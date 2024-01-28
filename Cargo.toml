@@ -6,3 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+[dev-dependencies]
+criterion = { version = "0.5.1", features = ["html_reports"] }
+tfhe = { version = "0.5.0", features = [ "boolean", "shortint", "integer", "x86_64-unix", "gpu" ] }
