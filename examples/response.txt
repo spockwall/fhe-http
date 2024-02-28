@@ -1,0 +1,21 @@
+HTTP/1.1 209 fhe-success
+Accept-Ranges: bytes
+Access-Control-Allow-Origin: *
+Age: 3901990
+Cache-Control: public, max-age=31536000, immutable
+Content-Encoding: br
+Content-Length: 3584
+Content-Type: application/javascript
+Cross-Origin-Resource-Policy: cross-origin
+Date: Fri, 23 Feb 2024 17:39:09 GMT
+Etag: 0x8DBD4BAB420D672
+Last-Modified: Tue, 24 Oct 2023 17:57:35 GMT
+Server: Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
+Vary: Accept-Encoding
+Via: 1.1 varnish, 1.1 varnish
+X-Cache: HIT, HIT
+X-Cache-Hits: 38760, 28377
+X-Fastly-Request-Id: c364d383d705f186d2aaf40d19cc109701bf9556
+X-Served-By: cache-iad-kiad7000063-IAD, cache-yul1970020-YUL
+
+{ "hi": "good" }
