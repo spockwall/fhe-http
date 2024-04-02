@@ -7,11 +7,11 @@ pub fn read_from_stream<T: Read>(mut stream: T) -> Result<String> {
     Ok(contents)
 }
 
-pub fn encrypt_string(input: &str, client_key: ClientKey) -> Vec<FheUint8> {
+pub fn encrypt_string(input: &str, client_key: &ClientKey) -> Vec<FheUint8> {
     // divide input into 8-bit chunks
     let mut encrypted_chunks: Vec<FheUint8> = Vec::new();
     for byte in input.bytes() {
-        let res = FheUint8::try_encrypt(byte, &client_key);
+        let res = FheUint8::try_encrypt(byte, client_key);
         let temp = res.unwrap();
         encrypted_chunks.push(temp);
     }
@@ -21,11 +21,11 @@ pub fn encrypt_string(input: &str, client_key: ClientKey) -> Vec<FheUint8> {
     return encrypted_chunks;
 }
 
-pub fn decrypt_chunks(input: Vec<FheUint8>, client_key: ClientKey) -> String {
+pub fn decrypt_chunks(input: Vec<FheUint8>, client_key: &ClientKey) -> String {
     // decrypt chunks is a empty vector of bytes at the begining
     let mut decrypted_chunks: Vec<u8> = Vec::new();
     for chunk in input {
-        let res: u8 = chunk.decrypt(&client_key);
+        let res: u8 = chunk.decrypt(client_key);
         decrypted_chunks.push(res);
     }
 

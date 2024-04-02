@@ -14,15 +14,16 @@ fn main() -> Result<()> {
     let contents: String = utils::file_ctl::read_from_stream(file)?;
 
     //// turn content from String to &str
-    let encoded = utils::base64::encode(contents.as_str());
-    let decoded = utils::base64::decode(encoded.as_str());
+    let encoded: String = utils::base64::encode(contents.as_str());
+    let decoded: String = utils::base64::decode(encoded.as_str());
 
     println!("Encode: {}\n", encoded);
     println!("Decode: {}", decoded);
 
     // encrypt & decrypt the text
-    let res = utils::file_ctl::encrypt_string(&encoded, client_key.clone());
-    let decrypted = utils::file_ctl::decrypt_chunks(res, client_key.clone());
+    let res: Vec<tfhe::FheUint<tfhe::FheUint8Id>> =
+        utils::file_ctl::encrypt_string(&encoded, &client_key);
+    let decrypted: String = utils::file_ctl::decrypt_chunks(res, &client_key);
     println!("Decrypted: {}", decrypted);
     Ok(())
 }
