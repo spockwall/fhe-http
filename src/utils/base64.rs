@@ -1,5 +1,5 @@
 extern crate base64;
-use base64::{engine::general_purpose::STANDARD, DecodeError, Engine as _};
+use base64::{engine::general_purpose::STANDARD, Engine as _};
 
 pub fn encode(input: &str) -> String {
     return STANDARD.encode(input.as_bytes());
@@ -20,6 +20,7 @@ pub fn decode(input: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use base64::DecodeError;
     #[test]
     fn encode() {
         let input: &str = "Hello, World!";

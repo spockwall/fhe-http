@@ -16,3 +16,9 @@ pub fn parse_http_packet(packet: &str) -> (String, String) {
     }
     return ("".to_string(), "".to_string());
 }
+
+pub fn parse_json(json: &str) -> serde_json::Map<String, Value> {
+    let res: Value = serde_json::from_str(&json).unwrap();
+    let data = res.as_object().unwrap();
+    return data.clone();
+}
