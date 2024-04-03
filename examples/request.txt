@@ -1,9 +1,6 @@
-POST / HTTP/1.1
-Origin: https://github.com
-Referer: https://github.com/
-Sec-Ch-Ua: "Not A(Brand";v="99", "Brave";v="121", "Chromium";v="121"
-Sec-Ch-Ua-Mobile: ?0
-Sec-Ch-Ua-Platform: "macOS"
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36
+POST /submit-form HTTP/1.1
+Host: www.example.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 20
 
-{"name": "John Doe", "age": 30}
+name=John+Doe&age=30
