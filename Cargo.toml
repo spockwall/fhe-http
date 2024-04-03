@@ -12,6 +12,8 @@ tfhe = { version = "*", features = [
     "integer",
     "aarch64-unix",
 ] }
+serde = { version = "1.0.104", features = ["derive"] }
+serde_json = "1.0.48"
 clap = "4.5.1"
 base64 = "0.22.0"
 

@@ -350,6 +350,8 @@ dependencies = [
  "base64",
  "clap",
  "criterion",
+ "serde",
+ "serde_json",
  "tfhe",
 ]
 
