@@ -25,5 +25,9 @@ fn main() -> Result<()> {
         utils::file_ctl::encrypt_string(&encoded, &client_key);
     let decrypted: String = utils::file_ctl::decrypt_chunks(res, &client_key);
     println!("Decrypted: {}", decrypted);
+
+    // extract the header and body from the packet
+    let (header, body) = utils::file_ctl::parse_http_packet(&contents);
+    print!("Header:\n {}\n\nBody:\n {}", header, body);
     Ok(())
 }
