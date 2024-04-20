@@ -1,32 +1,37 @@
+use crate::configs::fhe_types::FheSupportedType;
 use std::u32;
 
-use tfhe::{prelude::*, ClientKey, Error, FheInt128, FheInt32, FheUint128, FheUint32, FheUint8};
+use tfhe::{prelude::*, ClientKey, Error, FheInt32, FheInt64, FheUint32, FheUint64, FheUint8};
 
 // Trait that abstracts over the encryption and decryption operations
-pub trait FheSupport<T, U> {
+pub trait FheSupport<T, U>
+where
+    T: FheSupportedType<T>,
+{
     fn encrypt(input: T, client_key: &ClientKey) -> Result<Self, Error>
     where
         Self: Sized;
+    // set constraints That T must be FheSupportedTypes
 
     fn decrypt(input: U, client_key: &ClientKey) -> T;
 }
 
-impl FheSupport<i128, FheInt128> for FheInt128 {
-    fn encrypt(input: i128, client_key: &ClientKey) -> Result<FheInt128, Error> {
-        FheInt128::try_encrypt(input, client_key)
+impl FheSupport<i64, FheInt64> for FheInt64 {
+    fn encrypt(input: i64, client_key: &ClientKey) -> Result<FheInt64, Error> {
+        FheInt64::try_encrypt(input, client_key)
     }
 
-    fn decrypt(input: FheInt128, client_key: &ClientKey) -> i128 {
+    fn decrypt(input: FheInt64, client_key: &ClientKey) -> i64 {
         input.decrypt(client_key)
     }
 }
 
-impl FheSupport<u128, FheUint128> for FheUint128 {
-    fn encrypt(input: u128, client_key: &ClientKey) -> Result<FheUint128, Error> {
-        FheUint128::try_encrypt(input, client_key)
+impl FheSupport<u64, FheUint64> for FheUint64 {
+    fn encrypt(input: u64, client_key: &ClientKey) -> Result<FheUint64, Error> {
+        FheUint64::try_encrypt(input, client_key)
     }
 
-    fn decrypt(input: FheUint128, client_key: &ClientKey) -> u128 {
+    fn decrypt(input: FheUint64, client_key: &ClientKey) -> u64 {
         input.decrypt(client_key)
     }
 }
@@ -81,6 +86,7 @@ impl FheSupport<String, Vec<FheUint8>> for Vec<FheUint8> {
 // wrap the decrypt function for every impl
 pub fn fhe_encrypt<T, U>(input: T, client_key: &ClientKey) -> Result<U, Error>
 where
+    T: FheSupportedType<T>,
     U: FheSupport<T, U>,
 {
     U::encrypt(input, client_key)
@@ -88,6 +94,7 @@ where
 
 pub fn fhe_decrypt<T, U>(input: U, client_key: &ClientKey) -> T
 where
+    T: FheSupportedType<T>,
     U: FheSupport<T, U>,
 {
     U::decrypt(input, client_key)
@@ -104,11 +111,11 @@ mod fhe_tests {
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, _) = generate_keys(config);
         let res_copy = http_response.clone();
-        let encrypted: Result<Vec<FheUint8>, Error> = fhe_encrypt(http_response, &client_key);
+        let encrypted: Result<Vec<FheUint8>, Error> = fhe_encrypt(res_copy, &client_key);
         match encrypted {
             Ok(cipher) => {
                 let decrypted: String = fhe_decrypt(cipher, &client_key);
-                assert_eq!(res_copy, decrypted);
+                assert_eq!(http_response, decrypted);
             }
             Err(_) => panic!("Failed to encrypt the string"),
         }
@@ -129,7 +136,6 @@ mod fhe_tests {
             }
         }
     }
-
     #[test]
     fn test_encrypt_and_decrypt_i32() {
         let config: tfhe::Config = ConfigBuilder::default().build();
