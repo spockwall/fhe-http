@@ -1,9 +1,14 @@
-use serde_json::Value;
 use tfhe::{FheInt64, FheUint64, FheUint8};
 
+pub enum NorJsonValue {
+    Int64(i64),
+    Uint64(u64),
+    String(String),
+}
+
+#[derive(serde::Deserialize, serde::Serialize)]
 pub enum FheJsonValue {
-    Value(Value),
-    EncInt64(FheInt64),
-    EncUint64(FheUint64),
-    EncString(Vec<FheUint8>),
+    FheInt64(FheInt64),
+    FheUint64(FheUint64),
+    FheString(Vec<FheUint8>),
 }
