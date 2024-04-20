@@ -1,3 +1,4 @@
+use crate::configs::json::NorJsonValue;
 use serde_json::Value;
 
 // Trait for validating and converting values
@@ -6,40 +7,26 @@ pub trait FheSupportedType<T> {
     fn val_to_supported_type(value: &Value) -> Result<T, String>;
 }
 
-impl FheSupportedType<i32> for i32 {
+impl FheSupportedType<NorJsonValue> for NorJsonValue {
     fn is_val_supported_type(val: &Value) -> bool {
         match val {
-            Value::Number(n) => n
-                .as_i64()
-                .map(|num| (i32::MIN as i64) <= num && num <= (i32::MAX as i64))
-                .unwrap_or(false),
+            Value::Number(n) => n.is_i64() || n.is_u64(),
+            Value::String(_) => true,
             _ => false,
         }
     }
 
-    fn val_to_supported_type(value: &Value) -> Result<i32, String> {
-        match value.as_i64() {
-            Some(num) if (i32::MIN as i64) <= num && num <= (i32::MAX as i64) => Ok(num as i32),
-            _ => Err("Unsupported or invalid value for i32".to_string()),
-        }
-    }
-}
-
-impl FheSupportedType<u32> for u32 {
-    fn is_val_supported_type(val: &Value) -> bool {
-        match val {
-            Value::Number(n) => n
-                .as_u64()
-                .map(|num| num <= (u32::MAX as u64))
-                .unwrap_or(false),
-            _ => false,
-        }
-    }
-
-    fn val_to_supported_type(value: &Value) -> Result<u32, String> {
-        match value.as_u64() {
-            Some(num) if num <= (u32::MAX as u64) => Ok(num as u32),
-            _ => Err("Unsupported or invalid value for u32".to_string()),
+    fn val_to_supported_type(value: &Value) -> Result<NorJsonValue, String> {
+        match value {
+            Value::Number(n) => {
+                if n.is_i64() {
+                    Ok(NorJsonValue::Int64(n.as_i64().unwrap()))
+                } else {
+                    Ok(NorJsonValue::Uint64(n.as_u64().unwrap()))
+                }
+            }
+            Value::String(s) => Ok(NorJsonValue::String(s.clone())),
+            _ => Err("Unsupported value type".to_string()),
         }
     }
 }
@@ -93,9 +80,7 @@ impl FheSupportedType<String> for String {
 
 // Global function to check if any type is supported
 pub fn is_val_supported_type(val: &Value) -> bool {
-    i32::is_val_supported_type(val)
-        || u32::is_val_supported_type(val)
-        || i64::is_val_supported_type(val)
+    i64::is_val_supported_type(val)
         || u64::is_val_supported_type(val)
         || String::is_val_supported_type(val)
 }
