@@ -13,6 +13,9 @@ pub trait Encryptable {
 }
 
 pub trait Decryptable {
+    fn to_fhe_i64(&self) -> FheInt64;
+    fn to_fhe_u64(&self) -> FheUint64;
+    fn to_fhe_string(&self) -> Vec<FheUint8>;
     fn decrypt(&self, client_key: &ClientKey) -> Result<NorJsonValue, Error>
     where
         Self: Sized;
@@ -58,6 +61,24 @@ impl Encryptable for NorJsonValue {
 }
 
 impl Decryptable for FheJsonValue {
+    fn to_fhe_i64(&self) -> FheInt64 {
+        match self {
+            FheJsonValue::FheInt64(n) => n.clone(),
+            _ => panic!("unsupported type passed"), // Unsupported
+        }
+    }
+    fn to_fhe_u64(&self) -> FheUint64 {
+        match self {
+            FheJsonValue::FheUint64(n) => n.clone(),
+            _ => panic!("unsupported type passed"), // Unsupported
+        }
+    }
+    fn to_fhe_string(&self) -> Vec<FheUint8> {
+        match self {
+            FheJsonValue::FheString(s) => s.clone(),
+            _ => panic!("unsupported type passed"), // Unsupported
+        }
+    }
     fn decrypt(&self, client_key: &ClientKey) -> Result<NorJsonValue, Error> {
         match self {
             FheJsonValue::FheInt64(n) => Ok(NorJsonValue::Int64(n.decrypt(client_key))),
