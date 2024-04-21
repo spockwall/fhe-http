@@ -1,10 +1,9 @@
-use crate::configs::fhe_types::is_val_supported_type;
 use crate::configs::json::{FheJsonValue, NorJsonValue};
 use crate::utils::base64;
 use crate::utils::fhe::{Decryptable, Encryptable};
 use bincode;
 use serde_json::{Map, Value};
-use tfhe::{ClientKey, ServerKey};
+use tfhe::ClientKey;
 
 /// Encrypt a JSON object using the provided keys
 /// The keys are used to encrypt the values of the JSON object
@@ -21,7 +20,6 @@ pub fn encrypt_json(
     keys: &Vec<&str>,
     data: &Map<String, Value>,
     client_key: &ClientKey,
-    _: &ServerKey,
 ) -> Map<String, Value> {
     // Create new empty Map object that will store the encrypted values
     let mut encrypted_data: Map<String, Value> = serde_json::Map::new();

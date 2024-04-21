@@ -1,7 +1,6 @@
 #[cfg(test)]
 mod file_ctl_tests {
     extern crate fhe_http;
-    use bincode::de;
     use fhe_http::configs::json::FheJsonValue;
     use fhe_http::utils::base64;
     use fhe_http::utils::fhe::{Decryptable, Encryptable};
@@ -13,12 +12,12 @@ mod file_ctl_tests {
     #[test]
     fn encrypt_and_decrypt_json() {
         let config: tfhe::Config = ConfigBuilder::default().build();
-        let (client_key, server_key) = generate_keys(config);
+        let (client_key, _) = generate_keys(config);
         // read file json file from examples
         let json = read_from_stream(File::open(FILE_PATH).unwrap()).unwrap();
         let mut plain_data = parse_json(&json);
         let keys = vec!["a", "b"];
-        let encrypted_data = encrypt_json(&keys, &mut plain_data, &client_key, &server_key);
+        let encrypted_data = encrypt_json(&keys, &mut plain_data, &client_key);
         let _ = decrypt_json(&keys, &encrypted_data, &client_key);
     }
 
@@ -28,9 +27,9 @@ mod file_ctl_tests {
         let (client_key, server_key) = generate_keys(config);
         // read file json file from examples
         let json = read_from_stream(File::open(FILE_PATH).unwrap()).unwrap();
-        let mut plain_data = parse_json(&json);
+        let plain_data = parse_json(&json);
         let keys = vec!["a", "b"];
-        let encrypted_data = encrypt_json(&keys, &mut plain_data, &client_key, &server_key);
+        let encrypted_data = encrypt_json(&keys, &plain_data, &client_key);
 
         let a = encrypted_data.get("a").unwrap();
         let b = encrypted_data.get("b").unwrap();
