@@ -1,6 +1,8 @@
 use crate::configs::json::{FheJsonValue, NorJsonValue};
+use crate::fhe::decryptable::Decryptable;
+use crate::fhe::encryptable::Encryptable;
 use crate::utils::base64;
-use crate::utils::fhe::{Decryptable, Encryptable};
+
 use bincode;
 use serde_json::{Map, Value};
 use tfhe::ClientKey;

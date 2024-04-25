@@ -2,7 +2,8 @@
 mod file_ctl_tests {
     extern crate fhe_http;
     use fhe_http::configs::json::FheJsonValue;
-    use fhe_http::utils::fhe::{Decryptable, Encryptable};
+    use fhe_http::fhe::decryptable::Decryptable;
+    use fhe_http::fhe::encryptable::Encryptable;
     use fhe_http::utils::file_ctl::{parse_json, read_from_stream};
     use fhe_http::utils::json::{decrypt_json, encrypt_json};
     use std::fs::File;
