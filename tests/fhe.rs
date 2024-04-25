@@ -14,13 +14,13 @@ mod fhe_tests {
         match encrypted {
             Ok(cipher) => {
                 let decrypted = cipher.decrypt(&client_key).unwrap();
-                assert_eq!(http_response, decrypted.to_string());
+                assert_eq!(http_response, decrypted.to_string().unwrap());
             }
             Err(_) => panic!("Failed to encrypt the string"),
         }
     }
     #[test]
-    fn test_encrypt_and_decrypt_u32() {
+    fn encrypt_and_decrypt_u64() {
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, _) = generate_keys(config);
         let input_vec: Vec<u64> = vec![0, 11, 18446744073709551615, 34234];
@@ -28,11 +28,11 @@ mod fhe_tests {
             let val = NorJsonValue::Uint64(input);
             let encrypted = val.encrypt(&client_key).unwrap();
             let decrypted = encrypted.decrypt(&client_key).unwrap();
-            assert_eq!(input, decrypted.to_u64());
+            assert_eq!(input, decrypted.to_u64().unwrap());
         }
     }
     #[test]
-    fn test_encrypt_and_decrypt_i32() {
+    fn encrypt_and_decrypt_i64() {
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, _) = generate_keys(config);
         let input_vec: Vec<i64> = vec![
@@ -45,7 +45,7 @@ mod fhe_tests {
             let val = NorJsonValue::Int64(input);
             let encrypted = val.encrypt(&client_key).unwrap();
             let decrypted = encrypted.decrypt(&client_key).unwrap();
-            assert_eq!(input, decrypted.to_i64());
+            assert_eq!(input, decrypted.to_i64().unwrap());
         }
     }
 }

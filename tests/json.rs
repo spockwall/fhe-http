@@ -34,10 +34,14 @@ mod file_ctl_tests {
 
         let encrypted_a = get_encrypted_value_from_json(&encrypted_data, "a");
         let encrypted_b = get_encrypted_value_from_json(&encrypted_data, "b");
-        let fhe_a = encrypted_a.to_fhe_i64();
-        let fhe_b = encrypted_b.to_fhe_i64();
-        let encrypted_c = FheJsonValue::FheInt64(fhe_a + fhe_b);
+        let fhe_a = encrypted_a.to_fhe_i64().unwrap();
+        let fhe_b = encrypted_b.to_fhe_i64().unwrap();
+        // Addition
+        let encrypted_c = FheJsonValue::FheInt64(fhe_a.clone() + fhe_b.clone());
         let decrypted_c = encrypted_c.decrypt(&client_key).unwrap().to_i64();
-        assert_eq!(decrypted_c, plain_data.get("c").unwrap().as_i64().unwrap());
+        assert_eq!(
+            decrypted_c.unwrap(),
+            plain_data.get("addition").unwrap().as_i64().unwrap()
+        );
     }
 }

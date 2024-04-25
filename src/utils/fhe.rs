@@ -1,44 +1,45 @@
 use crate::configs::json::{FheJsonValue, NorJsonValue};
 use tfhe::{prelude::*, ClientKey, Error, FheInt64, FheUint64, FheUint8};
 
+// Define an alias for the error type
+type UnspportedError = Box<dyn std::error::Error>;
 // Trait that abstracts over the encryption and decryption operations
-
 pub trait Encryptable {
-    fn to_i64(&self) -> i64;
-    fn to_u64(&self) -> u64;
-    fn to_string(&self) -> String;
+    fn to_i64(&self) -> Result<i64, UnspportedError>;
+    fn to_u64(&self) -> Result<u64, UnspportedError>;
+    fn to_string(&self) -> Result<String, UnspportedError>;
     fn encrypt(&self, client_key: &ClientKey) -> Result<FheJsonValue, Error>
     where
         Self: Sized;
 }
 
 pub trait Decryptable {
-    fn to_fhe_i64(&self) -> FheInt64;
-    fn to_fhe_u64(&self) -> FheUint64;
-    fn to_fhe_string(&self) -> Vec<FheUint8>;
+    fn to_fhe_i64(&self) -> Result<FheInt64, UnspportedError>;
+    fn to_fhe_u64(&self) -> Result<FheUint64, UnspportedError>;
+    fn to_fhe_string(&self) -> Result<Vec<FheUint8>, UnspportedError>;
     fn decrypt(&self, client_key: &ClientKey) -> Result<NorJsonValue, Error>
     where
         Self: Sized;
 }
 
 impl Encryptable for NorJsonValue {
-    fn to_i64(&self) -> i64 {
+    fn to_i64(&self) -> Result<i64, UnspportedError> {
         match self {
-            NorJsonValue::Int64(n) => *n,
+            NorJsonValue::Int64(n) => Ok(*n),
             _ => panic!("unsupported type passed"), // Unsupported
         }
     }
-    fn to_u64(&self) -> u64 {
+    fn to_u64(&self) -> Result<u64, UnspportedError> {
         match self {
-            NorJsonValue::Uint64(n) => *n,
+            NorJsonValue::Uint64(n) => Ok(*n),
             _ => panic!("unsupported type passed"), // Unsupported
         }
     }
-    fn to_string(&self) -> String {
+    fn to_string(&self) -> Result<String, UnspportedError> {
         match self {
-            NorJsonValue::Int64(n) => n.to_string(),
-            NorJsonValue::Uint64(n) => n.to_string(),
-            NorJsonValue::String(s) => s.clone(),
+            NorJsonValue::Int64(n) => Ok(n.to_string()),
+            NorJsonValue::Uint64(n) => Ok(n.to_string()),
+            NorJsonValue::String(s) => Ok(s.clone()),
         }
     }
     fn encrypt(&self, client_key: &ClientKey) -> Result<FheJsonValue, Error> {
@@ -61,22 +62,22 @@ impl Encryptable for NorJsonValue {
 }
 
 impl Decryptable for FheJsonValue {
-    fn to_fhe_i64(&self) -> FheInt64 {
+    fn to_fhe_i64(&self) -> Result<FheInt64, UnspportedError> {
         match self {
-            FheJsonValue::FheInt64(n) => n.clone(),
-            _ => panic!("unsupported type passed"), // Unsupported
+            FheJsonValue::FheInt64(n) => Ok(n.clone()),
+            _ => panic!("Unsupported type passed, should be FheInt64"), // Unsupported
         }
     }
-    fn to_fhe_u64(&self) -> FheUint64 {
+    fn to_fhe_u64(&self) -> Result<FheUint64, UnspportedError> {
         match self {
-            FheJsonValue::FheUint64(n) => n.clone(),
-            _ => panic!("unsupported type passed"), // Unsupported
+            FheJsonValue::FheUint64(n) => Ok(n.clone()),
+            _ => panic!("Unsupported type passed, should be FheUint64"), // Unsupported
         }
     }
-    fn to_fhe_string(&self) -> Vec<FheUint8> {
+    fn to_fhe_string(&self) -> Result<Vec<FheUint8>, UnspportedError> {
         match self {
-            FheJsonValue::FheString(s) => s.clone(),
-            _ => panic!("unsupported type passed"), // Unsupported
+            FheJsonValue::FheString(s) => Ok(s.clone()),
+            _ => panic!("Unsupported type passed, should be Vec<FheUint8>"), // Unsupported
         }
     }
     fn decrypt(&self, client_key: &ClientKey) -> Result<NorJsonValue, Error> {
