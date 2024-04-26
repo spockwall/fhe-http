@@ -4,6 +4,7 @@ pub enum FheSupportedType {
     String,
 }
 
+#[allow(dead_code)]
 impl FheSupportedType {
     fn as_str(&self) -> &'static str {
         match self {

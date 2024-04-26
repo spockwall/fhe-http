@@ -3,7 +3,7 @@ mod fhe_tests {
     use fhe_http::configs::json::{FheJsonValue, NorJsonValue};
     use fhe_http::fhe_traits::decryptable::Decryptable;
     use fhe_http::fhe_traits::encryptable::Encryptable;
-    use tfhe::{generate_keys, ConfigBuilder, Error};
+    use tfhe::{generate_keys, ClientKey, ConfigBuilder, Error};
 
     #[test]
     fn test_encrypt_and_decrypt_string() {
@@ -48,5 +48,33 @@ mod fhe_tests {
             let decrypted = encrypted.decrypt(&client_key).unwrap();
             assert_eq!(input, decrypted.to_i64().unwrap());
         }
+    }
+
+    #[test]
+    fn serialize_and_deserialize() {
+        use fhe_http::configs::fhe_types::FheSupportedType;
+        use fhe_http::fhe_traits::computable::Computable;
+        use fhe_http::fhe_traits::key_serialize::KeySerialize;
+        use tfhe::{set_server_key, ServerKey};
+        let config: tfhe::Config = ConfigBuilder::default().build();
+        let (client_key, server_key) = generate_keys(config);
+
+        let client_key_serialized = client_key.serialize();
+        let server_key_serialized = server_key.serialize();
+        let client_key_deserialized: ClientKey = KeySerialize::deserialize(&client_key_serialized);
+        let server_key_deserialized: ServerKey = KeySerialize::deserialize(&server_key_serialized);
+        set_server_key(server_key_deserialized);
+        let a = NorJsonValue::Int64(123)
+            .encrypt(&client_key_deserialized)
+            .unwrap();
+        let b = NorJsonValue::Int64(456)
+            .encrypt(&client_key_deserialized)
+            .unwrap();
+
+        let c = a
+            .add(&b, &FheSupportedType::Int64)
+            .decrypt(&client_key_deserialized)
+            .unwrap();
+        assert_eq!(c.to_i64().unwrap(), 123 + 456);
     }
 }
