@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 mod configs;
 mod fhe_traits;
 mod utils;
