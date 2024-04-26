@@ -14,3 +14,7 @@ pub mod fhe_traits {
     pub mod decryptable;
     pub mod encryptable;
 }
+
+pub mod apis {
+    pub mod fhe_ops;
+}
