@@ -6,8 +6,9 @@ mod fhe_tests {
     use fhe_http::fhe_traits::decryptable::Decryptable;
     use fhe_http::fhe_traits::encryptable::Encryptable;
     use tfhe::{generate_keys, set_server_key, ConfigBuilder};
+
     #[test]
-    fn encrypt_and_decrypt_json() {
+    fn fhe_operations() {
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
         set_server_key(server_key);
@@ -21,7 +22,6 @@ mod fhe_tests {
         // test fhe add
         let encrypted_c = encrypted_a.add(&encrypted_b, &FheSupportedType::Int64);
         let decrypted_c = encrypted_c.decrypt(&client_key).unwrap().to_i64().unwrap();
-        print!("decrypted_c: {}", decrypted_c);
         assert_eq!(plain_a + plain_b, decrypted_c);
 
         // test fhe sub
