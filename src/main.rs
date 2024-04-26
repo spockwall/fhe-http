@@ -1,5 +1,5 @@
 mod configs;
-mod fhe;
+mod fhe_traits;
 mod utils;
 use std::fs::File;
 use std::io::Result;

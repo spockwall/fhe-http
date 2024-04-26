@@ -2,9 +2,9 @@
 mod fhe_tests {
     use fhe_http::configs::fhe_types::FheSupportedType;
     use fhe_http::configs::json::NorJsonValue;
-    use fhe_http::fhe::computable::Computable;
-    use fhe_http::fhe::decryptable::Decryptable;
-    use fhe_http::fhe::encryptable::Encryptable;
+    use fhe_http::fhe_traits::computable::Computable;
+    use fhe_http::fhe_traits::decryptable::Decryptable;
+    use fhe_http::fhe_traits::encryptable::Encryptable;
     use tfhe::{generate_keys, set_server_key, ConfigBuilder};
     #[test]
     fn encrypt_and_decrypt_json() {

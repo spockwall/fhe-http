@@ -1,6 +1,6 @@
 use crate::configs::fhe_types::FheSupportedType;
 use crate::configs::json::FheJsonValue;
-use crate::fhe::decryptable::Decryptable;
+use crate::fhe_traits::decryptable::Decryptable;
 pub trait Computable {
     fn add(&self, other: &Self, data_type: &FheSupportedType) -> Self;
     fn sub(&self, other: &Self, data_type: &FheSupportedType) -> Self;

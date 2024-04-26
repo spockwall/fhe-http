@@ -9,7 +9,7 @@ pub mod utils {
     pub mod json;
 }
 
-pub mod fhe {
+pub mod fhe_traits {
     pub mod computable;
     pub mod decryptable;
     pub mod encryptable;

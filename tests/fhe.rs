@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod fhe_tests {
     use fhe_http::configs::json::{FheJsonValue, NorJsonValue};
-    use fhe_http::fhe::decryptable::Decryptable;
-    use fhe_http::fhe::encryptable::Encryptable;
+    use fhe_http::fhe_traits::decryptable::Decryptable;
+    use fhe_http::fhe_traits::encryptable::Encryptable;
     use tfhe::{generate_keys, ConfigBuilder, Error};
 
     #[test]

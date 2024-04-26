@@ -1,6 +1,6 @@
 use crate::configs::json::{FheJsonValue, NorJsonValue};
-use crate::fhe::decryptable::Decryptable;
-use crate::fhe::encryptable::Encryptable;
+use crate::fhe_traits::decryptable::Decryptable;
+use crate::fhe_traits::encryptable::Encryptable;
 use crate::utils::base64;
 
 use bincode;
