@@ -1,11 +1,10 @@
 #[cfg(test)]
 mod file_ctl_tests {
-    extern crate fhe_http;
-    use fhe_http::configs::json::FheJsonValue;
-    use fhe_http::fhe_traits::decryptable::Decryptable;
-    use fhe_http::fhe_traits::encryptable::Encryptable;
-    use fhe_http::utils::file_ctl::{parse_json, read_from_stream};
-    use fhe_http::utils::json::{decrypt_json, encrypt_json};
+    use fhe_http_core::configs::json::FheJsonValue;
+    use fhe_http_core::fhe_traits::decryptable::Decryptable;
+    use fhe_http_core::fhe_traits::encryptable::Encryptable;
+    use fhe_http_core::utils::file_ctl::{parse_json, read_from_stream};
+    use fhe_http_core::utils::json::{decrypt_json, encrypt_json};
     use std::fs::File;
     use tfhe::{generate_keys, set_server_key, ConfigBuilder};
     const FILE_PATH: &str = "examples/json_files/param.json";
@@ -23,7 +22,7 @@ mod file_ctl_tests {
 
     #[test]
     fn operate_on_ciphertext() {
-        use fhe_http::utils::json::get_encrypted_value_from_json;
+        use fhe_http_core::utils::json::get_encrypted_value_from_json;
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
         set_server_key(server_key);

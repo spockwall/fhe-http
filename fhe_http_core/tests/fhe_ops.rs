@@ -1,10 +1,10 @@
 #[cfg(test)]
 mod fhe_tests {
-    use fhe_http::configs::fhe_types::FheSupportedType;
-    use fhe_http::configs::json::NorJsonValue;
-    use fhe_http::fhe_traits::computable::Computable;
-    use fhe_http::fhe_traits::decryptable::Decryptable;
-    use fhe_http::fhe_traits::encryptable::Encryptable;
+    use fhe_http_core::configs::fhe_types::FheSupportedType;
+    use fhe_http_core::configs::json::NorJsonValue;
+    use fhe_http_core::fhe_traits::computable::Computable;
+    use fhe_http_core::fhe_traits::decryptable::Decryptable;
+    use fhe_http_core::fhe_traits::encryptable::Encryptable;
     use tfhe::{generate_keys, set_server_key, ConfigBuilder};
 
     #[test]

@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod fhe_tests {
-    use fhe_http::configs::json::{FheJsonValue, NorJsonValue};
-    use fhe_http::fhe_traits::decryptable::Decryptable;
-    use fhe_http::fhe_traits::encryptable::Encryptable;
+    use fhe_http_core::configs::json::{FheJsonValue, NorJsonValue};
+    use fhe_http_core::fhe_traits::decryptable::Decryptable;
+    use fhe_http_core::fhe_traits::encryptable::Encryptable;
     use tfhe::{generate_keys, ClientKey, ConfigBuilder, Error};
 
     #[test]
@@ -52,9 +52,9 @@ mod fhe_tests {
 
     #[test]
     fn serialize_and_deserialize() {
-        use fhe_http::configs::fhe_types::FheSupportedType;
-        use fhe_http::fhe_traits::computable::Computable;
-        use fhe_http::fhe_traits::key_serialize::KeySerialize;
+        use fhe_http_core::configs::fhe_types::FheSupportedType;
+        use fhe_http_core::fhe_traits::computable::Computable;
+        use fhe_http_core::fhe_traits::key_serialize::KeySerialize;
         use tfhe::{set_server_key, ServerKey};
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);

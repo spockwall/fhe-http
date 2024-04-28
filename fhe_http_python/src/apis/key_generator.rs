@@ -1,6 +1,6 @@
-use crate::fhe_traits::key_serialize::KeySerialize;
+use fhe_http_core::fhe_traits::key_serialize::KeySerialize;
+use fhe_http_core::tfhe::{generate_keys, set_server_key, Config, ConfigBuilder, ServerKey};
 use pyo3::prelude::*;
-use tfhe::{generate_keys, set_server_key, ConfigBuilder, ServerKey};
 
 #[pyclass]
 struct KeyGenerator {
@@ -11,7 +11,7 @@ struct KeyGenerator {
 #[pymethods]
 impl KeyGenerator {
     pub fn generate_keys(&self) -> KeyGenerator {
-        let config: tfhe::Config = ConfigBuilder::default().build();
+        let config: Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
         KeyGenerator {
             client_key: client_key.serialize(),
@@ -32,7 +32,7 @@ impl KeyGenerator {
 }
 
 #[pymodule]
-fn fhe_http(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn py_fhe_http(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<KeyGenerator>()?;
     Ok(())
 }

@@ -1,7 +1,6 @@
 #[cfg(test)]
 mod tests {
-    extern crate fhe_http;
-    use fhe_http::utils::base64::{decode, encode};
+    use fhe_http_core::utils::base64::{decode, encode};
     #[test]
     fn test_encode() {
         let input: &str = "Hello, World!";

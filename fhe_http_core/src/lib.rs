@@ -20,7 +20,4 @@ pub mod apis {
     pub mod fhe_ops;
 }
 
-pub mod pyo3 {
-    pub mod fhe_types;
-    pub mod key_generator;
-}
+pub extern crate tfhe;
