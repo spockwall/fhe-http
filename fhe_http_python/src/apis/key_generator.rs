@@ -12,13 +12,22 @@ struct KeyGenerator {
 #[pymethods]
 impl KeyGenerator {
     #[new]
-    fn new() -> Self {
+    // check if the new keys generation is needed
+    fn new(new_keys: bool) -> Self {
         let config: Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
-        KeyGenerator {
-            client_key: client_key.serialize(),
-            server_key: server_key.serialize(),
-            config,
+        if new_keys {
+            return KeyGenerator {
+                client_key: client_key.serialize(),
+                server_key: server_key.serialize(),
+                config,
+            };
+        } else {
+            return KeyGenerator {
+                client_key: vec![],
+                server_key: vec![],
+                config,
+            };
         }
     }
     pub fn generate_new_keys(&self) -> KeyGenerator {
