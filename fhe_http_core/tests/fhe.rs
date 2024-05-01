@@ -77,4 +77,23 @@ mod fhe_tests {
             .unwrap();
         assert_eq!(c.to_i64().unwrap(), 123 + 456);
     }
+
+    #[test]
+    fn encrypted_serialize() {
+        use fhe_http_core::fhe_traits::encrypted_serialize::EncryptedSerialize;
+        use tfhe::{generate_keys, ConfigBuilder};
+        let config: tfhe::Config = ConfigBuilder::default().build();
+        let (client_key, _) = generate_keys(config);
+        let a = NorJsonValue::Int64(123);
+        let encrypted_a = a.encrypt(&client_key).unwrap();
+        let serialized_a = encrypted_a.serialize();
+        let deserialized_a = FheJsonValue::deserialize(&serialized_a);
+        let decrypted_a = deserialized_a.decrypt(&client_key).unwrap();
+        let decrypted = decrypted_a.to_i64().unwrap();
+        print!("{:?}", decrypted);
+        match a {
+            NorJsonValue::Int64(n) => assert_eq!(n, decrypted_a.to_i64().unwrap()),
+            _ => panic!("Unsupported type"),
+        }
+    }
 }
