@@ -6,16 +6,27 @@ use pyo3::prelude::*;
 struct KeyGenerator {
     client_key: Vec<u8>,
     server_key: Vec<u8>,
+    config: Config,
 }
 
 #[pymethods]
 impl KeyGenerator {
-    pub fn generate_keys(&self) -> KeyGenerator {
+    #[new]
+    fn new() -> Self {
         let config: Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
         KeyGenerator {
             client_key: client_key.serialize(),
             server_key: server_key.serialize(),
+            config,
+        }
+    }
+    pub fn generate_new_keys(&self) -> KeyGenerator {
+        let (client_key, server_key) = generate_keys(self.config);
+        KeyGenerator {
+            client_key: client_key.serialize(),
+            server_key: server_key.serialize(),
+            config: self.config,
         }
     }
     pub fn set_server_key(&self, key: Vec<u8>) {
@@ -32,7 +43,7 @@ impl KeyGenerator {
 }
 
 #[pymodule]
-fn py_fhe_http(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn fhe_http_python(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<KeyGenerator>()?;
     Ok(())
 }
