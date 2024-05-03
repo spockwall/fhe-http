@@ -80,7 +80,7 @@ mod fhe_tests {
 
     #[test]
     fn encrypted_serialize() {
-        use fhe_http_core::fhe_traits::encrypted_serialize::EncryptedSerialize;
+        use fhe_http_core::fhe_traits::value_serialize::FheJsonValueSerialize;
         use tfhe::{generate_keys, ConfigBuilder};
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, _) = generate_keys(config);
