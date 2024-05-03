@@ -9,5 +9,6 @@ pub mod apis {
 fn fhe_http_python(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<apis::key_generator::KeyGenerator>()?;
     m.add_class::<apis::fhe_ops::FheOps>()?;
+    m.add_class::<apis::fhe_types::FheTypes>()?;
     Ok(())
 }

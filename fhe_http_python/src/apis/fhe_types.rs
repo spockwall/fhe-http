@@ -1,28 +1,23 @@
-use fhe_http_core::configs::fhe_types::FheSupportedType;
+use fhe_http_core::configs::json::NorJsonValue;
+use fhe_http_core::fhe_traits::value_serialize::NorJsonValueSerialize;
 use pyo3::prelude::*;
 
 #[pyclass]
-struct FheSupportedTypeEnumWrapper {
-    inner: FheSupportedType,
-}
-#[pymethods]
-impl FheSupportedTypeEnumWrapper {
-    #[new]
-    fn new(value: String) -> Self {
-        let inner = match value.as_str() {
-            "Int64" => FheSupportedType::Int64,
-            "Uint64" => FheSupportedType::Uint64,
-            "String" => FheSupportedType::String,
-            _ => panic!("Unsupported type"),
-        };
-        FheSupportedTypeEnumWrapper { inner }
-    }
+pub struct FheTypes {}
 
-    fn get_type(&self) -> String {
-        match self.inner {
-            FheSupportedType::Int64 => "Int64".to_string(),
-            FheSupportedType::Uint64 => "Uint64".to_string(),
-            FheSupportedType::String => "String".to_string(),
-        }
+#[pymethods]
+impl FheTypes {
+    #[new]
+    fn new() -> Self {
+        FheTypes {}
+    }
+    fn from_i64(&self, value: i64) -> Vec<u8> {
+        NorJsonValue::Int64(value).serialize()
+    }
+    fn from_u64(&self, value: u64) -> Vec<u8> {
+        NorJsonValue::Uint64(value).serialize()
+    }
+    fn from_string(&self, value: String) -> Vec<u8> {
+        NorJsonValue::String(value).serialize()
     }
 }
