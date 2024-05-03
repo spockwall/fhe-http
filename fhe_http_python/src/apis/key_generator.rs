@@ -3,7 +3,7 @@ use fhe_http_core::tfhe::{generate_keys, set_server_key, Config, ConfigBuilder, 
 use pyo3::prelude::*;
 
 #[pyclass]
-struct KeyGenerator {
+pub struct KeyGenerator {
     client_key: Vec<u8>,
     server_key: Vec<u8>,
     config: Config,
@@ -49,10 +49,4 @@ impl KeyGenerator {
     pub fn get_server_key(&self) -> Vec<u8> {
         self.server_key.clone()
     }
-}
-
-#[pymodule]
-fn fhe_http_python(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_class::<KeyGenerator>()?;
-    Ok(())
 }
