@@ -20,6 +20,7 @@ pub mod fhe_traits {
 pub mod apis {
     pub mod fhe;
     pub mod fhe_ops;
+    pub mod fhe_types;
 }
 
 pub extern crate tfhe;
