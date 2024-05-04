@@ -8,16 +8,40 @@ pub struct FheTypes {}
 #[pymethods]
 impl FheTypes {
     #[new]
-    fn new() -> Self {
+    pub fn new() -> Self {
         FheTypes {}
     }
-    fn from_i64(&self, value: i64) -> Vec<u8> {
+    pub fn from_i64(&self, value: i64) -> Vec<u8> {
         NorJsonValue::Int64(value).serialize()
     }
-    fn from_u64(&self, value: u64) -> Vec<u8> {
+    pub fn from_u64(&self, value: u64) -> Vec<u8> {
         NorJsonValue::Uint64(value).serialize()
     }
-    fn from_string(&self, value: String) -> Vec<u8> {
+    pub fn from_string(&self, value: String) -> Vec<u8> {
         NorJsonValue::String(value).serialize()
+    }
+
+    pub fn to_i64(&self, value: &[u8]) -> i64 {
+        let res: NorJsonValue = NorJsonValueSerialize::deserialize(value);
+        match res {
+            NorJsonValue::Int64(v) => v,
+            _ => panic!("Invalid type"),
+        }
+    }
+
+    pub fn to_u64(&self, value: &[u8]) -> u64 {
+        let res: NorJsonValue = NorJsonValueSerialize::deserialize(value);
+        match res {
+            NorJsonValue::Uint64(v) => v,
+            _ => panic!("Invalid type"),
+        }
+    }
+
+    pub fn to_string(&self, value: &[u8]) -> String {
+        let res: NorJsonValue = NorJsonValueSerialize::deserialize(value);
+        match res {
+            NorJsonValue::String(v) => v,
+            _ => panic!("Invalid type"),
+        }
     }
 }
