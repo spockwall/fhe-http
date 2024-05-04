@@ -39,6 +39,9 @@ impl KeyGenerator {
         }
     }
     pub fn set_server_key(&self) {
+        if &self.server_key.len() == &0 {
+            panic!("Server key is not set")
+        }
         let server_key: ServerKey = KeySerialize::deserialize(&self.server_key);
         set_server_key(server_key);
     }
