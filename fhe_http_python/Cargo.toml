@@ -5,8 +5,9 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
+path = "src/lib.rs"
 name = "fhe_http_python"
-crate-type = ["cdylib"]
+#crate-type = ["cdylib", "lib"]
 
 [dependencies]
 pyo3 = { version = "0.21.2", features = ["extension-module"] }
