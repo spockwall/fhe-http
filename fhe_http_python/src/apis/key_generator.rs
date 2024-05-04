@@ -13,7 +13,7 @@ pub struct KeyGenerator {
 impl KeyGenerator {
     #[new]
     // check if the new keys generation is needed
-    fn new(new_keys: bool) -> Self {
+    pub fn new(new_keys: bool) -> Self {
         let config: Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
         if new_keys {
@@ -38,8 +38,8 @@ impl KeyGenerator {
             config: self.config,
         }
     }
-    pub fn set_server_key(&self, key: Vec<u8>) {
-        let server_key: ServerKey = KeySerialize::deserialize(&key);
+    pub fn set_server_key(&self) {
+        let server_key: ServerKey = KeySerialize::deserialize(&self.server_key);
         set_server_key(server_key);
     }
 

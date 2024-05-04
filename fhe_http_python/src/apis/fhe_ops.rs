@@ -7,7 +7,7 @@ pub struct FheOps {}
 #[pymethods]
 impl FheOps {
     #[new]
-    fn new() -> Self {
+    pub fn new() -> Self {
         FheOps {}
     }
     pub fn add(&self, a: Vec<u8>, b: Vec<u8>, data_type: String) -> Vec<u8> {
