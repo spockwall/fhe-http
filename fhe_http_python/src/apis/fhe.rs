@@ -10,7 +10,9 @@ pub struct Fhe {
 impl Fhe {
     #[new]
     pub fn new(client_key: Vec<u8>) -> Self {
-        Fhe { client_key }
+        Fhe {
+            client_key: client_key.clone(),
+        }
     }
 
     pub fn encrypt(&self, val: Vec<u8>) -> Vec<u8> {

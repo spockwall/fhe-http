@@ -21,24 +21,24 @@ impl FheTypes {
         NorJsonValue::String(value).serialize()
     }
 
-    pub fn to_i64(&self, value: &[u8]) -> i64 {
-        let res: NorJsonValue = NorJsonValueSerialize::deserialize(value);
+    pub fn to_i64(&self, value: Vec<u8>) -> i64 {
+        let res: NorJsonValue = NorJsonValueSerialize::deserialize(&value);
         match res {
             NorJsonValue::Int64(v) => v,
             _ => panic!("Invalid type"),
         }
     }
 
-    pub fn to_u64(&self, value: &[u8]) -> u64 {
-        let res: NorJsonValue = NorJsonValueSerialize::deserialize(value);
+    pub fn to_u64(&self, value: Vec<u8>) -> u64 {
+        let res: NorJsonValue = NorJsonValueSerialize::deserialize(&value);
         match res {
             NorJsonValue::Uint64(v) => v,
             _ => panic!("Invalid type"),
         }
     }
 
-    pub fn to_string(&self, value: &[u8]) -> String {
-        let res: NorJsonValue = NorJsonValueSerialize::deserialize(value);
+    pub fn to_string(&self, value: Vec<u8>) -> String {
+        let res: NorJsonValue = NorJsonValueSerialize::deserialize(&value);
         match res {
             NorJsonValue::String(v) => v,
             _ => panic!("Invalid type"),

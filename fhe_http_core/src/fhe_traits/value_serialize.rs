@@ -2,12 +2,12 @@ use crate::configs::json::{FheJsonValue, NorJsonValue};
 use bincode;
 pub trait NorJsonValueSerialize {
     fn serialize(&self) -> Vec<u8>;
-    fn deserialize(data: &[u8]) -> Self;
+    fn deserialize(data: &Vec<u8>) -> Self;
 }
 
 pub trait FheJsonValueSerialize {
     fn serialize(&self) -> Vec<u8>;
-    fn deserialize(data: &[u8]) -> Self;
+    fn deserialize(data: &Vec<u8>) -> Self;
 }
 
 impl FheJsonValueSerialize for FheJsonValue {
@@ -19,7 +19,7 @@ impl FheJsonValueSerialize for FheJsonValue {
         }
     }
 
-    fn deserialize(data: &[u8]) -> Self {
+    fn deserialize(data: &Vec<u8>) -> Self {
         if let Ok(value) = bincode::deserialize::<tfhe::FheInt64>(data) {
             return FheJsonValue::FheInt64(value);
         }
@@ -45,7 +45,7 @@ impl NorJsonValueSerialize for NorJsonValue {
         }
     }
 
-    fn deserialize(data: &[u8]) -> Self {
+    fn deserialize(data: &Vec<u8>) -> Self {
         if let Ok(value) = bincode::deserialize::<i64>(data) {
             return NorJsonValue::Int64(value);
         }

@@ -5,7 +5,7 @@ use crate::fhe_traits::value_serialize::FheJsonValueSerialize;
 
 type CompuationResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
-pub fn fhe_add(a: &[u8], b: &[u8], data_type: &str) -> CompuationResult<Vec<u8>> {
+pub fn fhe_add(a: &Vec<u8>, b: &Vec<u8>, data_type: &str) -> CompuationResult<Vec<u8>> {
     let a: FheJsonValue = FheJsonValueSerialize::deserialize(a);
     let b: FheJsonValue = FheJsonValueSerialize::deserialize(b);
     let data_type: FheSupportedType = FheSupportedType::from_str(data_type);
@@ -13,7 +13,7 @@ pub fn fhe_add(a: &[u8], b: &[u8], data_type: &str) -> CompuationResult<Vec<u8>>
     Ok(result.serialize())
 }
 
-pub fn fhe_sub(a: &[u8], b: &[u8], data_type: &str) -> CompuationResult<Vec<u8>> {
+pub fn fhe_sub(a: &Vec<u8>, b: &Vec<u8>, data_type: &str) -> CompuationResult<Vec<u8>> {
     let a: FheJsonValue = FheJsonValueSerialize::deserialize(a);
     let b: FheJsonValue = FheJsonValueSerialize::deserialize(b);
     let data_type: FheSupportedType = FheSupportedType::from_str(data_type);
@@ -21,7 +21,7 @@ pub fn fhe_sub(a: &[u8], b: &[u8], data_type: &str) -> CompuationResult<Vec<u8>>
     Ok(result.serialize())
 }
 
-pub fn fhe_mul(a: &[u8], b: &[u8], data_type: &str) -> CompuationResult<Vec<u8>> {
+pub fn fhe_mul(a: &Vec<u8>, b: &Vec<u8>, data_type: &str) -> CompuationResult<Vec<u8>> {
     let a: FheJsonValue = FheJsonValueSerialize::deserialize(a);
     let b: FheJsonValue = FheJsonValueSerialize::deserialize(b);
     let data_type: FheSupportedType = FheSupportedType::from_str(data_type);
