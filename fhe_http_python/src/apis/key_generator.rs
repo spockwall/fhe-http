@@ -13,10 +13,15 @@ pub struct KeyGenerator {
 impl KeyGenerator {
     #[new]
     // check if the new keys generation is needed
-    pub fn new(new_keys: bool) -> Self {
+    pub fn new(client_key: Option<Vec<u8>>, server_key: Option<Vec<u8>>) -> Self {
         let config: Config = ConfigBuilder::default().build();
-        let (client_key, server_key) = generate_keys(config);
+
+        // check if the new keys generation is needed
+        let new_keys = client_key.is_none() || server_key.is_none();
+
+        // if new keys are needed, generate new keys
         if new_keys {
+            let (client_key, server_key) = generate_keys(config);
             return KeyGenerator {
                 client_key: client_key.serialize(),
                 server_key: server_key.serialize(),
@@ -24,13 +29,13 @@ impl KeyGenerator {
             };
         } else {
             return KeyGenerator {
-                client_key: vec![],
-                server_key: vec![],
+                client_key: client_key.unwrap(),
+                server_key: server_key.unwrap(),
                 config,
             };
         }
     }
-    pub fn generate_new_keys(&self) -> KeyGenerator {
+    pub fn generate_new_keys(&self) -> Self {
         let (client_key, server_key) = generate_keys(self.config);
         KeyGenerator {
             client_key: client_key.serialize(),
