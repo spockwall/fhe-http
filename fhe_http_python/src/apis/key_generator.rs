@@ -6,6 +6,7 @@ use pyo3::prelude::*;
 use serde_json;
 use std::fs::File;
 use std::io::Write;
+use zstd::{decode_all, encode_all};
 
 #[pyclass]
 pub struct KeyGenerator {
@@ -72,10 +73,14 @@ impl KeyGenerator {
         let file_path = self.get_enc_path();
         let mut file = File::create(file_path).expect("key.enc create failed");
 
+        // compress keys by using zstd
+        let compressed_client_key = encode_all(&self.client_key[..], 0)?;
+        let compressed_server_key = encode_all(&self.server_key[..], 0)?;
+
         // json format
         let json = serde_json::json!({
-            "client_key": base64::encode_vec_u8(&self.client_key),
-            "server_key": base64::encode_vec_u8(&self.server_key)
+            "client_key": base64::encode_vec_u8(&compressed_client_key),
+            "server_key": base64::encode_vec_u8(&compressed_server_key)
         });
 
         // write the keys to the file
@@ -112,8 +117,11 @@ impl KeyGenerator {
             PyErr::new::<pyo3::exceptions::PyValueError, _>("Missing 'server_key' in JSON.")
         })?;
 
-        self.client_key = base64::decode_vec_u8(client_key);
-        self.server_key = base64::decode_vec_u8(server_key);
+        // decompression and set key
+        let compressed_client_key = base64::decode_vec_u8(client_key);
+        let compressed_server_key = base64::decode_vec_u8(server_key);
+        self.client_key = decode_all(&compressed_client_key[..])?;
+        self.server_key = decode_all(&compressed_server_key[..])?;
 
         println!("Keys loaded successfully");
         Ok(())
