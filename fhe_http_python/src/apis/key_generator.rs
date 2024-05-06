@@ -1,6 +1,6 @@
+use fhe_http_core::apis::base64;
 use fhe_http_core::fhe_traits::key_serialize::KeySerialize;
 use fhe_http_core::tfhe::{generate_keys, Config, ConfigBuilder};
-use fhe_http_core::utils::base64;
 use project_root;
 use pyo3::prelude::*;
 use serde_json;
@@ -112,8 +112,8 @@ impl KeyGenerator {
             PyErr::new::<pyo3::exceptions::PyValueError, _>("Missing 'server_key' in JSON.")
         })?;
 
-        self.client_key = base64::decode_vec_u8(client_key).unwrap();
-        self.server_key = base64::decode_vec_u8(server_key).unwrap();
+        self.client_key = base64::decode_vec_u8(client_key);
+        self.server_key = base64::decode_vec_u8(server_key);
 
         println!("Keys loaded successfully");
         Ok(())
