@@ -2,15 +2,15 @@ import fhe_http_python as py_fhe
 
 
 def generate_keys():
-    key_gen = py_fhe.KeyGenerator(new_keys=True)
+    key_gen = py_fhe.KeyGenerator()
     client_key = key_gen.get_client_key()
     server_key = key_gen.get_server_key()
     return client_key, server_key
 
 
 def set_server_key(server_key):
-    key_gen = py_fhe.KeyGenerator(new_keys=False)
-    key_gen.set_server_key(server_key)
+    ops = py_fhe.FheOps()
+    ops.set_server_key(server_key)
 
 
 def encrypt_i64(num: int, client_key):
