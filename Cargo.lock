@@ -351,7 +351,9 @@ name = "fhe_http_python"
 version = "0.1.0"
 dependencies = [
  "fhe_http_core",
+ "project-root",
  "pyo3",
+ "serde_json",
 ]
 
 [[package]]
@@ -602,6 +604,12 @@ checksum = "3d1597b0c024618f09a9c3b8655b7e430397a36d23fdafec26d6965e9eec3eba"
 dependencies = [
  "unicode-ident",
 ]
+
+[[package]]
+name = "project-root"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8bccbff07d5ed689c4087d20d7307a52ab6141edeedf487c3876a55b86cf63df"
 
 [[package]]
 name = "pulp"

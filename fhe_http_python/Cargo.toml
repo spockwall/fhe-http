@@ -12,3 +12,5 @@ name = "fhe_http_python"
 [dependencies]
 pyo3 = { version = "0.21.2", features = ["extension-module"] }
 fhe_http_core = { path = "../fhe_http_core" }
+project-root = "0.2.2"
+serde_json = "1.0.116"
