@@ -12,14 +12,14 @@ pub fn encode(input: &str) -> String {
     return STANDARD.encode(input.as_bytes());
 }
 
-pub fn decode(input: &str) -> String {
+pub fn decode(input: &str) -> Result<String, base64::DecodeError> {
     match STANDARD.decode(input.as_bytes()) {
         Ok(decoded) => {
             let decoded_str = String::from_utf8_lossy(&decoded);
-            return decoded_str.to_string();
+            return Ok(decoded_str.to_string());
         }
         Err(err) => {
-            return format!("Decoding error: {:?}", err);
+            panic!("decode error: {}", err)
         }
     }
 }

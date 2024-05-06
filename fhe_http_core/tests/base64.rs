@@ -14,6 +14,6 @@ mod tests {
         let input: &str = "SGVsbG8sIFdvcmxkIQ==";
         let expected: &str = "Hello, World!";
         let result = decode(input);
-        assert_eq!(result, expected);
+        assert_eq!(result.unwrap(), expected);
     }
 }
