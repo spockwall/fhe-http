@@ -3,6 +3,7 @@ import fhe_http_python as py_fhe
 
 def generate_keys():
     key_gen = py_fhe.KeyGenerator()
+    key_gen.init_keys()
     client_key = key_gen.get_client_key()
     server_key = key_gen.get_server_key()
     return client_key, server_key
