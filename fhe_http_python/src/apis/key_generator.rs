@@ -38,11 +38,8 @@ impl KeyGenerator {
             config: self.config,
         }
     }
-    pub fn set_server_key(&self) {
-        if &self.server_key.len() == &0 {
-            panic!("Server key is not set")
-        }
-        let server_key: ServerKey = KeySerialize::deserialize(&self.server_key);
+    pub fn set_server_key(&self, server_key: Vec<u8>) {
+        let server_key: ServerKey = KeySerialize::deserialize(&server_key);
         set_server_key(server_key);
     }
 
