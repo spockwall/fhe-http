@@ -1,5 +1,5 @@
 use fhe_http_core::fhe_traits::key_serialize::KeySerialize;
-use fhe_http_core::tfhe::{generate_keys, set_server_key, Config, ConfigBuilder, ServerKey};
+use fhe_http_core::tfhe::{generate_keys, Config, ConfigBuilder};
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -35,6 +35,7 @@ impl KeyGenerator {
             };
         }
     }
+
     pub fn generate_new_keys(&self) -> Self {
         let (client_key, server_key) = generate_keys(self.config);
         KeyGenerator {
@@ -43,14 +44,11 @@ impl KeyGenerator {
             config: self.config,
         }
     }
-    pub fn set_server_key(&self, server_key: Vec<u8>) {
-        let server_key: ServerKey = KeySerialize::deserialize(&server_key);
-        set_server_key(server_key);
-    }
 
     pub fn get_client_key(&self) -> Vec<u8> {
         self.client_key.clone()
     }
+
     pub fn get_server_key(&self) -> Vec<u8> {
         self.server_key.clone()
     }
