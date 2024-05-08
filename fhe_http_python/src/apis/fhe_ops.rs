@@ -31,11 +31,27 @@ impl FheOps {
             .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(format!("{}", e)))
     }
 
-    pub fn sub(&self, a: Vec<u8>, b: Vec<u8>, data_type: String) -> Vec<u8> {
-        fhe_sub(&a, &b, &data_type).unwrap()
+    pub fn sub(
+        &self,
+        py: Python<'_>,
+        a: Vec<u8>,
+        b: Vec<u8>,
+        data_type: String,
+    ) -> PyResult<PyObject> {
+        fhe_sub(&a, &b, &data_type)
+            .map(|result| PyBytes::new_bound(py, &result).into())
+            .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(format!("{}", e)))
     }
 
-    pub fn mul(&self, a: Vec<u8>, b: Vec<u8>, data_type: String) -> Vec<u8> {
-        fhe_mul(&a, &b, &data_type).unwrap()
+    pub fn mul(
+        &self,
+        py: Python<'_>,
+        a: Vec<u8>,
+        b: Vec<u8>,
+        data_type: String,
+    ) -> PyResult<PyObject> {
+        fhe_mul(&a, &b, &data_type)
+            .map(|result| PyBytes::new_bound(py, &result).into())
+            .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(format!("{}", e)))
     }
 }
