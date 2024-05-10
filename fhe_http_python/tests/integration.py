@@ -11,7 +11,8 @@ def generate_keys():
 
 def set_server_key(server_key):
     ops = py_fhe.FheOps()
-    ops.set_server_key(server_key)
+    decompressed_server_key = ops.decompress_server_key(server_key)
+    ops.set_server_key(decompressed_server_key)
 
 
 def encrypt_i64(num: int, client_key):
@@ -48,6 +49,8 @@ def sub_i64(a, b, client_key):
 
 if __name__ == "__main__":
     client_key, server_key = generate_keys()
+    print("client key: ", len(client_key))
+    print("server key: ", len(server_key))
     set_server_key(server_key)
     encrypted_a = encrypt_i64(5, client_key)
     encrypted_b = encrypt_i64(6, client_key)
