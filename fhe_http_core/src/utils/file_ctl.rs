@@ -18,7 +18,10 @@ pub fn parse_http_packet(packet: &str) -> (String, String) {
 }
 
 pub fn parse_json(json: &str) -> serde_json::Map<String, Value> {
-    let res: Value = serde_json::from_str(&json).unwrap();
+    let res: Value = match serde_json::from_str(&json) {
+        Ok(v) => v,
+        Err(_) => panic!("Error parsing JSON"),
+    };
     let data = res.as_object().unwrap();
     return data.clone();
 }
