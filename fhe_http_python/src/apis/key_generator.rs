@@ -1,12 +1,11 @@
 use fhe_http_core::apis::base64;
 use fhe_http_core::fhe_traits::key_serialize::KeySerialize;
-use fhe_http_core::tfhe::{generate_keys, Config, ConfigBuilder};
+use fhe_http_core::tfhe::{ClientKey, CompressedServerKey, Config, ConfigBuilder};
 use project_root;
 use pyo3::prelude::*;
 use serde_json;
 use std::fs::File;
 use std::io::Write;
-use zstd::{decode_all, encode_all};
 
 #[pyclass]
 pub struct KeyGenerator {
@@ -40,9 +39,10 @@ impl KeyGenerator {
 
     pub fn generate_new_keys(&mut self) -> () {
         print!("Generating new keys\n");
-        let (client_key, server_key) = generate_keys(self.config);
-        self.client_key = client_key.serialize();
-        self.server_key = server_key.serialize();
+        let cks = ClientKey::generate(self.config);
+        let compressed_sks: CompressedServerKey = CompressedServerKey::new(&cks);
+        self.client_key = cks.serialize();
+        self.server_key = compressed_sks.serialize();
     }
 
     pub fn get_client_key(&self) -> Vec<u8> {
@@ -50,6 +50,7 @@ impl KeyGenerator {
     }
 
     pub fn get_server_key(&self) -> Vec<u8> {
+        // server key is compressed
         self.server_key.clone()
     }
 
@@ -73,14 +74,10 @@ impl KeyGenerator {
         let file_path = self.get_enc_path();
         let mut file = File::create(file_path).expect("key.enc create failed");
 
-        // compress keys by using zstd
-        let compressed_client_key = encode_all(&self.client_key[..], 0)?;
-        let compressed_server_key = encode_all(&self.server_key[..], 0)?;
-
         // json format
         let json = serde_json::json!({
-            "client_key": base64::encode_vec_u8(&compressed_client_key),
-            "server_key": base64::encode_vec_u8(&compressed_server_key)
+            "client_key": base64::encode_vec_u8(&self.client_key),
+            "server_key": base64::encode_vec_u8(&self.server_key)
         });
 
         // write the keys to the file
@@ -118,10 +115,8 @@ impl KeyGenerator {
         })?;
 
         // decompression and set key
-        let compressed_client_key = base64::decode_vec_u8(client_key);
-        let compressed_server_key = base64::decode_vec_u8(server_key);
-        self.client_key = decode_all(&compressed_client_key[..])?;
-        self.server_key = decode_all(&compressed_server_key[..])?;
+        self.client_key = base64::decode_vec_u8(client_key);
+        self.server_key = base64::decode_vec_u8(server_key);
 
         println!("Keys loaded successfully");
         Ok(())
