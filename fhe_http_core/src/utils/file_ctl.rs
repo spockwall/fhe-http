@@ -22,3 +22,9 @@ pub fn parse_json(json: &str) -> serde_json::Map<String, Value> {
     let data = res.as_object().unwrap();
     return data.clone();
 }
+
+pub fn create_fhe_header(method: &str) -> String {
+    let mut header = serde_json::Map::new();
+    header.insert("fhe-method".to_string(), Value::String(method.to_string()));
+    return serde_json::to_string(&header).unwrap();
+}
