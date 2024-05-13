@@ -16,5 +16,6 @@ fn fhe_http_python(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(apis::http::create_fhe_header, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::encrypt_fhe_body, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::decrypt_fhe_body, m)?)?;
+    m.add_function(wrap_pyfunction!(apis::http::set_server_key_in_body, m)?)?;
     Ok(())
 }

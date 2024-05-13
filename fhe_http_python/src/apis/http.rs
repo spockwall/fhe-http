@@ -15,3 +15,14 @@ pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> S
 pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> String {
     http::decrypt_fhe_body(keys, data, client_key)
 }
+
+#[pyfunction]
+pub fn set_server_key_in_body(server_key: Vec<u8>, data: &str) -> String {
+    http::set_server_key_in_body(&server_key, data)
+}
+
+#[pyfunction]
+pub fn check_http_packet(packet: &str) -> PyResult<()> {
+    http::check_http_packet(packet)
+        .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(format!("{}", e)))
+}
