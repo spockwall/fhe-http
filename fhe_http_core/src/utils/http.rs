@@ -1,5 +1,6 @@
 use crate::fhe_traits::key_serialize::KeySerialize;
 use crate::utils::base64;
+use crate::utils::file_ctl::get_tfhe_version;
 use crate::utils::json;
 use serde_json::Value;
 use tfhe;
@@ -7,8 +8,12 @@ use tfhe::ClientKey;
 
 pub fn create_fhe_header(method: &str) -> String {
     let mut header = serde_json::Map::new();
+    let version = get_tfhe_version().to_string();
     header.insert("fhe-method".to_string(), Value::String(method.to_string()));
-
+    header.insert(
+        "fhe-version".to_string(),
+        Value::String(format!("tfhe:{}", version)),
+    );
     return serde_json::to_string(&header).unwrap();
 }
 
