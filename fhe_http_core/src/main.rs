@@ -11,7 +11,7 @@ fn main() -> Result<()> {
     let file_path: &str = "./examples/json_files/user.json";
     let file: File = File::open(file_path)?;
     let contents: String = utils::file_ctl::read_from_stream(file)?;
-    let _ = utils::file_ctl::parse_json(&contents);
+    let _ = utils::json::parse_json(&contents);
 
     Ok(())
 }

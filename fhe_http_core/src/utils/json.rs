@@ -7,6 +7,16 @@ use bincode;
 use serde_json::{Map, Value};
 use tfhe::ClientKey;
 
+/// Parse a JSON string into a JSON object
+pub fn parse_json(json: &str) -> serde_json::Map<String, Value> {
+    let res: Value = match serde_json::from_str(&json) {
+        Ok(v) => v,
+        Err(_) => panic!("Error parsing JSON"),
+    };
+    let data = res.as_object().unwrap();
+    return data.clone();
+}
+
 /// Encrypt a JSON object using the provided keys
 /// The keys are used to encrypt the values of the JSON object
 /// Encode the plaintext values by base64

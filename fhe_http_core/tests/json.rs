@@ -3,8 +3,8 @@ mod file_ctl_tests {
     use fhe_http_core::configs::json::FheJsonValue;
     use fhe_http_core::fhe_traits::decryptable::Decryptable;
     use fhe_http_core::fhe_traits::encryptable::Encryptable;
-    use fhe_http_core::utils::file_ctl::{parse_json, read_from_stream};
-    use fhe_http_core::utils::json::{decrypt_json, encrypt_json};
+    use fhe_http_core::utils::file_ctl::read_from_stream;
+    use fhe_http_core::utils::json::{decrypt_json, encrypt_json, parse_json};
     use std::fs::File;
     use tfhe::{generate_keys, set_server_key, ConfigBuilder};
     const FILE_PATH: &str = "examples/json_files/param.json";
