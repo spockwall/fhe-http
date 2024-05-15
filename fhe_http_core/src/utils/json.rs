@@ -103,19 +103,10 @@ pub fn decrypt_json(
     return decrypted_data;
 }
 
-pub fn get_encrypted_value_from_json(
-    encrypted_data: &Map<String, Value>,
-    key: &str,
-) -> FheJsonValue {
+pub fn get_encrypted_value_from_json(key: &str, encrypted_data: &Map<String, Value>) -> Vec<u8> {
     if !encrypted_data.contains_key(key) {
         panic!("Key not found in data");
     }
     let val = encrypted_data.get(key).unwrap();
-    let decoded_val = base64::decode_vec_u8(val.as_str().unwrap()).unwrap();
-    let deserialized_val: FheJsonValue = bincode::deserialize(&decoded_val).unwrap();
-    match deserialized_val {
-        FheJsonValue::FheInt64(n) => FheJsonValue::FheInt64(n),
-        FheJsonValue::FheUint64(n) => FheJsonValue::FheUint64(n),
-        FheJsonValue::FheString(s) => FheJsonValue::FheString(s),
-    }
+    base64::decode_vec_u8(val.as_str().unwrap()).unwrap()
 }
