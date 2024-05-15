@@ -22,6 +22,7 @@ mod file_ctl_tests {
 
     #[test]
     fn operate_on_ciphertext() {
+        use fhe_http_core::fhe_traits::value_serialize::FheJsonValueSerialize;
         use fhe_http_core::utils::json::get_encrypted_value_from_json;
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
@@ -32,16 +33,21 @@ mod file_ctl_tests {
         let keys = vec!["a", "b"];
         let encrypted_data = encrypt_json(&keys, &plain_data, &client_key);
 
-        let encrypted_a = get_encrypted_value_from_json(&encrypted_data, "a");
-        let encrypted_b = get_encrypted_value_from_json(&encrypted_data, "b");
-        let fhe_a = encrypted_a.to_fhe_i64().unwrap();
-        let fhe_b = encrypted_b.to_fhe_i64().unwrap();
-        // Addition
+        let encrypted_a = get_encrypted_value_from_json("a", &encrypted_data);
+        let encrypted_b = get_encrypted_value_from_json("b", &encrypted_data);
+        //let deserialized_a: FheJsonValue = bincode::deserialize(&encrypted_a).unwrap();
+
+        let deserialized_a = FheJsonValue::deserialize(&encrypted_a);
+        let deserialized_b = FheJsonValue::deserialize(&encrypted_b);
+        let fhe_a = deserialized_a.to_fhe_i64().unwrap();
+        let fhe_b = deserialized_b.to_fhe_i64().unwrap();
+        //// Addition
         let encrypted_c = FheJsonValue::FheInt64(fhe_a.clone() + fhe_b.clone());
-        let decrypted_c = encrypted_c.decrypt(&client_key).unwrap().to_i64();
+        let c = encrypted_c.decrypt(&client_key).unwrap();
+        print!("c: {}", c.to_i64().unwrap());
         assert_eq!(
-            decrypted_c.unwrap(),
-            plain_data.get("addition").unwrap().as_i64().unwrap()
+            c.to_i64().unwrap(),
+            plain_data.get("c").unwrap().as_i64().unwrap()
         );
     }
 }
