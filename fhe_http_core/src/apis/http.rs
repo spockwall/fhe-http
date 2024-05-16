@@ -1,4 +1,4 @@
-use crate::utils::http;
+use crate::utils::{http, json};
 
 pub fn create_fhe_header(method: &str) -> String {
     return http::create_fhe_header(&method);
@@ -18,4 +18,9 @@ pub fn set_server_key_in_body(server_key: &Vec<u8>, data: &str) -> String {
 
 pub fn check_http_packet(packet: &str) -> Result<(), &str> {
     return http::check_http_packet(packet);
+}
+
+pub fn get_fhe_value_from_json(keys: &str, data: &str) -> Vec<u8> {
+    let data = json::parse_json(data);
+    return json::get_fhe_value_from_json(keys, &data);
 }

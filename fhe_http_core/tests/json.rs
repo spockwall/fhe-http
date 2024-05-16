@@ -23,7 +23,7 @@ mod file_ctl_tests {
     #[test]
     fn operate_on_ciphertext() {
         use fhe_http_core::fhe_traits::value_serialize::FheJsonValueSerialize;
-        use fhe_http_core::utils::json::get_encrypted_value_from_json;
+        use fhe_http_core::utils::json::get_fhe_value_from_json;
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
         set_server_key(server_key);
@@ -33,8 +33,8 @@ mod file_ctl_tests {
         let keys = vec!["a", "b"];
         let encrypted_data = encrypt_json(&keys, &plain_data, &client_key);
 
-        let encrypted_a = get_encrypted_value_from_json("a", &encrypted_data);
-        let encrypted_b = get_encrypted_value_from_json("b", &encrypted_data);
+        let encrypted_a = get_fhe_value_from_json("a", &encrypted_data);
+        let encrypted_b = get_fhe_value_from_json("b", &encrypted_data);
         //let deserialized_a: FheJsonValue = bincode::deserialize(&encrypted_a).unwrap();
 
         let deserialized_a = FheJsonValue::deserialize(&encrypted_a);

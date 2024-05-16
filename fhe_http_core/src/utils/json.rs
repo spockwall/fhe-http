@@ -26,7 +26,6 @@ pub fn parse_json(json: &str) -> serde_json::Map<String, Value> {
 ///   client_key: &ClientKey - The secret key used for encryption
 /// returns:
 ///   Map<String, Value> - The encrypted JSON object
-/// panic:
 
 pub fn encrypt_json(
     keys: &Vec<&str>,
@@ -103,7 +102,7 @@ pub fn decrypt_json(
     return decrypted_data;
 }
 
-pub fn get_encrypted_value_from_json(key: &str, encrypted_data: &Map<String, Value>) -> Vec<u8> {
+pub fn get_fhe_value_from_json(key: &str, encrypted_data: &Map<String, Value>) -> Vec<u8> {
     if !encrypted_data.contains_key(key) {
         panic!("Key not found in data");
     }
