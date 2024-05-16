@@ -1,5 +1,6 @@
 use pyo3::prelude::*;
 pub mod apis {
+    pub mod base64;
     pub mod fhe;
     pub mod fhe_ops;
     pub mod fhe_types;
@@ -16,6 +17,9 @@ fn fhe_http_python(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(apis::http::create_fhe_header, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::encrypt_fhe_body, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::decrypt_fhe_body, m)?)?;
-    m.add_function(wrap_pyfunction!(apis::http::set_server_key_in_body, m)?)?;
+    m.add_function(wrap_pyfunction!(apis::http::set_server_key_to_json, m)?)?;
+    m.add_function(wrap_pyfunction!(apis::http::get_fhe_value_from_json, m)?)?;
+    m.add_function(wrap_pyfunction!(apis::base64::encode_fhe_value, m)?)?;
+    m.add_function(wrap_pyfunction!(apis::base64::decode_fhe_value, m)?)?;
     Ok(())
 }
