@@ -12,10 +12,12 @@ def send_post_request(url):
     data_str = json.dumps(data)
     encrypt_json = py_fhe.encrypt_fhe_body(["a", "b"], data_str, client_key)
     encrypt_json = json.loads(encrypt_json)
-    data["server_key"] = server_key
-    response = requests.post(url, json=data, headers=header)
+    encrypt_json_str = json.dumps(encrypt_json)
+    payload_str = py_fhe.set_server_key_to_json(server_key, encrypt_json_str)
+    payload = json.loads(payload_str)
+    response = requests.post(url, json=payload, headers=header)
     response = response.json()
-    encrypted_c = response["result"]
+    encrypted_c = py_fhe.decode_fhe_value(response["result"])
     c = decrypt_i64(encrypted_c, client_key)
     assert c == 123123246
 
