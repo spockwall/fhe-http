@@ -7,6 +7,9 @@ pub mod apis {
     pub mod http;
     pub mod key_generator;
 }
+pub mod utils {
+    pub mod conversion;
+}
 
 #[pymodule]
 fn fhe_http_python(m: &Bound<'_, PyModule>) -> PyResult<()> {
