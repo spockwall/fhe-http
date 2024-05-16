@@ -59,7 +59,7 @@ pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> S
     return serde_json::to_string(&decrypted_body).unwrap();
 }
 
-pub fn set_server_key_in_body(server_key: &Vec<u8>, data: &str) -> String {
+pub fn set_server_key_to_json(server_key: &Vec<u8>, data: &str) -> String {
     let mut body = json::parse_json(data);
     body.insert(
         "server_key".to_string(),
