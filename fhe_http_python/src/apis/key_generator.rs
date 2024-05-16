@@ -1,4 +1,5 @@
 use fhe_http_core::apis::base64;
+use fhe_http_core::configs::typing::{SerializedClientKey, SerializedServerKey};
 use fhe_http_core::fhe_traits::key_serialize::KeySerialize;
 use fhe_http_core::tfhe::{ClientKey, CompressedServerKey, Config, ConfigBuilder};
 use project_root;
@@ -9,8 +10,8 @@ use std::io::Write;
 
 #[pyclass]
 pub struct KeyGenerator {
-    client_key: Vec<u8>,
-    server_key: Vec<u8>,
+    client_key: SerializedClientKey,
+    server_key: SerializedServerKey,
     config: Config,
 }
 
@@ -45,11 +46,11 @@ impl KeyGenerator {
         self.server_key = compressed_sks.serialize();
     }
 
-    pub fn get_client_key(&self) -> Vec<u8> {
+    pub fn get_client_key(&self) -> SerializedClientKey {
         self.client_key.clone()
     }
 
-    pub fn get_server_key(&self) -> Vec<u8> {
+    pub fn get_server_key(&self) -> SerializedServerKey {
         // server key is compressed
         self.server_key.clone()
     }

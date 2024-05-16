@@ -1,8 +1,8 @@
 use fhe_http_core::apis::fhe_ops::{fhe_add, fhe_mul, fhe_sub};
+use fhe_http_core::configs::typing::SerializedServerKey;
 use fhe_http_core::fhe_traits::key_serialize::KeySerialize;
 use fhe_http_core::tfhe::{set_server_key, CompressedServerKey, ServerKey};
 use pyo3::prelude::*;
-
 #[pyclass]
 pub struct FheOps {}
 
@@ -12,13 +12,13 @@ impl FheOps {
     pub fn new() -> Self {
         FheOps {}
     }
-    fn decompress_server_key(&self, server_key: Vec<u8>) -> Vec<u8> {
+    fn decompress_server_key(&self, server_key: SerializedServerKey) -> Vec<u8> {
         let compressed_sks: CompressedServerKey = KeySerialize::deserialize(&server_key.clone());
         let decompressed_sks = compressed_sks.decompress();
         decompressed_sks.serialize().clone()
     }
 
-    pub fn set_server_key(&self, server_key: Vec<u8>) {
+    pub fn set_server_key(&self, server_key: SerializedServerKey) {
         let server_key: ServerKey = KeySerialize::deserialize(&server_key);
         set_server_key(server_key);
     }

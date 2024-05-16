@@ -1,15 +1,16 @@
 use fhe_http_core::apis::fhe::{decrypt, encrypt};
+use fhe_http_core::configs::typing::SerializedClientKey;
 use pyo3::prelude::*;
 
 #[pyclass]
 pub struct Fhe {
-    client_key: Vec<u8>,
+    client_key: SerializedClientKey,
 }
 
 #[pymethods]
 impl Fhe {
     #[new]
-    pub fn new(client_key: Vec<u8>) -> Self {
+    pub fn new(client_key: SerializedClientKey) -> Self {
         Fhe {
             client_key: client_key.clone(),
         }

@@ -1,3 +1,4 @@
+use crate::configs::typing::{SerializedClientKey, SerializedServerKey};
 use crate::fhe_traits::key_serialize::KeySerialize;
 use crate::utils::base64;
 use crate::utils::file_ctl::get_tfhe_version;
@@ -32,9 +33,9 @@ pub fn create_fhe_header(method: &str) -> String {
 /// returns:
 ///    String - The encrypted JSON object which is stringified
 ///           - The encrypted value in encoded in base64
-pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> String {
+pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerializedClientKey) -> String {
     let body = json::parse_json(data);
-    let client_key: ClientKey = KeySerialize::deserialize(&client_key);
+    let client_key: ClientKey = KeySerialize::deserialize(client_key);
     let keys = keys.iter().map(|x| x.as_str()).collect();
     let encrypted_body = json::encrypt_json(&keys, &body, &client_key);
     return serde_json::to_string(&encrypted_body).unwrap();
@@ -51,15 +52,15 @@ pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> S
 ///   String - The decrypted JSON object which is stringified
 ///          - The decrypted value in encoded in base64
 ///
-pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> String {
+pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerializedClientKey) -> String {
     let body: serde_json::Map<String, serde_json::Value> = serde_json::from_str(data).unwrap();
-    let client_key: ClientKey = KeySerialize::deserialize(&client_key);
+    let client_key: ClientKey = KeySerialize::deserialize(client_key);
     let keys = keys.iter().map(|x| x.as_str()).collect();
     let decrypted_body = json::decrypt_json(&keys, &body, &client_key);
     return serde_json::to_string(&decrypted_body).unwrap();
 }
 
-pub fn set_server_key_to_json(server_key: &Vec<u8>, data: &str) -> String {
+pub fn set_server_key_to_json(server_key: &SerializedServerKey, data: &str) -> String {
     let mut body = json::parse_json(data);
     body.insert(
         "server_key".to_string(),

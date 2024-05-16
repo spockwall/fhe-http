@@ -1,6 +1,7 @@
 pub mod configs {
     pub mod fhe_types;
     pub mod json;
+    pub mod typing;
 }
 
 pub mod utils {
