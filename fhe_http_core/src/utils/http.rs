@@ -14,9 +14,24 @@ pub fn create_fhe_header(method: &str) -> String {
         "fhe-version".to_string(),
         Value::String(format!("tfhe:{}", version)),
     );
+
+    header.insert(
+        "content-encoding".to_string(),
+        Value::String("gzip".to_string()),
+    );
     return serde_json::to_string(&header).unwrap();
 }
 
+/// Encrypt the body of the HTTP packet using the provided keys
+/// Currently, only the provided keys will be encrypted and left in the packet
+/// The rest of columns will be dropped, the problem will be fix in the future
+/// args:
+///    keys: Vec<String> - The keys to the values to encrypt
+///    data: &str - The JSON object to encrypt which is stringified
+///    client_key: Vec<u8> - The client key used for encryption
+/// returns:
+///    String - The encrypted JSON object which is stringified
+///           - The encrypted value in encoded in base64
 pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> String {
     let body = json::parse_json(data);
     let client_key: ClientKey = KeySerialize::deserialize(&client_key);
@@ -25,6 +40,17 @@ pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> S
     return serde_json::to_string(&encrypted_body).unwrap();
 }
 
+/// Decrypt the body of the HTTP packet using the provided keys
+/// Currently, only the provided keys will be decrypted and left in the packet
+/// The rest of columns will be dropped, the problem will be fix in the future
+/// args:
+///   keys: Vec<String> - The keys to the values to decrypt
+///   data: &str - The JSON object to decrypt which is stringified
+///   client_key: Vec<u8> - The client key used for decryption
+/// returns:
+///   String - The decrypted JSON object which is stringified
+///          - The decrypted value in encoded in base64
+///
 pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: Vec<u8>) -> String {
     let body: serde_json::Map<String, serde_json::Value> = serde_json::from_str(data).unwrap();
     let client_key: ClientKey = KeySerialize::deserialize(&client_key);
