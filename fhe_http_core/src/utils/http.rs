@@ -1,9 +1,8 @@
-use crate::configs::typing::{SerialClientKey, SerialServerKey};
-use crate::fhe_traits::key_serialize::KeySerialize;
+use crate::configs::typing::SerialServerKey;
 use crate::utils::base64;
 use crate::utils::file_ctl::get_tfhe_version;
 use crate::utils::json;
-use serde_json::Value;
+use serde_json::{Map, Value};
 use tfhe;
 use tfhe::ClientKey;
 
@@ -33,12 +32,15 @@ pub fn create_fhe_header(method: &str) -> String {
 /// returns:
 ///    String - The encrypted JSON object which is stringified
 ///           - The encrypted value in encoded in base64
-pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerialClientKey) -> String {
+pub fn encrypt_fhe_body(
+    keys: Vec<String>,
+    data: &str,
+    client_key: &ClientKey,
+) -> Map<String, Value> {
     let body = json::parse_json(data);
-    let client_key: ClientKey = KeySerialize::deserialize(client_key);
     let keys = keys.iter().map(|x| x.as_str()).collect();
     let encrypted_body = json::encrypt_json(&keys, &body, &client_key);
-    return serde_json::to_string(&encrypted_body).unwrap();
+    return encrypted_body;
 }
 
 /// Decrypt the body of the HTTP packet using the provided keys
@@ -52,12 +54,15 @@ pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerialClient
 ///   String - The decrypted JSON object which is stringified
 ///          - The decrypted value in encoded in base64
 ///
-pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerialClientKey) -> String {
+pub fn decrypt_fhe_body(
+    keys: Vec<String>,
+    data: &str,
+    client_key: &ClientKey,
+) -> Map<String, Value> {
     let body: serde_json::Map<String, serde_json::Value> = serde_json::from_str(data).unwrap();
-    let client_key: ClientKey = KeySerialize::deserialize(client_key);
     let keys = keys.iter().map(|x| x.as_str()).collect();
     let decrypted_body = json::decrypt_json(&keys, &body, &client_key);
-    return serde_json::to_string(&decrypted_body).unwrap();
+    return decrypted_body;
 }
 
 pub fn set_server_key_to_json(server_key: &SerialServerKey, data: &str) -> String {

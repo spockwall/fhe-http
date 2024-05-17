@@ -1,5 +1,7 @@
 use crate::configs::typing::{SerialClientKey, SerialServerKey, StringfiedJson};
+use crate::fhe_traits::key_serialize::KeySerialize;
 use crate::utils::{http, json};
+use tfhe::ClientKey;
 
 pub fn create_fhe_header(method: &str) -> String {
     return http::create_fhe_header(&method);
@@ -10,7 +12,9 @@ pub fn encrypt_fhe_body(
     data: &StringfiedJson,
     client_key: &SerialClientKey,
 ) -> String {
-    return http::encrypt_fhe_body(keys, data, client_key);
+    let client_key: ClientKey = KeySerialize::deserialize(client_key);
+    let encrypted_body = http::encrypt_fhe_body(keys, data, &client_key);
+    return serde_json::to_string(&encrypted_body).unwrap();
 }
 
 pub fn decrypt_fhe_body(
@@ -18,7 +22,9 @@ pub fn decrypt_fhe_body(
     data: &StringfiedJson,
     client_key: &SerialClientKey,
 ) -> String {
-    return http::decrypt_fhe_body(keys, data, client_key);
+    let client_key: ClientKey = KeySerialize::deserialize(client_key);
+    let decrypted_body = http::decrypt_fhe_body(keys, data, &client_key);
+    return serde_json::to_string(&decrypted_body).unwrap();
 }
 
 pub fn set_server_key_to_json(server_key: &SerialServerKey, data: &StringfiedJson) -> String {
