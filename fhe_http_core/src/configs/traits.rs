@@ -1,4 +1,4 @@
-use crate::configs::json::NorJsonValue;
+use crate::configs::typing::NorJsonValue;
 
 // turn i64 into NorJsonValue
 impl From<i64> for NorJsonValue {

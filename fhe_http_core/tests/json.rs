@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod file_ctl_tests {
-    use fhe_http_core::configs::json::FheJsonValue;
+    use fhe_http_core::configs::typing::FheJsonValue;
     use fhe_http_core::fhe_traits::decryptable::Decryptable;
     use fhe_http_core::fhe_traits::encryptable::Encryptable;
     use fhe_http_core::utils::file_ctl::read_from_stream;

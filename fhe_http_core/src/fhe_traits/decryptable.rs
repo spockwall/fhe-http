@@ -1,4 +1,4 @@
-use crate::configs::json::{FheJsonValue, NorJsonValue};
+use crate::configs::typing::{FheJsonValue, NorJsonValue};
 use tfhe::{prelude::*, ClientKey, Error, FheInt64, FheUint64, FheUint8};
 
 // Define an alias for the error type

@@ -1,5 +1,5 @@
-use crate::configs::fhe_types::FheSupportedType;
-use crate::configs::json::FheJsonValue;
+use crate::configs::typing::FheJsonValue;
+use crate::configs::typing::FheSupportedType;
 use crate::fhe_traits::computable::Computable;
 use crate::fhe_traits::value_serialize::FheJsonValueSerialize;
 

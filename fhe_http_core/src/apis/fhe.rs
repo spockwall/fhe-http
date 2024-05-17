@@ -1,5 +1,5 @@
-use crate::configs::json::{FheJsonValue, NorJsonValue};
 use crate::configs::typing::SerializedClientKey;
+use crate::configs::typing::{FheJsonValue, NorJsonValue};
 use crate::fhe_traits::decryptable::Decryptable;
 use crate::fhe_traits::encryptable::Encryptable;
 use crate::fhe_traits::key_serialize::KeySerialize;

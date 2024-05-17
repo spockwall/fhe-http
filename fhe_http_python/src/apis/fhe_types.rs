@@ -1,4 +1,4 @@
-use fhe_http_core::configs::json::NorJsonValue;
+use fhe_http_core::configs::typing::NorJsonValue;
 use fhe_http_core::fhe_traits::value_serialize::NorJsonValueSerialize;
 use pyo3::prelude::*;
 

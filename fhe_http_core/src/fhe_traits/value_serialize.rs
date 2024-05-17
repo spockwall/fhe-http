@@ -1,4 +1,4 @@
-use crate::configs::json::{FheJsonValue, NorJsonValue};
+use crate::configs::typing::{FheJsonValue, NorJsonValue};
 use bincode;
 pub trait NorJsonValueSerialize {
     fn serialize(&self) -> Vec<u8>;
