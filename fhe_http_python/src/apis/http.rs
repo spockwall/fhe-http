@@ -1,6 +1,6 @@
 use crate::utils::conversion::py_dict_to_json;
 use fhe_http_core::apis::http;
-use fhe_http_core::configs::typing::{SerializedClientKey, SerializedServerKey};
+use fhe_http_core::configs::typing::{SerialClientKey, SerialServerKey};
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
@@ -13,7 +13,7 @@ pub fn create_fhe_header(method: &str) -> String {
 pub fn encrypt_fhe_body<'py>(
     keys: Vec<String>,
     data: Bound<'py, PyDict>,
-    client_key: SerializedClientKey,
+    client_key: SerialClientKey,
 ) -> String {
     let data_json_str = py_dict_to_json(data).unwrap();
     http::encrypt_fhe_body(keys, &data_json_str, &client_key)
@@ -23,7 +23,7 @@ pub fn encrypt_fhe_body<'py>(
 pub fn decrypt_fhe_body<'py>(
     keys: Vec<String>,
     data: Bound<'py, PyDict>,
-    client_key: SerializedClientKey,
+    client_key: SerialClientKey,
 ) -> String {
     let data_json_str = py_dict_to_json(data).unwrap();
     http::decrypt_fhe_body(keys, &data_json_str, &client_key)
@@ -31,7 +31,7 @@ pub fn decrypt_fhe_body<'py>(
 
 #[pyfunction]
 pub fn set_server_key_to_json<'py>(
-    server_key: SerializedServerKey,
+    server_key: SerialServerKey,
     data: Bound<'py, PyDict>,
 ) -> String {
     let data_json_str = py_dict_to_json(data).unwrap();

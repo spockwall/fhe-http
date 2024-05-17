@@ -1,4 +1,4 @@
-use crate::configs::typing::{SerializedClientKey, SerializedServerKey};
+use crate::configs::typing::{SerialClientKey, SerialServerKey};
 use crate::fhe_traits::key_serialize::KeySerialize;
 use crate::utils::base64;
 use crate::utils::file_ctl::get_tfhe_version;
@@ -33,7 +33,7 @@ pub fn create_fhe_header(method: &str) -> String {
 /// returns:
 ///    String - The encrypted JSON object which is stringified
 ///           - The encrypted value in encoded in base64
-pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerializedClientKey) -> String {
+pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerialClientKey) -> String {
     let body = json::parse_json(data);
     let client_key: ClientKey = KeySerialize::deserialize(client_key);
     let keys = keys.iter().map(|x| x.as_str()).collect();
@@ -52,7 +52,7 @@ pub fn encrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerializedCl
 ///   String - The decrypted JSON object which is stringified
 ///          - The decrypted value in encoded in base64
 ///
-pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerializedClientKey) -> String {
+pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerialClientKey) -> String {
     let body: serde_json::Map<String, serde_json::Value> = serde_json::from_str(data).unwrap();
     let client_key: ClientKey = KeySerialize::deserialize(client_key);
     let keys = keys.iter().map(|x| x.as_str()).collect();
@@ -60,7 +60,7 @@ pub fn decrypt_fhe_body(keys: Vec<String>, data: &str, client_key: &SerializedCl
     return serde_json::to_string(&decrypted_body).unwrap();
 }
 
-pub fn set_server_key_to_json(server_key: &SerializedServerKey, data: &str) -> String {
+pub fn set_server_key_to_json(server_key: &SerialServerKey, data: &str) -> String {
     let mut body = json::parse_json(data);
     body.insert(
         "server_key".to_string(),

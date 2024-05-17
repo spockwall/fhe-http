@@ -1,7 +1,9 @@
 use tfhe::{FheInt64, FheUint64, FheUint8};
 
-pub type SerializedServerKey = Vec<u8>;
-pub type SerializedClientKey = Vec<u8>;
+pub type SerialServerKey = Vec<u8>;
+pub type SerialClientKey = Vec<u8>;
+pub type SerialNorJsonValue = Vec<u8>;
+pub type SerialFheJsonValue = Vec<u8>;
 pub type StringfiedJson = str;
 
 #[derive(serde::Deserialize, serde::Serialize)]
