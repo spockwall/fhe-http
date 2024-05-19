@@ -1,27 +1,31 @@
 use crate::configs::typing::SerialClientKey;
-use crate::configs::typing::{FheJsonValue, NorJsonValue, SerialFheJsonValue, SerialNorJsonValue};
 use crate::fhe_traits::decryptable::Decryptable;
 use crate::fhe_traits::encryptable::Encryptable;
-use crate::fhe_traits::key_serialize::KeySerialize;
-use crate::fhe_traits::value_serialize::{FheJsonValueSerialize, NorJsonValueSerialize};
+use crate::fhe_traits::serializable::ValueSerializable;
+use crate::fhe_traits::serializable::{FheValueSerializable, KeySerializable};
 use tfhe::ClientKey;
 
-pub fn encrypt(value: &SerialNorJsonValue, client_key: &SerialClientKey) -> SerialFheJsonValue {
-    let deserialized_key: ClientKey = KeySerialize::deserialize(client_key);
-    let deserailized_val: NorJsonValue = NorJsonValueSerialize::deserialize(value);
-    let encrypted = deserailized_val.encrypt(&deserialized_key);
+pub fn encrypt<T, U>(value: &Vec<u8>, client_key: &SerialClientKey) -> Vec<u8>
+where
+    T: Encryptable<Output = U> + ValueSerializable,
+    U: Decryptable + FheValueSerializable,
+{
+    let deserialized_key = KeySerializable::deserialize(client_key);
+    let deserailized_val: T = ValueSerializable::deserialize(value);
+    let encrypted = deserailized_val.val_encrypt(&deserialized_key);
     match encrypted {
         Ok(encrypted) => encrypted.serialize(),
         Err(_) => panic!("Failed to encrypt the value"),
     }
 }
 
-pub fn decrypt(value: &SerialFheJsonValue, client_key: &SerialClientKey) -> SerialNorJsonValue {
-    let deserialized_key: ClientKey = KeySerialize::deserialize(client_key);
-    let deserialized_val: FheJsonValue = FheJsonValueSerialize::deserialize(value);
-    let decrypted = deserialized_val.decrypt(&deserialized_key);
-    match decrypted {
-        Ok(decrypted) => decrypted.serialize(),
-        Err(_) => panic!("Failed to decrypt the value"),
-    }
+pub fn decrypt<T, U>(value: &Vec<u8>, client_key: &SerialClientKey) -> Vec<u8>
+where
+    T: Decryptable<Output = U> + FheValueSerializable,
+    U: Encryptable + ValueSerializable,
+{
+    let deserialized_key: ClientKey = KeySerializable::deserialize(client_key);
+    let deserialized_val: T = FheValueSerializable::deserialize(value);
+    let decrypted = deserialized_val.val_decrypt(&deserialized_key);
+    return decrypted.serialize();
 }
