@@ -1,7 +1,5 @@
 #[cfg(test)]
 mod fhe_tests {
-    use fhe_http_core::configs::typing::FheSupportedType;
-    use fhe_http_core::configs::typing::NorJsonValue;
     use fhe_http_core::fhe_traits::computable::Computable;
     use fhe_http_core::fhe_traits::decryptable::Decryptable;
     use fhe_http_core::fhe_traits::encryptable::Encryptable;
@@ -9,29 +7,45 @@ mod fhe_tests {
 
     #[test]
     fn fhe_operations() {
+        use fhe_http_core::fhe_traits::encryptable::Encryptable;
         let config: tfhe::Config = ConfigBuilder::default().build();
         let (client_key, server_key) = generate_keys(config);
         set_server_key(server_key);
 
         // declare plain_text a, b
-        let plain_a = 123;
-        let plain_b = 456;
-        let encrypted_a = NorJsonValue::Int64(plain_a).encrypt(&client_key).unwrap();
-        let encrypted_b = NorJsonValue::Int64(plain_b).encrypt(&client_key).unwrap();
+        let plain_a: i64 = 123;
+        let plain_b: i64 = 456;
+        let encrypted_a = plain_a.val_encrypt(&client_key).unwrap();
+        let encrypted_b = plain_b.val_encrypt(&client_key).unwrap();
 
         // test fhe add
-        let encrypted_c = encrypted_a.add(&encrypted_b, &FheSupportedType::Int64);
-        let decrypted_c = encrypted_c.decrypt(&client_key).unwrap().to_i64().unwrap();
+        let encrypted_c = encrypted_a.add(&encrypted_b);
+        let decrypted_c = encrypted_c.val_decrypt(&client_key);
         assert_eq!(plain_a + plain_b, decrypted_c);
 
         // test fhe sub
-        let encrypted_c = encrypted_a.sub(&encrypted_b, &FheSupportedType::Int64);
-        let decrypted_c = encrypted_c.decrypt(&client_key).unwrap().to_i64().unwrap();
+        let encrypted_c = encrypted_a.sub(&encrypted_b);
+        let decrypted_c = encrypted_c.val_decrypt(&client_key);
         assert_eq!(plain_a - plain_b, decrypted_c);
 
         // test fhe mul
-        let encrypted_c = encrypted_a.mul(&encrypted_b, &FheSupportedType::Int64);
-        let decrypted_c = encrypted_c.decrypt(&client_key).unwrap().to_i64().unwrap();
+        let encrypted_c = encrypted_a.mul(&encrypted_b);
+        let decrypted_c = encrypted_c.val_decrypt(&client_key);
         assert_eq!(plain_a * plain_b, decrypted_c);
+    }
+
+    #[test]
+    fn fhe_signed_int_encrypt() {
+        let config: tfhe::Config = ConfigBuilder::default().build();
+        let (client_key, server_key) = generate_keys(config);
+        set_server_key(server_key);
+
+        let plain_a: i64 = -123;
+        let plain_b: i64 = 456;
+        let encrypted_a = plain_a.val_encrypt(&client_key).unwrap();
+        let encrypted_b = plain_b.val_encrypt(&client_key).unwrap();
+        let encrypted_c = encrypted_a + encrypted_b;
+        let decrypted_c = encrypted_c.val_decrypt(&client_key);
+        assert_eq!(plain_a + plain_b, decrypted_c);
     }
 }
