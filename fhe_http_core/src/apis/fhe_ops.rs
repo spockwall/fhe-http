@@ -1,122 +1,110 @@
-use crate::configs::typing::{FheJsonValue, FheSupportedType, SerialFheJsonValue};
-use crate::fhe_traits::computable::Computable;
-use crate::fhe_traits::value_serialize::FheJsonValueSerialize;
+use crate::configs::typing::CompuationResult;
+use crate::fhe_traits::computable::{Computable, Shiftable};
+use crate::fhe_traits::decryptable::Decryptable;
+use crate::fhe_traits::serializable::FheValueSerializable;
 
-type CompuationResult<T> = std::result::Result<T, Box<dyn std::error::Error>>;
-fn perform_binary_operation<F>(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
+fn perform_binary_operation<T, F>(
+    a: &Vec<u8>,
+    b: &Vec<u8>,
     operation: F,
-) -> CompuationResult<SerialFheJsonValue>
+) -> CompuationResult<Vec<u8>>
 where
-    F: Fn(&FheJsonValue, &FheJsonValue, &FheSupportedType) -> FheJsonValue,
+    T: Decryptable + FheValueSerializable,
+    F: Fn(&T, &T) -> T,
 {
-    let a: FheJsonValue = FheJsonValueSerialize::deserialize(a);
-    let b: FheJsonValue = FheJsonValueSerialize::deserialize(b);
-    let data_type: FheSupportedType = FheSupportedType::from_str(data_type);
-    let result = operation(&a, &b, &data_type);
+    let a: T = FheValueSerializable::deserialize(a);
+    let b: T = FheValueSerializable::deserialize(b);
+    let result = operation(&a, &b);
     Ok(result.serialize())
 }
 
-fn perform_unary_operation<F>(
-    a: &SerialFheJsonValue,
-    data_type: &str,
-    operation: F,
-) -> CompuationResult<SerialFheJsonValue>
+fn perform_unary_operation<T, F>(a: &Vec<u8>, operation: F) -> CompuationResult<Vec<u8>>
 where
-    F: Fn(&FheJsonValue, &FheSupportedType) -> FheJsonValue,
+    T: Decryptable + FheValueSerializable,
+    F: Fn(&T) -> T,
 {
-    let a: FheJsonValue = FheJsonValueSerialize::deserialize(a);
-    let data_type: FheSupportedType = FheSupportedType::from_str(data_type);
-    let result = operation(&a, &data_type);
+    let a: T = FheValueSerializable::deserialize(a);
+    let result = operation(&a);
     Ok(result.serialize())
 }
 
-pub fn fhe_add(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.add(b, data_type))
+pub fn fhe_add<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.add(b))
 }
 
-pub fn fhe_sub(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.sub(b, data_type))
+pub fn fhe_sub<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.sub(b))
 }
 
-pub fn fhe_mul(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.mul(b, data_type))
+pub fn fhe_mul<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.mul(b))
 }
 
-pub fn fhe_div(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.div(b, data_type))
+pub fn fhe_div<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.div(b))
+}
+pub fn fhe_rem<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.rem(b))
 }
 
-pub fn fhe_rem(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.rem(b, data_type))
+pub fn fhe_and<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.and(b))
 }
 
-pub fn fhe_and(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.and(b, data_type))
+pub fn fhe_or<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.or(b))
 }
 
-pub fn fhe_or(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.or(b, data_type))
+pub fn fhe_xor<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.xor(b))
+}
+pub fn fhe_shr<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Shiftable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.shr(b))
 }
 
-pub fn fhe_xor(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.xor(b, data_type))
+pub fn fhe_shl<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Shiftable,
+{
+    perform_binary_operation(a, b, |a: &T, b: &T| a.shl(b))
+}
+pub fn fhe_neg<T>(a: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_unary_operation(a, |a: &T| a.neg())
 }
 
-pub fn fhe_shr(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.shr(b, data_type))
-}
-
-pub fn fhe_shl(
-    a: &SerialFheJsonValue,
-    b: &SerialFheJsonValue,
-    data_type: &str,
-) -> CompuationResult<SerialFheJsonValue> {
-    perform_binary_operation(a, b, data_type, |a, b, data_type| a.shl(b, data_type))
-}
-
-pub fn fhe_neg(a: &SerialFheJsonValue, data_type: &str) -> CompuationResult<SerialFheJsonValue> {
-    perform_unary_operation(a, data_type, |a, data_type| a.neg(data_type))
-}
-
-pub fn fhe_not(a: &SerialFheJsonValue, data_type: &str) -> CompuationResult<SerialFheJsonValue> {
-    perform_unary_operation(a, data_type, |a, data_type| a.not(data_type))
+pub fn fhe_not<T>(a: &Vec<u8>) -> CompuationResult<Vec<u8>>
+where
+    T: Decryptable + FheValueSerializable + Computable,
+{
+    perform_unary_operation(a, |a: &T| a.not())
 }
