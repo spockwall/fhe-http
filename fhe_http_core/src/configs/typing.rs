@@ -18,6 +18,7 @@ pub type SerialFheUint64 = Vec<u8>;
 pub type StringfiedJson = str;
 pub type CompuationResult<T> = Result<T, &'static str>;
 
+#[derive(Debug, Clone)]
 pub enum FheValue {
     Int64,
     Uint64,

@@ -4,9 +4,8 @@ use crate::fhe_traits::encryptable::Encryptable;
 use crate::fhe_traits::serializable::{FheValueSerializable, KeySerializable, ValueSerializable};
 use tfhe::{ClientKey, FheInt64, FheUint64};
 
-pub fn encrypt(value: &Vec<u8>, client_key: &SerialClientKey, data_type: &str) -> Vec<u8> {
+pub fn encrypt(value: &Vec<u8>, client_key: &SerialClientKey, data_type: &FheValue) -> Vec<u8> {
     let deserialized_key = KeySerializable::try_deserialize(client_key).unwrap();
-    let data_type = FheValue::from_str(data_type);
     match data_type {
         FheValue::Int64 => {
             let deserialized_val = i64::try_deserialize(value).expect("Failed to deserialize");
@@ -25,9 +24,8 @@ pub fn encrypt(value: &Vec<u8>, client_key: &SerialClientKey, data_type: &str) -
     }
 }
 
-pub fn decrypt(value: &Vec<u8>, client_key: &SerialClientKey, data_type: &str) -> Vec<u8> {
+pub fn decrypt(value: &Vec<u8>, client_key: &SerialClientKey, data_type: &FheValue) -> Vec<u8> {
     let deserialized_key: ClientKey = KeySerializable::try_deserialize(client_key).unwrap();
-    let data_type = FheValue::from_str(data_type);
     match data_type {
         FheValue::Int64 => {
             let deserialized_val = FheInt64::try_deserialize(value).unwrap();

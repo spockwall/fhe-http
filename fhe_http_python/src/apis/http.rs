@@ -11,22 +11,22 @@ pub fn create_fhe_header(method: &str) -> String {
 
 #[pyfunction]
 pub fn encrypt_fhe_body<'py>(
-    keys: Vec<String>,
+    keys: Vec<(String, String)>,
     data: Bound<'py, PyDict>,
     client_key: SerialClientKey,
 ) -> String {
     let data_json_str = py_dict_to_json(data).unwrap();
-    http::encrypt_fhe_body(keys, &data_json_str, &client_key)
+    http::encrypt_fhe_body(&keys, &data_json_str, &client_key)
 }
 
 #[pyfunction]
 pub fn decrypt_fhe_body<'py>(
-    keys: Vec<String>,
+    keys: Vec<(String, String)>,
     data: Bound<'py, PyDict>,
     client_key: SerialClientKey,
 ) -> String {
     let data_json_str = py_dict_to_json(data).unwrap();
-    http::decrypt_fhe_body(keys, &data_json_str, &client_key)
+    http::decrypt_fhe_body(&keys, &data_json_str, &client_key)
 }
 
 #[pyfunction]

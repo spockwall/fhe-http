@@ -6,8 +6,11 @@ use tfhe::{FheInt64, FheUint64};
 
 macro_rules! generate_binary_operation {
     ($fn_name:ident, $op_trait:ident, $op_method:ident) => {
-        pub fn $fn_name(a: &Vec<u8>, b: &Vec<u8>, data_type: &str) -> CompuationResult<Vec<u8>> {
-            let data_type = FheValue::from_str(data_type);
+        pub fn $fn_name(
+            a: &Vec<u8>,
+            b: &Vec<u8>,
+            data_type: &FheValue,
+        ) -> CompuationResult<Vec<u8>> {
             match data_type {
                 FheValue::Int64 => {
                     let a: FheInt64 = FheValueSerializable::try_deserialize(a).unwrap();
@@ -28,8 +31,7 @@ macro_rules! generate_binary_operation {
 
 macro_rules! generate_unary_operation {
     ($fn_name:ident, $op_trait:ident, $op_method:ident) => {
-        pub fn $fn_name(a: &Vec<u8>, data_type: &str) -> CompuationResult<Vec<u8>> {
-            let data_type = FheValue::from_str(data_type);
+        pub fn $fn_name(a: &Vec<u8>, data_type: &FheValue) -> CompuationResult<Vec<u8>> {
             match data_type {
                 FheValue::Int64 => {
                     let a: FheInt64 = FheValueSerializable::try_deserialize(a).unwrap();
@@ -48,8 +50,11 @@ macro_rules! generate_unary_operation {
 
 macro_rules! generate_binary_shift_operation {
     ($fn_name:ident, $op_trait:ident, $op_method:ident) => {
-        pub fn $fn_name(a: &Vec<u8>, b: &Vec<u8>, data_type: &str) -> CompuationResult<Vec<u8>> {
-            let data_type = FheValue::from_str(data_type);
+        pub fn $fn_name(
+            a: &Vec<u8>,
+            b: &Vec<u8>,
+            data_type: &FheValue,
+        ) -> CompuationResult<Vec<u8>> {
             match data_type {
                 FheValue::Uint64 => {
                     let a: FheUint64 = FheValueSerializable::try_deserialize(a).unwrap();
