@@ -6,6 +6,7 @@ pub mod apis {
     pub mod fhe_ops;
     pub mod http;
     pub mod key_generator;
+    pub mod serializer;
 }
 pub mod utils {
     pub mod conversion;
@@ -20,6 +21,7 @@ fn fhe_http_python(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<apis::key_generator::KeyGenerator>()?;
     m.add_class::<apis::fhe_ops::FheOps>()?;
     m.add_class::<apis::fhe::Fhe>()?;
+    m.add_class::<apis::serializer::Serializer>()?;
     m.add_function(wrap_pyfunction!(apis::http::create_fhe_header, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::encrypt_fhe_body, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::decrypt_fhe_body, m)?)?;
