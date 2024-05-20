@@ -17,11 +17,11 @@ impl Fhe {
         }
     }
 
-    pub fn encrypt(&self, val: Vec<u8>, data_type: &PyFheValue) -> SerialFheInt64 {
-        encrypt(&val, &self.client_key, data_type.as_str())
+    pub fn encrypt(&self, val: Vec<u8>, data_type: PyFheValue) -> SerialFheInt64 {
+        encrypt(&val, &self.client_key, &data_type.inner)
     }
 
-    pub fn decrypt(&self, val: Vec<u8>, data_type: &PyFheValue) -> SerialFheInt64 {
-        decrypt(&val, &self.client_key, data_type.as_str())
+    pub fn decrypt(&self, val: Vec<u8>, data_type: PyFheValue) -> SerialFheInt64 {
+        decrypt(&val, &self.client_key, &data_type.inner)
     }
 }

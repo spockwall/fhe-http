@@ -4,7 +4,7 @@ use pyo3::prelude::*;
 #[pyclass]
 #[derive(Clone, Debug)]
 pub struct PyFheValue {
-    inner: FheValue,
+    pub inner: FheValue,
 }
 
 #[pymethods]

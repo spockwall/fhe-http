@@ -1,3 +1,4 @@
+use crate::configs::typing::PyFheValue;
 use crate::utils::conversion::py_dict_to_json;
 use fhe_http_core::apis::http;
 use fhe_http_core::configs::typing::{SerialClientKey, SerialServerKey};
@@ -11,20 +12,28 @@ pub fn create_fhe_header(method: &str) -> String {
 
 #[pyfunction]
 pub fn encrypt_fhe_body<'py>(
-    keys: Vec<(String, String)>,
+    keys: Vec<(String, PyFheValue)>,
     data: Bound<'py, PyDict>,
     client_key: SerialClientKey,
 ) -> String {
+    let keys = keys
+        .iter()
+        .map(|(k, v)| (k.clone(), v.inner.clone()))
+        .collect();
     let data_json_str = py_dict_to_json(data).unwrap();
     http::encrypt_fhe_body(&keys, &data_json_str, &client_key)
 }
 
 #[pyfunction]
 pub fn decrypt_fhe_body<'py>(
-    keys: Vec<(String, String)>,
+    keys: Vec<(String, PyFheValue)>,
     data: Bound<'py, PyDict>,
     client_key: SerialClientKey,
 ) -> String {
+    let keys = keys
+        .iter()
+        .map(|(k, v)| (k.clone(), v.inner.clone()))
+        .collect();
     let data_json_str = py_dict_to_json(data).unwrap();
     http::decrypt_fhe_body(&keys, &data_json_str, &client_key)
 }
