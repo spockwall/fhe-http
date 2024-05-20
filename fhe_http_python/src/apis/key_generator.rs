@@ -1,6 +1,6 @@
 use fhe_http_core::apis::base64;
 use fhe_http_core::configs::typing::{SerialClientKey, SerialServerKey};
-use fhe_http_core::fhe_traits::key_serialize::KeySerialize;
+use fhe_http_core::fhe_traits::serializable::KeySerializable;
 use fhe_http_core::tfhe::{ClientKey, CompressedServerKey, Config, ConfigBuilder};
 use project_root;
 use pyo3::prelude::*;
@@ -42,8 +42,8 @@ impl KeyGenerator {
         print!("Generating new keys\n");
         let cks = ClientKey::generate(self.config);
         let compressed_sks: CompressedServerKey = CompressedServerKey::new(&cks);
-        self.client_key = cks.serialize();
-        self.server_key = compressed_sks.serialize();
+        self.client_key = cks.try_serialize().unwrap();
+        self.server_key = compressed_sks.try_serialize().unwrap();
     }
 
     pub fn get_client_key(&self) -> SerialClientKey {
