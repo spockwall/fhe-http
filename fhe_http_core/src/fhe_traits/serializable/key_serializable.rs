@@ -2,18 +2,18 @@ use crate::configs::typing::{
     SerialClientKey, SerialCompressedCompactPublicKey, SerialCompressedServerKey, SerialServerKey,
 };
 use tfhe::{ClientKey, CompressedCompactPublicKey, CompressedServerKey, ServerKey};
-pub trait KeySerializable {
-    fn serialize(&self) -> Vec<u8>;
-    fn deserialize(data: &Vec<u8>) -> Self;
+pub trait KeySerializable: Sized {
+    fn try_serialize(&self) -> Result<Vec<u8>, Box<dyn std::error::Error>>;
+    fn try_deserialize(data: &Vec<u8>) -> Result<Self, Box<dyn std::error::Error>>;
 }
 macro_rules! impl_key_serializable {
     ($t:ty, $s:ty) => {
         impl KeySerializable for $t {
-            fn serialize(&self) -> $s {
-                bincode::serialize(&self).unwrap()
+            fn try_serialize(&self) -> Result<$s, Box<dyn std::error::Error>> {
+                bincode::serialize(&self).map_err(|e| e.into())
             }
-            fn deserialize(data: &$s) -> Self {
-                bincode::deserialize(data).unwrap()
+            fn try_deserialize(data: &$s) -> Result<$t, Box<dyn std::error::Error>> {
+                bincode::deserialize(data).map_err(|e| e.into())
             }
         }
     };

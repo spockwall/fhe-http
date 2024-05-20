@@ -10,11 +10,11 @@ where
     T: Encryptable<Output = U> + ValueSerializable,
     U: Decryptable + FheValueSerializable,
 {
-    let deserialized_key = KeySerializable::deserialize(client_key);
-    let deserailized_val: T = ValueSerializable::deserialize(value);
+    let deserialized_key = KeySerializable::try_deserialize(client_key).unwrap();
+    let deserailized_val: T = ValueSerializable::try_deserialize(value).unwrap();
     let encrypted = deserailized_val.val_encrypt(&deserialized_key);
     match encrypted {
-        Ok(encrypted) => encrypted.serialize(),
+        Ok(encrypted) => encrypted.try_serialize().expect("Failed to serialize"),
         Err(_) => panic!("Failed to encrypt the value"),
     }
 }
@@ -24,8 +24,8 @@ where
     T: Decryptable<Output = U> + FheValueSerializable,
     U: Encryptable + ValueSerializable,
 {
-    let deserialized_key: ClientKey = KeySerializable::deserialize(client_key);
-    let deserialized_val: T = FheValueSerializable::deserialize(value);
+    let deserialized_key: ClientKey = KeySerializable::try_deserialize(client_key).unwrap();
+    let deserialized_val: T = FheValueSerializable::try_deserialize(value).unwrap();
     let decrypted = deserialized_val.val_decrypt(&deserialized_key);
-    return decrypted.serialize();
+    return decrypted.try_serialize().unwrap();
 }

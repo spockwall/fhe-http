@@ -1,11 +1,9 @@
-use crate::configs::typing::{FheJsonValue, NorJsonValue};
-use crate::fhe_traits::decryptable::Decryptable;
 use crate::fhe_traits::encryptable::Encryptable;
+use crate::fhe_traits::{decryptable::Decryptable, serializable::FheValueSerializable};
 use crate::utils::base64;
 
-use bincode;
 use serde_json::{Map, Value};
-use tfhe::ClientKey;
+use tfhe::{ClientKey, FheInt64, FheUint64};
 
 /// Parse a JSON string into a JSON object
 pub fn parse_json(json: &str) -> serde_json::Map<String, Value> {
@@ -40,24 +38,21 @@ pub fn encrypt_json(
             panic!("Key not found in data");
         }
         let val: &Value = &data[*key];
-        let fhe_json_val: FheJsonValue;
+        let serial_data: Vec<u8>;
         match val {
-            Value::String(s) => {
-                let json_val = NorJsonValue::String(s.clone());
-                fhe_json_val = json_val.encrypt(client_key).unwrap();
-            }
             Value::Number(n) => {
                 if n.is_i64() {
                     let n: i64 = n.as_i64().unwrap();
-                    fhe_json_val = NorJsonValue::Int64(n).encrypt(client_key).unwrap();
+                    let fhe_json_val = n.val_encrypt(client_key).unwrap();
+                    serial_data = fhe_json_val.try_serialize().expect("Failed to serialize");
                 } else {
                     let n: u64 = n.as_u64().unwrap();
-                    fhe_json_val = NorJsonValue::Uint64(n).encrypt(client_key).unwrap();
+                    let fhe_json_val = n.val_encrypt(client_key).unwrap();
+                    serial_data = fhe_json_val.try_serialize().expect("Failed to serialize");
                 }
             }
             _ => panic!("Unsupported value type"),
         }
-        let serial_data = bincode::serialize(&fhe_json_val).unwrap();
         let encrypted_data_str = base64::encode_vec_u8(&serial_data);
         encrypted_data.insert(key.to_string(), encrypted_data_str.into());
     }
@@ -76,6 +71,7 @@ pub fn encrypt_json(
 /// panic:
 ///   If the key is not found in the data
 ///   If the value type is not supported
+
 pub fn decrypt_json(
     keys: &Vec<&str>,
     data: &Map<String, Value>,
@@ -83,20 +79,17 @@ pub fn decrypt_json(
 ) -> Map<String, Value> {
     let mut decrypted_data: Map<String, Value> = serde_json::Map::new();
     for &key in keys.iter() {
-        let val_str = data.get(key).and_then(Value::as_str).unwrap();
-        let encrypted_data = base64::decode_vec_u8(val_str).unwrap();
-        let fhe_json_val: FheJsonValue = bincode::deserialize(&encrypted_data).unwrap();
-        let decrypted_val: NorJsonValue = fhe_json_val.decrypt(client_key).unwrap();
-        match decrypted_val {
-            NorJsonValue::Int64(n) => {
-                decrypted_data.insert(key.to_string(), n.into());
-            }
-            NorJsonValue::Uint64(n) => {
-                decrypted_data.insert(key.to_string(), n.into());
-            }
-            NorJsonValue::String(s) => {
-                decrypted_data.insert(key.to_string(), s.into());
-            }
+        let val_res = data.get(key).and_then(Value::as_str).expect("Key Error");
+        let encrypted_data = base64::decode_vec_u8(val_res).expect("Failed to decode base64");
+        // Try deserializing of FheInt64 and FheUint64
+        if let Ok(fhe_val) = FheInt64::try_deserialize(&encrypted_data) {
+            let decrypted_val = fhe_val.val_decrypt(client_key);
+            decrypted_data.insert(key.to_string(), decrypted_val.to_json_value());
+        } else if let Ok(fhe_val) = FheUint64::try_deserialize(&encrypted_data) {
+            let decrypted_val = fhe_val.val_decrypt(client_key);
+            decrypted_data.insert(key.to_string(), decrypted_val.to_json_value());
+        } else {
+            panic!("Unsupported value type or deserialization failed");
         }
     }
     return decrypted_data;

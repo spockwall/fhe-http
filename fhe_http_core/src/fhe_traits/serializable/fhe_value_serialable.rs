@@ -2,27 +2,19 @@ use crate::configs::typing::{SerialFheInt64, SerialFheUint64};
 use crate::fhe_traits::decryptable::Decryptable;
 use tfhe::{FheInt64, FheUint64};
 
-pub trait FheValueSerializable {
-    fn serialize(&self) -> Vec<u8>
-    where
-        Self: Decryptable;
-    fn deserialize(data: &Vec<u8>) -> Self;
+pub trait FheValueSerializable: Decryptable + Sized {
+    fn try_serialize(&self) -> Result<Vec<u8>, Box<dyn std::error::Error>>;
+    fn try_deserialize(data: &Vec<u8>) -> Result<Self, Box<dyn std::error::Error>>;
 }
 macro_rules! impl_fhe_value_serializable {
     ($t:ty, $s:ty) => {
         impl FheValueSerializable for $t {
-            fn serialize(&self) -> $s {
-                match bincode::serialize(&self) {
-                    Ok(value) => return value,
-                    Err(e) => panic!("Failed to serialize: {}", e),
-                }
+            fn try_serialize(&self) -> Result<$s, Box<dyn std::error::Error>> {
+                bincode::serialize(&self).map_err(|e| e.into())
             }
 
-            fn deserialize(data: &$s) -> Self {
-                match bincode::deserialize(data) {
-                    Ok(value) => return value,
-                    Err(e) => panic!("Failed to deserialize: {}", e),
-                }
+            fn try_deserialize(data: &$s) -> Result<$t, Box<dyn std::error::Error>> {
+                bincode::deserialize(data).map_err(|e| e.into())
             }
         }
     };

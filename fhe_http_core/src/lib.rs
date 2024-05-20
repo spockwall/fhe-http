@@ -1,5 +1,4 @@
 pub mod configs {
-    pub mod traits;
     pub mod typing;
 }
 
@@ -15,8 +14,7 @@ pub mod fhe_traits {
     pub mod computable;
     pub mod decryptable;
     pub mod encryptable;
-    pub mod key_serialize;
-    pub mod value_serialize;
+    pub mod serializable;
 }
 
 pub mod apis {

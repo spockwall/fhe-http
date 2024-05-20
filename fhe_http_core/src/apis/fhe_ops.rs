@@ -12,10 +12,10 @@ where
     T: Decryptable + FheValueSerializable,
     F: Fn(&T, &T) -> T,
 {
-    let a: T = FheValueSerializable::deserialize(a);
-    let b: T = FheValueSerializable::deserialize(b);
+    let a: T = FheValueSerializable::try_deserialize(a).unwrap();
+    let b: T = FheValueSerializable::try_deserialize(b).unwrap();
     let result = operation(&a, &b);
-    Ok(result.serialize())
+    Ok(result.try_serialize().expect("Failed to serialize"))
 }
 
 fn perform_unary_operation<T, F>(a: &Vec<u8>, operation: F) -> CompuationResult<Vec<u8>>
@@ -23,9 +23,9 @@ where
     T: Decryptable + FheValueSerializable,
     F: Fn(&T) -> T,
 {
-    let a: T = FheValueSerializable::deserialize(a);
+    let a: T = FheValueSerializable::try_deserialize(a).unwrap();
     let result = operation(&a);
-    Ok(result.serialize())
+    Ok(result.try_serialize().expect("Failed to serialize"))
 }
 
 pub fn fhe_add<T>(a: &Vec<u8>, b: &Vec<u8>) -> CompuationResult<Vec<u8>>
