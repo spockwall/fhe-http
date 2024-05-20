@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod file_ctl_tests {
+    use fhe_http_core::configs::typing::FheValue;
     use fhe_http_core::fhe_traits::decryptable::Decryptable;
     use fhe_http_core::utils::file_ctl::read_from_stream;
     use fhe_http_core::utils::json::{decrypt_json, encrypt_json, parse_json};
@@ -13,7 +14,10 @@ mod file_ctl_tests {
         // read file json file from examples
         let json = read_from_stream(File::open(FILE_PATH).unwrap()).unwrap();
         let mut plain_data = parse_json(&json);
-        let keys = vec!["a", "b"];
+        let keys = vec![
+            ("a".to_string(), FheValue::Int64),
+            ("b".to_string(), FheValue::Int64),
+        ];
         let encrypted_data = encrypt_json(&keys, &mut plain_data, &client_key);
         let _ = decrypt_json(&keys, &encrypted_data, &client_key);
     }
@@ -28,7 +32,10 @@ mod file_ctl_tests {
         // read file json file from examples
         let json = read_from_stream(File::open(FILE_PATH).unwrap()).unwrap();
         let plain_data = parse_json(&json);
-        let keys = vec!["a", "b"];
+        let keys = vec![
+            ("a".to_string(), FheValue::Int64),
+            ("b".to_string(), FheValue::Int64),
+        ];
         let encrypted_data = encrypt_json(&keys, &plain_data, &client_key);
 
         let encrypted_a = get_fhe_value_from_json("a", &encrypted_data);
