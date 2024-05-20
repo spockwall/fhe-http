@@ -1,4 +1,4 @@
-use crate::configs::typing::SerialServerKey;
+use crate::configs::typing::{FheValue, SerialServerKey};
 use crate::utils::base64;
 use crate::utils::file_ctl::get_tfhe_version;
 use crate::utils::json;
@@ -26,19 +26,18 @@ pub fn create_fhe_header(method: &str) -> String {
 /// Currently, only the provided keys will be encrypted and left in the packet
 /// The rest of columns will be dropped, the problem will be fix in the future
 /// args:
-///    keys: Vec<String> - The keys to the values to encrypt
+///    keys: &Vec<(String, FheValue)> - The keys to the values to encrypt
 ///    data: &str - The JSON object to encrypt which is stringified
 ///    client_key: Vec<u8> - The client key used for encryption
 /// returns:
 ///    String - The encrypted JSON object which is stringified
 ///           - The encrypted value in encoded in base64
 pub fn encrypt_fhe_body(
-    keys: Vec<String>,
+    keys: &Vec<(String, FheValue)>,
     data: &str,
     client_key: &ClientKey,
 ) -> Map<String, Value> {
     let body = json::parse_json(data);
-    let keys = keys.iter().map(|x| x.as_str()).collect();
     let encrypted_body = json::encrypt_json(&keys, &body, &client_key);
     return encrypted_body;
 }
@@ -47,20 +46,18 @@ pub fn encrypt_fhe_body(
 /// Currently, only the provided keys will be decrypted and left in the packet
 /// The rest of columns will be dropped, the problem will be fix in the future
 /// args:
-///   keys: Vec<String> - The keys to the values to decrypt
+///   keys: &Vec<(String, FheValue)> - The keys and types to the values to decrypt
 ///   data: &str - The JSON object to decrypt which is stringified
 ///   client_key: Vec<u8> - The client key used for decryption
 /// returns:
 ///   String - The decrypted JSON object which is stringified
 ///          - The decrypted value in encoded in base64
-///
 pub fn decrypt_fhe_body(
-    keys: Vec<String>,
+    keys: &Vec<(String, FheValue)>,
     data: &str,
     client_key: &ClientKey,
 ) -> Map<String, Value> {
     let body: serde_json::Map<String, serde_json::Value> = serde_json::from_str(data).unwrap();
-    let keys = keys.iter().map(|x| x.as_str()).collect();
     let decrypted_body = json::decrypt_json(&keys, &body, &client_key);
     return decrypted_body;
 }
