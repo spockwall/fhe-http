@@ -1,5 +1,6 @@
+use crate::configs::typing::PyFheValue;
 use fhe_http_core::apis::fhe::{decrypt, encrypt};
-use fhe_http_core::configs::typing::{SerialClientKey, SerialFheJsonValue, SerialNorJsonValue};
+use fhe_http_core::configs::typing::{SerialClientKey, SerialFheInt64};
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -16,11 +17,11 @@ impl Fhe {
         }
     }
 
-    pub fn encrypt(&self, val: SerialNorJsonValue) -> SerialFheJsonValue {
-        encrypt(&val, &self.client_key)
+    pub fn encrypt(&self, val: Vec<u8>, data_type: &PyFheValue) -> SerialFheInt64 {
+        encrypt(&val, &self.client_key, data_type.as_str())
     }
 
-    pub fn decrypt(&self, val: SerialFheJsonValue) -> SerialNorJsonValue {
-        decrypt(&val, &self.client_key)
+    pub fn decrypt(&self, val: Vec<u8>, data_type: &PyFheValue) -> SerialFheInt64 {
+        decrypt(&val, &self.client_key, data_type.as_str())
     }
 }
