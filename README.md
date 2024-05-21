@@ -25,3 +25,6 @@ This project is designed as an HTTP extension for an FHE feature or plan, and in
 - rust
 - python binding
 - rust -> wasm, javascript
+
+## References
+- [Rust compression crate benchmark](https://blog.logrocket.com/rust-compression-libraries/)
