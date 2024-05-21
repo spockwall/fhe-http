@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import Body
 from pydantic import BaseModel
 import fhe_http_python as py_fhe
-from integration import set_server_key
+from integration import set_server_key, add_encrypted_i64
 
 
 app = fastapi.FastAPI()
@@ -24,8 +24,7 @@ async def post_request(data: Addition = Body(...)):
     b = py_fhe.decode_fhe_value(data_json["b"])
     server_key = py_fhe.decode_fhe_value(data_json["server_key"])
     set_server_key(server_key)
-    fhe_ops = py_fhe.FheOps()
-    encrypted_c = fhe_ops.add(a, b, "Int64")
+    encrypted_c = add_encrypted_i64(a, b)
     encoded_c = py_fhe.encode_fhe_value(encrypted_c)
     return {"result": encoded_c, "status": "success"}
 

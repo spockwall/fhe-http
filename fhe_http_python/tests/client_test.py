@@ -9,7 +9,10 @@ def send_post_request(url):
     header = json.loads(py_fhe.create_fhe_header("123"))
     client_key, server_key = generate_keys()
     data = {"a": 123123123, "b": 123}
-    encrypt_json = py_fhe.encrypt_fhe_body(["a", "b"], data, client_key)
+    data_type = py_fhe.create_fhe_value_type("Int64")
+    encrypt_json = py_fhe.encrypt_fhe_body(
+        [("a", data_type), ("b", data_type)], data, client_key
+    )
     encrypt_json = json.loads(encrypt_json)
     payload_str = py_fhe.set_server_key_to_json(server_key, encrypt_json)
     payload = json.loads(payload_str)
