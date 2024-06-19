@@ -1,6 +1,8 @@
 use tfhe::prelude::FheTryEncrypt;
-use tfhe::ClientKey;
-
+use tfhe::zk::{CompactPkeCrs, ZkComputeLoad};
+use tfhe::{
+    ClientKey, CompactPublicKey, FheInt64, FheUint64, ProvenCompactFheInt64, ProvenCompactFheUint64,
+};
 type FheError = Box<dyn std::error::Error>;
 pub trait Encryptable {
     type Output;
@@ -9,8 +11,19 @@ pub trait Encryptable {
     where
         Self: Sized;
 
-    // type check
-    fn type_name(&self) -> &'static str;
+    // convert to json value
+    fn to_json_value(&self) -> serde_json::Value;
+}
+
+pub trait ProvenEncryptable {
+    type ProvenOutput;
+    fn proven_encrypt(
+        &self,
+        public_zk_params: &CompactPkeCrs,
+        public_key: &CompactPublicKey,
+    ) -> Result<Self::ProvenOutput, FheError>
+    where
+        Self: Sized;
 
     // convert to json value
     fn to_json_value(&self) -> serde_json::Value;
@@ -18,7 +31,7 @@ pub trait Encryptable {
 
 // Now, define the macro to implement Encryptable for specific types
 macro_rules! impl_encryptable {
-    ($t:ty, $fhe_ty:ty) => {
+    ($t:ty, $fhe_ty:ty, $proven_ty:ty) => {
         impl Encryptable for $t {
             type Output = $fhe_ty;
 
@@ -28,8 +41,29 @@ macro_rules! impl_encryptable {
                     Err(e) => Err(e.into()),
                 }
             }
-            fn type_name(&self) -> &'static str {
-                stringify!($t)
+
+            fn to_json_value(&self) -> serde_json::Value {
+                serde_json::Value::Number(serde_json::Number::from(*self))
+            }
+        }
+
+        impl ProvenEncryptable for $t {
+            type ProvenOutput = $proven_ty;
+            fn proven_encrypt(
+                &self,
+                public_zk_params: &CompactPkeCrs,
+                public_key: &CompactPublicKey,
+            ) -> Result<Self::ProvenOutput, FheError> {
+                let a = <$proven_ty>::try_encrypt(
+                    *self,
+                    public_zk_params.public_params(),
+                    &public_key,
+                    ZkComputeLoad::Proof,
+                );
+                match a {
+                    Ok(encrypted) => Ok(encrypted),
+                    Err(e) => Err(e.into()),
+                }
             }
 
             fn to_json_value(&self) -> serde_json::Value {
@@ -40,5 +74,5 @@ macro_rules! impl_encryptable {
 }
 
 // Use the macro to implement Encryptable for i64 and u64
-impl_encryptable!(i64, tfhe::FheInt64);
-impl_encryptable!(u64, tfhe::FheUint64);
+impl_encryptable!(i64, FheInt64, ProvenCompactFheInt64);
+impl_encryptable!(u64, FheUint64, ProvenCompactFheUint64);
