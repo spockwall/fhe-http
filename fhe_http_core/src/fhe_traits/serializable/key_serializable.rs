@@ -1,7 +1,10 @@
 use crate::configs::typing::{
-    SerialClientKey, SerialCompressedCompactPublicKey, SerialCompressedServerKey, SerialServerKey,
+    SerialClientKey, SerialCompactPublicKey, SerialCompressedCompactPublicKey,
+    SerialCompressedServerKey, SerialServerKey,
 };
-use tfhe::{ClientKey, CompressedCompactPublicKey, CompressedServerKey, ServerKey};
+use tfhe::{
+    ClientKey, CompactPublicKey, CompressedCompactPublicKey, CompressedServerKey, ServerKey,
+};
 pub trait KeySerializable: Sized {
     fn try_serialize(&self) -> Result<Vec<u8>, Box<dyn std::error::Error>>;
     fn try_deserialize(data: &Vec<u8>) -> Result<Self, Box<dyn std::error::Error>>;
@@ -23,3 +26,4 @@ impl_key_serializable!(ClientKey, SerialClientKey);
 impl_key_serializable!(ServerKey, SerialServerKey);
 impl_key_serializable!(CompressedCompactPublicKey, SerialCompressedCompactPublicKey);
 impl_key_serializable!(CompressedServerKey, SerialCompressedServerKey);
+impl_key_serializable!(CompactPublicKey, SerialCompactPublicKey);
