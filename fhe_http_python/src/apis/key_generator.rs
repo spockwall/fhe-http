@@ -1,29 +1,46 @@
+use core::panic;
 use fhe_http_core::apis::base64;
-use fhe_http_core::configs::typing::{SerialClientKey, SerialServerKey};
+use fhe_http_core::configs::typing::{
+    SerialClientKey, SerialCompactPublicKey, SerialPbsParams, SerialPublicZkParams, SerialServerKey,
+};
 use fhe_http_core::fhe_traits::serializable::KeySerializable;
-use fhe_http_core::tfhe::{ClientKey, CompressedServerKey, Config, ConfigBuilder};
+use fhe_http_core::fhe_traits::serializable::ZkSerializable;
+use fhe_http_core::tfhe::{self, Config};
 use project_root;
 use pyo3::prelude::*;
 use serde_json;
 use std::fs::File;
 use std::io::Write;
+use std::option::Option;
+use tfhe::zk::CompactPkeCrs;
 
 #[pyclass]
 pub struct KeyGenerator {
     client_key: SerialClientKey,
     server_key: SerialServerKey,
-    config: Config,
+    public_key: SerialCompactPublicKey,
+    public_zk_params: SerialPublicZkParams,
+    config: tfhe::Config,
 }
 
 #[pymethods]
 impl KeyGenerator {
     #[new]
     // check if the new keys generation is needed
-    pub fn new() -> Self {
-        let config: Config = ConfigBuilder::default().build();
+    pub fn new(params: Option<SerialPbsParams>) -> Self {
+        let config: Config = match params {
+            Some(p) => {
+                let params = tfhe::shortint::ClassicPBSParameters::try_deserialize(&p)
+                    .unwrap_or_else(|_| panic!("Invalid PBS params"));
+                tfhe::ConfigBuilder::with_custom_parameters(params, None).build()
+            }
+            None => tfhe::ConfigBuilder::default().build(),
+        };
         Self {
             client_key: Vec::new(),
             server_key: Vec::new(),
+            public_key: Vec::new(),
+            public_zk_params: Vec::new(),
             config,
         }
     }
@@ -40,10 +57,31 @@ impl KeyGenerator {
 
     pub fn generate_new_keys(&mut self) -> () {
         print!("Generating new keys\n");
-        let cks = ClientKey::generate(self.config);
-        let compressed_sks: CompressedServerKey = CompressedServerKey::new(&cks);
+        let cks = tfhe::ClientKey::generate(self.config);
+        let compressed_sks: tfhe::CompressedServerKey = tfhe::CompressedServerKey::new(&cks);
+        let public_key = tfhe::CompactPublicKey::new(&cks);
         self.client_key = cks.try_serialize().unwrap();
         self.server_key = compressed_sks.try_serialize().unwrap();
+        self.public_key = public_key.try_serialize().unwrap();
+    }
+
+    pub fn generate_public_zk_params(
+        &mut self,
+        max_num_message: usize,
+        params: Option<SerialPbsParams>,
+    ) {
+        println!("Generating new public zk params");
+
+        let params = params
+            .map(|p| tfhe::shortint::ClassicPBSParameters::try_deserialize(&p))
+            .unwrap_or_else(|| panic!("No PBS params provided to generate public zk params"))
+            .unwrap_or_else(|_| panic!("Invalid PBS params"));
+
+        let crs = CompactPkeCrs::from_shortint_params(params, max_num_message)
+            .unwrap_or_else(|_| panic!("Error: failed to generate public zk params"));
+
+        let public_zk_params = crs.public_params();
+        self.public_zk_params = public_zk_params.try_serialize().unwrap();
     }
 
     pub fn get_client_key(&self) -> SerialClientKey {
@@ -53,6 +91,11 @@ impl KeyGenerator {
     pub fn get_server_key(&self) -> SerialServerKey {
         // server key is compressed
         self.server_key.clone()
+    }
+
+    pub fn get_public_key(&self) -> SerialCompactPublicKey {
+        // compact public key
+        self.public_key.clone()
     }
 
     fn get_enc_path(&self) -> String {
