@@ -19,7 +19,7 @@ pub trait Shiftable {
 }
 
 macro_rules! impl_computable {
-    ($fhe_ty:ty, $is_shift:expr) => {
+    ($fhe_ty:ty) => {
         impl Computable for $fhe_ty {
             fn add(&self, other: &Self) -> Self {
                 self + other
@@ -67,6 +67,6 @@ macro_rules! impl_shiftable {
     };
 }
 
-impl_computable!(FheInt64, false);
-impl_computable!(FheUint64, true);
+impl_computable!(FheInt64);
+impl_computable!(FheUint64);
 impl_shiftable!(FheUint64);
