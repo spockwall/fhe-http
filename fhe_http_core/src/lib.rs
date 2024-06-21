@@ -24,4 +24,5 @@ pub mod apis {
     pub mod http;
 }
 
+pub extern crate serde;
 pub extern crate tfhe;
