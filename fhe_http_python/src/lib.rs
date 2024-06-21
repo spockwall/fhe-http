@@ -1,4 +1,4 @@
-use configs::typing::PyFheValue;
+use crate::configs::typing::PyFheValue;
 use pyo3::prelude::*;
 pub mod apis {
     pub mod base64;
@@ -13,6 +13,7 @@ pub mod utils {
 }
 
 pub mod configs {
+    pub mod params;
     pub mod typing;
 }
 
@@ -30,7 +31,7 @@ fn fhe_http_python(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(apis::base64::encode_fhe_value, m)?)?;
     m.add_function(wrap_pyfunction!(apis::base64::decode_fhe_value, m)?)?;
     m.add_function(wrap_pyfunction!(configs::typing::create_fhe_value_type, m)?)?;
-
+    m.add_function(wrap_pyfunction!(configs::params::get_pbs_params, m)?)?;
     // Using wrap_enum! to expose the enum
     let fhe_value_enum = py.get_type_bound::<PyFheValue>();
     m.add("FheValue", fhe_value_enum)?;
