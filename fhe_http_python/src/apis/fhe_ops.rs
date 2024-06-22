@@ -1,8 +1,5 @@
 use crate::configs::typing::PyFheValue;
 use fhe_http_core::apis::fhe_ops::*;
-use fhe_http_core::configs::typing::SerialServerKey;
-use fhe_http_core::fhe_traits::serializable::KeySerializable;
-use fhe_http_core::tfhe::{set_server_key, CompressedServerKey, ServerKey};
 use pyo3::prelude::*;
 
 #[macro_export]
@@ -31,17 +28,6 @@ impl FheOps {
     #[new]
     pub fn new() -> Self {
         FheOps {}
-    }
-    fn decompress_server_key(&self, server_key: SerialServerKey) -> Vec<u8> {
-        let compressed_sks: CompressedServerKey =
-            KeySerializable::try_deserialize(&server_key).unwrap();
-        let decompressed_sks = compressed_sks.decompress();
-        decompressed_sks.try_serialize().unwrap().clone()
-    }
-
-    pub fn set_server_key(&self, server_key: SerialServerKey) {
-        let server_key: ServerKey = KeySerializable::try_deserialize(&server_key).unwrap();
-        set_server_key(server_key);
     }
 
     pub fn add(&self, a: Vec<u8>, b: Vec<u8>, data_type: PyFheValue) -> PyResult<Vec<u8>> {
