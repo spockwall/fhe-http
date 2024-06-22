@@ -31,7 +31,7 @@ pub trait ProvenEncryptable {
 
 // Now, define the macro to implement Encryptable for specific types
 macro_rules! impl_encryptable {
-    ($t:ty, $fhe_ty:ty, $proven_ty:ty) => {
+    ($t:ty, $fhe_ty:ty) => {
         impl Encryptable for $t {
             type Output = $fhe_ty;
 
@@ -46,15 +46,19 @@ macro_rules! impl_encryptable {
                 serde_json::Value::Number(serde_json::Number::from(*self))
             }
         }
+    };
+}
 
+macro_rules! impl_proven_encryptable {
+    ($t:ty, $proven_fhe_ty:ty) => {
         impl ProvenEncryptable for $t {
-            type ProvenOutput = $proven_ty;
+            type ProvenOutput = $proven_fhe_ty;
             fn proven_encrypt(
                 &self,
                 public_zk_params: &CompactPkeCrs,
                 public_key: &CompactPublicKey,
             ) -> Result<Self::ProvenOutput, FheError> {
-                let a = <$proven_ty>::try_encrypt(
+                let a = <$proven_fhe_ty>::try_encrypt(
                     *self,
                     public_zk_params.public_params(),
                     &public_key,
@@ -74,5 +78,7 @@ macro_rules! impl_encryptable {
 }
 
 // Use the macro to implement Encryptable for i64 and u64
-impl_encryptable!(i64, FheInt64, ProvenCompactFheInt64);
-impl_encryptable!(u64, FheUint64, ProvenCompactFheUint64);
+impl_encryptable!(i64, FheInt64);
+impl_encryptable!(u64, FheUint64);
+impl_proven_encryptable!(i64, ProvenCompactFheInt64);
+impl_proven_encryptable!(u64, ProvenCompactFheUint64);
