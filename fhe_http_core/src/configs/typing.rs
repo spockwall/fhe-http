@@ -31,6 +31,12 @@ pub enum FheValue {
     Uint64,
 }
 
+#[derive(Debug, Clone)]
+pub enum ProvenFheValue {
+    ProvenInt64,
+    ProvenUint64,
+}
+
 impl FheValue {
     pub fn as_str(&self) -> &'static str {
         match self {
@@ -43,6 +49,22 @@ impl FheValue {
         match s {
             "Int64" => FheValue::Int64,
             "Uint64" => FheValue::Uint64,
+            _ => panic!("Invalid FheValue"),
+        }
+    }
+}
+
+impl ProvenFheValue {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            ProvenFheValue::ProvenInt64 => "ProvenInt64",
+            ProvenFheValue::ProvenUint64 => "ProvenUint64",
+        }
+    }
+    pub fn from_str(s: &str) -> ProvenFheValue {
+        match s {
+            "ProvenInt64" => ProvenFheValue::ProvenInt64,
+            "ProvenUint64" => ProvenFheValue::ProvenUint64,
             _ => panic!("Invalid FheValue"),
         }
     }
