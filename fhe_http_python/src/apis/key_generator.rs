@@ -55,7 +55,7 @@ impl KeyGenerator {
         Ok(())
     }
 
-    pub fn generate_new_keys(&mut self) -> () {
+    pub fn generate_new_keys(&mut self) -> PyResult<()> {
         print!("Generating new keys\n");
         let cks = tfhe::ClientKey::generate(self.config);
         let compressed_sks: tfhe::CompressedServerKey = tfhe::CompressedServerKey::new(&cks);
@@ -63,13 +63,14 @@ impl KeyGenerator {
         self.client_key = cks.try_serialize().unwrap();
         self.server_key = compressed_sks.try_serialize().unwrap();
         self.public_key = public_key.try_serialize().unwrap();
+        Ok(())
     }
 
     pub fn generate_public_zk_params(
         &mut self,
         max_num_message: usize,
         params: Option<SerialPbsParams>,
-    ) {
+    ) -> PyResult<()> {
         println!("Generating new public zk params");
 
         let params = params
@@ -82,6 +83,7 @@ impl KeyGenerator {
 
         let public_zk_params = crs.public_params();
         self.public_zk_params = public_zk_params.try_serialize().unwrap();
+        Ok(())
     }
 
     pub fn get_client_key(&self) -> SerialClientKey {
