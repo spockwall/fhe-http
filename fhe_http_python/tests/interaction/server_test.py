@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import Body
 from pydantic import BaseModel
 import fhe_http_python as py_fhe
-from integration import set_server_key, add_encrypted_i64
+from ..operations import set_server_key, add_encrypted_i64
 
 
 app = fastapi.FastAPI()

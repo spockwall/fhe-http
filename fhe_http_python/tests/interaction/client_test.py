@@ -2,7 +2,7 @@
 import json
 import requests
 import fhe_http_python as py_fhe
-from integration import generate_keys, decrypt_i64
+from ..operations import generate_keys, decrypt_i64
 
 
 def send_post_request(url):
