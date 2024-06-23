@@ -1,5 +1,5 @@
 use tfhe::prelude::FheTryEncrypt;
-use tfhe::zk::{CompactPkeCrs, ZkComputeLoad};
+use tfhe::zk::{CompactPkePublicParams, ZkComputeLoad};
 use tfhe::{
     ClientKey, CompactPublicKey, FheInt64, FheUint64, ProvenCompactFheInt64, ProvenCompactFheUint64,
 };
@@ -19,7 +19,7 @@ pub trait ProvenEncryptable {
     type ProvenOutput;
     fn proven_encrypt(
         &self,
-        public_zk_params: &CompactPkeCrs,
+        public_zk_params: &CompactPkePublicParams,
         public_key: &CompactPublicKey,
     ) -> Result<Self::ProvenOutput, FheError>
     where
@@ -55,12 +55,12 @@ macro_rules! impl_proven_encryptable {
             type ProvenOutput = $proven_fhe_ty;
             fn proven_encrypt(
                 &self,
-                public_zk_params: &CompactPkeCrs,
+                public_zk_params: &CompactPkePublicParams,
                 public_key: &CompactPublicKey,
             ) -> Result<Self::ProvenOutput, FheError> {
                 let a = <$proven_fhe_ty>::try_encrypt(
                     *self,
-                    public_zk_params.public_params(),
+                    public_zk_params,
                     &public_key,
                     ZkComputeLoad::Proof,
                 );
