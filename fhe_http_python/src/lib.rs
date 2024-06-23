@@ -36,7 +36,7 @@ fn fhe_http_python(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(apis::http::decrypt_fhe_body, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::set_server_key_to_json, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::get_fhe_value_from_json, m)?)?;
-    m.add_function(wrap_pyfunction!(configs::params::get_pbs_params, m)?)?;
+    m.add_function(wrap_pyfunction!(configs::params::get_public_zk_params, m)?)?;
     m.add_function(wrap_pyfunction!(create_fhe_value_type, m)?)?;
     m.add_function(wrap_pyfunction!(create_proven_fhe_value_type, m)?)?;
 

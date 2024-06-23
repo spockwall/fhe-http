@@ -1,4 +1,5 @@
 use fhe_http_core::fhe_traits::serializable::ZkSerializable;
+use fhe_http_core::tfhe::zk::CompactPkeCrs;
 use pyo3::prelude::*;
 /// Import the parameters from the shortint module
 /// example:
@@ -49,8 +50,9 @@ import_shortint_parameters!(
 ///    (2, 0),(2, 1),(2, 2),(2, 3),(2, 4),(2, 5),(2, 6),
 ///    (3, 0),(3, 1),(3, 2),(3, 3),(3, 4),(3, 5)
 #[pyfunction]
-pub fn get_pbs_params(msg: u8, carry: u8) -> Vec<u8> {
-    let param = match (msg, carry) {
+pub fn get_public_zk_params(msg: u8, carry: u8) -> Vec<u8> {
+    let max_num_message = 1;
+    let params = match (msg, carry) {
         (1, 0) => PARAM_MESSAGE_1_CARRY_0_COMPACT_PK_KS_PBS_TUNIFORM_2M40,
         (1, 1) => PARAM_MESSAGE_1_CARRY_1_COMPACT_PK_KS_PBS_TUNIFORM_2M40,
         (1, 2) => PARAM_MESSAGE_1_CARRY_2_COMPACT_PK_KS_PBS_TUNIFORM_2M40,
@@ -73,7 +75,9 @@ pub fn get_pbs_params(msg: u8, carry: u8) -> Vec<u8> {
         (3, 5) => PARAM_MESSAGE_3_CARRY_5_COMPACT_PK_KS_PBS_TUNIFORM_2M40,
         _ => panic!("Invalid parameters"),
     };
-    let res = param.try_serialize();
+    let crs = CompactPkeCrs::from_shortint_params(params, max_num_message).unwrap();
+    let public_zk_params = crs.public_params();
+    let res = public_zk_params.try_serialize();
     match res {
         Ok(v) => v,
         Err(e) => panic!("{}", e.to_string()),
