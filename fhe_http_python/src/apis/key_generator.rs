@@ -121,7 +121,8 @@ impl KeyGenerator {
         // json format
         let json = serde_json::json!({
             "client_key": base64::encode_vec_u8(&self.client_key),
-            "server_key": base64::encode_vec_u8(&self.server_key)
+            "server_key": base64::encode_vec_u8(&self.server_key),
+            "public_key": base64::encode_vec_u8(&self.public_key),
         });
 
         // write the keys to the file
@@ -158,9 +159,14 @@ impl KeyGenerator {
             PyErr::new::<pyo3::exceptions::PyValueError, _>("Missing 'server_key' in JSON.")
         })?;
 
+        let public_key = data["public_key"].as_str().ok_or_else(|| {
+            PyErr::new::<pyo3::exceptions::PyValueError, _>("Missing 'public_key' in JSON.")
+        })?;
+
         // decompression and set key
         self.client_key = base64::decode_vec_u8(client_key);
         self.server_key = base64::decode_vec_u8(server_key);
+        self.public_key = base64::decode_vec_u8(public_key);
 
         println!("Keys loaded successfully");
         Ok(())
