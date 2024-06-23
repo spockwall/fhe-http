@@ -119,14 +119,16 @@ class TestFheOps(unittest.TestCase):
 
     def test_not_encrypted_i64(self, data_type="Int64"):
         encrypted_a = encrypt(self.a, self.client_key, data_type)
-        encrypted_c = exec_unary_operation(encrypted_a, data_type)
-        c = decrypt(encrypted_c, self.client_key, "Int64")
+        encrypted_c = exec_unary_operation(
+            encrypted_a, getattr(self.ops, "not"), data_type
+        )
+        c = decrypt(encrypted_c, self.client_key, data_type)
         self.assertEqual(c, ~self.a)
 
     def test_neg_encrypted_i64(self, data_type="Int64"):
         encrypted_a = encrypt(self.a, self.client_key, data_type)
         encrypted_c = exec_unary_operation(encrypted_a, self.ops.neg, data_type)
-        c = decrypt(encrypted_c, self.client_key, "Int64")
+        c = decrypt(encrypted_c, self.client_key, data_type)
         self.assertEqual(c, -self.a)
 
     def test_shr_encrypted_u64(self, data_type="Uint64"):
