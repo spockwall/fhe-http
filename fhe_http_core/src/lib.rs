@@ -1,5 +1,6 @@
 pub mod configs {
     pub mod typing;
+    pub mod zk_params;
 }
 
 pub mod utils {
