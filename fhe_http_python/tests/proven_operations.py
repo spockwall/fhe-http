@@ -1,7 +1,7 @@
 import unittest
 import fhe_http_python as py_fhe
 from fhe_http_python import create_proven_fhe_value_type
-from fhe_http_python import get_pbs_params
+from fhe_http_python import get_public_zk_params
 
 
 def generate_keys():
@@ -43,16 +43,13 @@ def decrypt(encrypted_num, client_key, data_type: str = "ProvenInt64"):
 
 class TestFheOps(unittest.TestCase):
 
-    def __init__(self, methodName: str = "runTest") -> None:
-        super().__init__(methodName=methodName)
-        self.proven_ops = py_fhe.ProvenFheOps()
-        self.public_zk_params = get_pbs_params(msg=2, carry=2)
-        self.num = [2500, 21]
-        self.encrypted_num_i64 = self.get_encrypted_num()
-        self.encrypted_num_u64 = self.get_encrypted_num(data_type="ProvenUint64")
-
     @classmethod
     def setUpClass(cls):
+        cls.proven_ops = py_fhe.ProvenFheOps()
+        cls.public_zk_params = get_public_zk_params(msg=2, carry=2)
+        cls.num = [2500, 21]
+        cls.encrypted_num_i64 = cls.get_encrypted_num()
+        cls.encrypted_num_u64 = cls.get_encrypted_num(data_type="ProvenUint64")
         cls.client_key, cls.server_key, cls.public_key = generate_keys()
         set_server_key(cls.server_key)
 
