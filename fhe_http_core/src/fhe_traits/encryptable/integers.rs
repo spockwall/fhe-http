@@ -4,6 +4,17 @@ use tfhe::{
     ClientKey, CompactPublicKey, FheInt64, FheUint64, ProvenCompactFheInt64, ProvenCompactFheUint64,
 };
 type FheError = Box<dyn std::error::Error>;
+
+/// Define Encryptable trait for integer encryption.
+///
+/// Valid type that implements Encryptable trait can be encrypted to
+/// FheType with a client key. Valid type now temporarily supports integers
+/// such as i64, u64. The output is FheType corresponding to the input.
+/// Example:
+///     i64 -> FheInt64
+///     u64 -> FheUint64
+///
+/// Supported Type: Integer
 pub trait Encryptable {
     type Output;
 
@@ -15,6 +26,18 @@ pub trait Encryptable {
     fn to_json_value(&self) -> serde_json::Value;
 }
 
+/// Define ProvenEncryptable trait for integer encryption with zk.
+///
+/// Valid type that implements ProvenEncryptable trait can be encrypted to
+/// ProvenFheType with a public zk params and a public key. Server can validate
+/// the encrypted value before conducting the operation by using public zk params
+/// and public key. Valid type now temporarily supports integers such as i64, u64.
+/// The output is ProvenFheType corresponding to the input.
+/// Example:
+///    i64 -> ProvenCompactFheInt64
+///    u64 -> ProvenCompactFheUint64
+///
+/// Supported Type: Integer
 pub trait ProvenEncryptable {
     type ProvenOutput;
     fn proven_encrypt(
@@ -29,7 +52,16 @@ pub trait ProvenEncryptable {
     fn to_json_value(&self) -> serde_json::Value;
 }
 
-// Now, define the macro to implement Encryptable for specific types
+/// Implement Encryptable trait using macro_rules
+///
+/// Input Type: i64, u64
+/// Output Type: FheInt64, FheUint64
+///
+/// Example:
+/// ```no_run
+/// impl_encryptable!(i64, FheInt64);
+/// impl_encryptable!(u64, FheUint64);
+/// ```
 macro_rules! impl_encryptable {
     ($t:ty, $fhe_ty:ty) => {
         impl Encryptable for $t {
@@ -48,6 +80,16 @@ macro_rules! impl_encryptable {
         }
     };
 }
+
+/// Implement ProvenEncryptable trait using macro_rules
+///
+/// Input Type: i64, u64
+/// Output Type: ProvenCompactFheInt64, ProvenCompactFheUint64
+///
+/// Example:
+/// ```no_run
+/// impl_proven_encryptable!(i64, ProvenCompactFheInt64);
+/// ```
 
 macro_rules! impl_proven_encryptable {
     ($t:ty, $proven_fhe_ty:ty) => {
