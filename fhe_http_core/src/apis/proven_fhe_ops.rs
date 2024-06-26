@@ -8,6 +8,15 @@ use crate::fhe_traits::serializable::{
 use tfhe::zk::CompactPkePublicParams;
 use tfhe::{CompactPublicKey, ProvenCompactFheInt64, ProvenCompactFheUint64};
 
+/// API of binary operation functions for ProvenFheType
+///
+/// Input: api_name, operation_name
+/// Output: api function
+///
+/// Example:
+/// ```no_run
+/// generate_binary_operation!(proven_fhe_add, add);
+/// ```
 macro_rules! generate_binary_operation {
     ($fn_name:ident, $op_method:ident) => {
         pub fn $fn_name(
@@ -39,6 +48,15 @@ macro_rules! generate_binary_operation {
     };
 }
 
+/// API of unary operation functions for ProvenFheType
+///
+/// Input: api_name, operation_name
+/// Output: api function
+///
+/// Example:
+/// ```no_run
+/// generate_unary_operation!(proven_fhe_neg, neg);
+/// ```
 macro_rules! generate_unary_operation {
     ($fn_name:ident, $op_method:ident) => {
         pub fn $fn_name(
@@ -67,6 +85,15 @@ macro_rules! generate_unary_operation {
     };
 }
 
+/// API of shift operation functions for ProvenFheType
+///
+/// Input: api_name, operation_name
+/// Output: api function
+///
+/// Example:
+/// ```no_run
+/// generate_binary_shift_operation!(proven_fhe_shr, shr);
+/// ```F
 macro_rules! generate_binary_shift_operation {
     ($fn_name:ident, $op_method:ident) => {
         pub fn $fn_name(

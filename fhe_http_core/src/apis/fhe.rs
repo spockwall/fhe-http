@@ -1,3 +1,4 @@
+//! This fhe module is used to encrypt and decrypt values using the TFHE library.
 use crate::configs::typing::{
     FheValue, ProvenFheValue, SerialClientKey, SerialCompactPublicKey, SerialPublicZkParams,
 };
@@ -10,6 +11,18 @@ use crate::fhe_traits::serializable::{
 use tfhe::zk::CompactPkePublicParams;
 use tfhe::{ClientKey, CompactPublicKey, FheInt64, FheUint64};
 
+/// Encrypt a value using the client key and serialize the
+/// result into a Vec<u8>. Type of value to be encrypted
+/// is specified by data_type
+///
+/// Input: value, client_key, data_type
+/// Output: encrypted value as Vec<u8>
+///
+/// Example:
+/// ```no_run
+/// let value = vec![210, 4, 0, 0, 0, 0, 0, 0]; // serialized 1234_i64
+/// let encrypted = encrypt(&vec![1, 2, 3, 4], &client_key, &FheValue::Int64);
+/// ```
 pub fn encrypt(value: &Vec<u8>, client_key: &SerialClientKey, data_type: &FheValue) -> Vec<u8> {
     let deserialized_key = KeySerializable::try_deserialize(client_key).unwrap();
     match data_type {
@@ -30,6 +43,18 @@ pub fn encrypt(value: &Vec<u8>, client_key: &SerialClientKey, data_type: &FheVal
     }
 }
 
+/// Encrypt a value using public_key and public zk parameters
+/// and serialize the result into a Vec<u8>. Type of value to be
+/// encrypted is specified by data_type
+///
+/// Input: value, public_key, public_zk_params, data_type
+/// Output: encrypted value as Vec<u8>
+///
+/// Example:
+/// ```no_run
+/// let value = vec![210, 4, 0, 0, 0, 0, 0, 0]; // serialized 1234_i64
+/// let encrypted = proven_encrypt(&vec![1, 2, 3, 4], &public_key, &public_zk_params, &ProvenFheValue::ProvenInt64);
+/// ```
 pub fn proven_encrypt(
     value: &Vec<u8>,
     public_key: &SerialCompactPublicKey,
@@ -57,6 +82,17 @@ pub fn proven_encrypt(
     }
 }
 
+/// Decrypt a FheType value using the client key and
+/// serialize the result into a Vec<u8>. Type of value
+/// to be decrypted is specified by data_type
+///
+/// Input: FheType value, client_key, data_type
+/// Output: decrypted value as Vec<u8>
+///
+/// Example:
+/// ```no_run
+/// let res = decrypt(&encrypted, &client_key, &FheValue::Int64);
+/// ```
 pub fn decrypt(value: &Vec<u8>, client_key: &SerialClientKey, data_type: &FheValue) -> Vec<u8> {
     let deserialized_key: ClientKey = KeySerializable::try_deserialize(client_key).unwrap();
     match data_type {

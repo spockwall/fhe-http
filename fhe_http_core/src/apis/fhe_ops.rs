@@ -4,6 +4,15 @@ use crate::fhe_traits::computable::Shiftable;
 use crate::fhe_traits::serializable::FheValueSerializable;
 use tfhe::{FheInt64, FheUint64};
 
+/// API of binary operation functions for FheType
+///
+/// Input: api_name, operation_name
+/// Output: api function
+///
+/// Example:
+/// ```no_run
+/// generate_binary_operation!(fhe_add, add);
+/// ```
 macro_rules! generate_binary_operation {
     ($fn_name:ident, $op_method:ident) => {
         pub fn $fn_name(
@@ -29,6 +38,15 @@ macro_rules! generate_binary_operation {
     };
 }
 
+/// API of unary operation functions for FheType
+///
+/// Input: api_name, operation_name
+/// Output: api function
+///
+/// Example:
+/// ```no_run
+/// generate_unary_operation!(fhe_add, add);
+/// ```
 macro_rules! generate_unary_operation {
     ($fn_name:ident, $op_method:ident) => {
         pub fn $fn_name(a: &Vec<u8>, data_type: &FheValue) -> CompuationResult<Vec<u8>> {
@@ -48,6 +66,15 @@ macro_rules! generate_unary_operation {
     };
 }
 
+/// API of shift operation functions for FheType
+///
+/// Input: api_name, operation_name
+/// Output: api function
+///
+/// Example:
+/// ```no_run
+/// generate_binary_shift_operation!(fhe_add, add);
+/// ```
 macro_rules! generate_binary_shift_operation {
     ($fn_name:ident, $op_method:ident) => {
         pub fn $fn_name(
