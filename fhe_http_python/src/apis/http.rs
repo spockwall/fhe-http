@@ -1,7 +1,9 @@
 use crate::configs::typing::PyFheValue;
 use crate::utils::conversion::py_dict_to_json;
 use fhe_http_core::apis::http;
-use fhe_http_core::configs::typing::{SerialClientKey, SerialServerKey};
+use fhe_http_core::configs::typing::{
+    SerialClientKey, SerialCompactPublicKey, SerialPublicZkParams, SerialServerKey,
+};
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
@@ -45,6 +47,24 @@ pub fn set_server_key_to_json<'py>(
 ) -> String {
     let data_json_str = py_dict_to_json(data).unwrap();
     http::set_server_key_to_json(&server_key, &data_json_str)
+}
+
+#[pyfunction]
+pub fn set_public_key_to_json<'py>(
+    public_key: SerialCompactPublicKey,
+    data: Bound<'py, PyDict>,
+) -> String {
+    let data_json_str = py_dict_to_json(data).unwrap();
+    http::set_public_key_to_json(&public_key, &data_json_str)
+}
+
+#[pyfunction]
+pub fn set_public_zk_params_to_json<'py>(
+    public_zk_params: SerialPublicZkParams,
+    data: Bound<'py, PyDict>,
+) -> String {
+    let data_json_str = py_dict_to_json(data).unwrap();
+    http::set_public_zk_params_to_json(&public_zk_params, &data_json_str)
 }
 
 #[pyfunction]
