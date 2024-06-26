@@ -1,9 +1,6 @@
 use crate::configs::typing::PyProvenFheValue;
 use fhe_http_core::apis::proven_fhe_ops::*;
 use fhe_http_core::configs::typing::{SerialCompactPublicKey, SerialPublicZkParams};
-use fhe_http_core::fhe_traits::serializable::{KeySerializable, ZkSerializable};
-use fhe_http_core::tfhe::zk::CompactPkePublicParams;
-use fhe_http_core::tfhe::CompactPublicKey;
 use pyo3::prelude::*;
 
 macro_rules! impl_binary_py_fhe_ops {
@@ -15,9 +12,6 @@ macro_rules! impl_binary_py_fhe_ops {
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> PyResult<Vec<u8>> {
-            let public_zk_param =
-                CompactPkePublicParams::try_deserialize(&public_zk_param).unwrap();
-            let public_key = CompactPublicKey::try_deserialize(&public_key).unwrap();
             ($method)(&a, &b, &data_type.inner, &public_zk_param, &public_key)
                 .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(format!("{}", e)))
         }
@@ -32,9 +26,6 @@ macro_rules! impl_unary_py_fhe_ops {
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> PyResult<Vec<u8>> {
-            let public_zk_param =
-                CompactPkePublicParams::try_deserialize(&public_zk_param).unwrap();
-            let public_key = CompactPublicKey::try_deserialize(&public_key).unwrap();
             ($method)(&a, &data_type.inner, &public_zk_param, &public_key)
                 .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(format!("{}", e)))
         }
