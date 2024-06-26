@@ -1,4 +1,7 @@
-use crate::configs::typing::{FheValue, SerialClientKey, SerialServerKey, StringfiedJson};
+use crate::configs::typing::{
+    FheValue, SerialClientKey, SerialCompactPublicKey, SerialPublicZkParams, SerialServerKey,
+    StringfiedJson,
+};
 use crate::fhe_traits::serializable::KeySerializable;
 use crate::utils::{http, json};
 
@@ -28,7 +31,24 @@ pub fn decrypt_fhe_body(
 }
 
 pub fn set_server_key_to_json(server_key: &SerialServerKey, data: &StringfiedJson) -> String {
-    return http::set_server_key_to_json(server_key, data);
+    let key_name = "server_key";
+    return http::set_val_to_json(&key_name, server_key, data);
+}
+
+pub fn set_public_key_to_json(
+    public_key: &SerialCompactPublicKey,
+    data: &StringfiedJson,
+) -> String {
+    let key_name = "public_key";
+    return http::set_val_to_json(&key_name, public_key, data);
+}
+
+pub fn set_public_zk_params_to_json(
+    public_zk_params: &SerialPublicZkParams,
+    data: &StringfiedJson,
+) -> String {
+    let key_name = "public_zk_params";
+    return http::set_val_to_json(&key_name, &public_zk_params, data);
 }
 
 pub fn check_http_packet(packet: &str) -> Result<(), &str> {

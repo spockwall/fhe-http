@@ -1,4 +1,4 @@
-use crate::configs::typing::{FheValue, SerialServerKey};
+use crate::configs::typing::FheValue;
 use crate::utils::base64;
 use crate::utils::file_ctl::get_tfhe_version;
 use crate::utils::json;
@@ -62,14 +62,15 @@ pub fn decrypt_fhe_body(
     return decrypted_body;
 }
 
-pub fn set_server_key_to_json(server_key: &SerialServerKey, data: &str) -> String {
+pub fn set_val_to_json(key_name: &str, key: &Vec<u8>, data: &str) -> String {
     let mut body = json::parse_json(data);
     body.insert(
-        "server_key".to_string(),
-        serde_json::Value::String(base64::encode_vec_u8(server_key)),
+        key_name.to_string(),
+        serde_json::Value::String(base64::encode_vec_u8(&key)),
     );
     return serde_json::to_string(&body).unwrap();
 }
+
 pub fn parse_http_packet(packet: &str) -> (String, String) {
     // split the packet into header and body
     let res: Vec<&str> = packet.split("\r\n\r\n").collect();
