@@ -6,15 +6,24 @@ use serde_json::{Map, Value};
 use tfhe;
 use tfhe::ClientKey;
 
-pub fn create_fhe_header(method: &str) -> String {
+pub fn create_fhe_header(method: &str, zk_experimental: Option<bool>) -> String {
     let mut header = serde_json::Map::new();
     let version = get_tfhe_version().to_string();
     header.insert("fhe-method".to_string(), Value::String(method.to_string()));
+
+    // add fhe-version header
     header.insert(
         "fhe-version".to_string(),
         Value::String(format!("tfhe:{}", version)),
     );
 
+    // add zk-experiment header, using gzip to compress the body
+    header.insert(
+        "zk-experiment".to_string(),
+        Value::Bool(zk_experimental.unwrap_or(false)),
+    );
+
+    // add content-encoding header
     header.insert(
         "content-encoding".to_string(),
         Value::String("gzip".to_string()),

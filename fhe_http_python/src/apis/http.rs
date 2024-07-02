@@ -8,8 +8,8 @@ use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
 #[pyfunction]
-pub fn create_fhe_header(method: &str) -> String {
-    http::create_fhe_header(method)
+pub fn create_fhe_header(method: &str, zk_experiment: Option<bool>) -> String {
+    http::create_fhe_header(method, zk_experiment)
 }
 
 #[pyfunction]

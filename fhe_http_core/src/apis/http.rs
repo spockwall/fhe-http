@@ -1,3 +1,5 @@
+use tfhe::zk;
+
 use crate::configs::typing::{
     FheValue, SerialClientKey, SerialCompactPublicKey, SerialPublicZkParams, SerialServerKey,
     StringfiedJson,
@@ -5,8 +7,8 @@ use crate::configs::typing::{
 use crate::fhe_traits::serializable::KeySerializable;
 use crate::utils::{http, json};
 
-pub fn create_fhe_header(method: &str) -> String {
-    return http::create_fhe_header(&method);
+pub fn create_fhe_header(method: &str, zk_experiment: Option<bool>) -> String {
+    return http::create_fhe_header(&method, zk_experiment);
 }
 
 pub fn encrypt_fhe_body(
