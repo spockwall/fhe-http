@@ -1,4 +1,4 @@
-use crate::configs::typing::PyFheValue;
+use crate::configs::typing::PyFheType;
 use crate::utils::conversion::py_dict_to_json;
 use fhe_http_core::apis::http;
 use fhe_http_core::configs::typing::{
@@ -7,14 +7,24 @@ use fhe_http_core::configs::typing::{
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
+/// Define fhe header in http request
+/// 1. method: self-defined
+/// 2. fhe-version: "tfhe:<version>"
+/// 3. zk-experiment: bool
 #[pyfunction]
 pub fn create_fhe_header(method: &str, zk_experiment: Option<bool>) -> String {
     http::create_fhe_header(method, zk_experiment)
 }
 
+/// Encrypt body of http request with FHE
+///
+/// Input:
+///     keys: List[Tuple[str, PyFheType]]
+///         - list of keys in dict whose values to be enrypted with type: PyFheType
+///     data: Dict - json data to be encrypted
 #[pyfunction]
 pub fn encrypt_fhe_body<'py>(
-    keys: Vec<(String, PyFheValue)>,
+    keys: Vec<(String, PyFheType)>,
     data: Bound<'py, PyDict>,
     client_key: SerialClientKey,
 ) -> String {
@@ -28,7 +38,7 @@ pub fn encrypt_fhe_body<'py>(
 
 #[pyfunction]
 pub fn decrypt_fhe_body<'py>(
-    keys: Vec<(String, PyFheValue)>,
+    keys: Vec<(String, PyFheType)>,
     data: Bound<'py, PyDict>,
     client_key: SerialClientKey,
 ) -> String {

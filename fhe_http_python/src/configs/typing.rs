@@ -1,24 +1,24 @@
-use fhe_http_core::configs::typing::{FheValue, ProvenFheValue};
+use fhe_http_core::configs::typing::{FheType, ProvenFheType};
 use pyo3::prelude::*;
 
 #[pyclass]
 #[derive(Clone, Debug)]
-pub struct PyFheValue {
-    pub inner: FheValue,
+pub struct PyFheType {
+    pub inner: FheType,
 }
 
 #[pyclass]
 #[derive(Clone, Debug)]
-pub struct PyProvenFheValue {
-    pub inner: ProvenFheValue,
+pub struct PyProvenFheType {
+    pub inner: ProvenFheType,
 }
 
 #[pymethods]
-impl PyFheValue {
+impl PyFheType {
     #[staticmethod]
     pub fn from_str(s: &str) -> PyResult<Self> {
-        let value = FheValue::from_str(s);
-        Ok(PyFheValue { inner: value })
+        let value = FheType::from_str(s);
+        Ok(PyFheType { inner: value })
     }
 
     pub fn as_str(&self) -> &str {
@@ -27,11 +27,11 @@ impl PyFheValue {
 }
 
 #[pymethods]
-impl PyProvenFheValue {
+impl PyProvenFheType {
     #[staticmethod]
     pub fn from_str(s: &str) -> PyResult<Self> {
-        let value = ProvenFheValue::from_str(s);
-        Ok(PyProvenFheValue { inner: value })
+        let value = ProvenFheType::from_str(s);
+        Ok(PyProvenFheType { inner: value })
     }
 
     pub fn as_str(&self) -> &str {
@@ -40,11 +40,11 @@ impl PyProvenFheValue {
 }
 
 #[pyfunction]
-pub fn create_fhe_value_type(s: &str) -> PyResult<PyFheValue> {
-    PyFheValue::from_str(s)
+pub fn create_fhe_value_type(s: &str) -> PyResult<PyFheType> {
+    PyFheType::from_str(s)
 }
 
 #[pyfunction]
-pub fn create_proven_fhe_value_type(s: &str) -> PyResult<PyProvenFheValue> {
-    PyProvenFheValue::from_str(s)
+pub fn create_proven_fhe_value_type(s: &str) -> PyResult<PyProvenFheType> {
+    PyProvenFheType::from_str(s)
 }

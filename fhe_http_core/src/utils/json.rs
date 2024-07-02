@@ -1,4 +1,4 @@
-use crate::configs::typing::FheValue;
+use crate::configs::typing::FheType;
 use crate::fhe_traits::encryptable::Encryptable;
 use crate::fhe_traits::{decryptable::Decryptable, serializable::FheValueSerializable};
 use crate::utils::base64;
@@ -20,14 +20,14 @@ pub fn parse_json(json: &str) -> serde_json::Map<String, Value> {
 /// The keys are used to encrypt the values of the JSON object
 /// Encode the plaintext values by base64
 /// args:
-///   keys: &Vec<(String, FheValue)> - The keys and types to the values to encrypt
+///   keys: &Vec<(String, FheType)> - The keys and types to the values to encrypt
 ///   data: Map<String, Value> - The JSON object to encrypt
 ///   client_key: &ClientKey - The secret key used for encryption
 /// returns:
 ///   Map<String, Value> - The encrypted JSON object
 
 pub fn encrypt_json(
-    keys: &Vec<(String, FheValue)>,
+    keys: &Vec<(String, FheType)>,
     data: &Map<String, Value>,
     client_key: &ClientKey,
 ) -> Map<String, Value> {
@@ -41,12 +41,12 @@ pub fn encrypt_json(
         let val: &Value = &data[key];
         let serial_data: Vec<u8>;
         match data_type {
-            FheValue::Int64 => {
+            FheType::Int64 => {
                 let val = val.as_i64().expect("Failed to parse value");
                 let fhe_val = val.val_encrypt(client_key).expect("Failed to encrypt");
                 serial_data = FheInt64::try_serialize(&fhe_val).expect("Failed to serialize");
             }
-            FheValue::Uint64 => {
+            FheType::Uint64 => {
                 let val = val.as_u64().expect("Failed to parse value");
                 let fhe_val = val.val_encrypt(client_key).expect("Failed to encrypt");
                 serial_data = FheUint64::try_serialize(&fhe_val).expect("Failed to serialize");
@@ -62,7 +62,7 @@ pub fn encrypt_json(
 /// Decrypts a JSON object using the provided keys
 /// The encrypted values of the JSON object are encdoed by base64
 /// args:
-///    keys: &Vec<(String, FheValue)> - The keys and types to the values to decrypt
+///    keys: &Vec<(String, FheType)> - The keys and types to the values to decrypt
 ///    data: Map<String, Value> - The JSON object to decrypt
 ///    client_key: &ClientKey - The secret key used for decryption
 /// returns:
@@ -72,7 +72,7 @@ pub fn encrypt_json(
 ///   If the value type is not supported
 
 pub fn decrypt_json(
-    keys: &Vec<(String, FheValue)>,
+    keys: &Vec<(String, FheType)>,
     data: &Map<String, Value>,
     client_key: &ClientKey,
 ) -> Map<String, Value> {
@@ -83,13 +83,13 @@ pub fn decrypt_json(
 
         // Try deserializing of FheInt64 and FheUint64
         match value_type {
-            FheValue::Int64 => {
+            FheType::Int64 => {
                 let fhe_val =
                     FheInt64::try_deserialize(&encrypted_data).expect("Failed to deserialize");
                 let decrypted_val = fhe_val.val_decrypt(client_key);
                 decrypted_data.insert(key.to_string(), decrypted_val.to_json_value());
             }
-            FheValue::Uint64 => {
+            FheType::Uint64 => {
                 let fhe_val =
                     FheUint64::try_deserialize(&encrypted_data).expect("Failed to deserialize");
                 let decrypted_val = fhe_val.val_decrypt(client_key);

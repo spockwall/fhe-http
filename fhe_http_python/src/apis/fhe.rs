@@ -1,10 +1,15 @@
-use crate::configs::typing::{PyFheValue, PyProvenFheValue};
+//! This module provides python api for encryption and decryption
+//! Input and output are serialized as Vec<u8> and PyFheType
+use crate::configs::typing::{PyFheType, PyProvenFheType};
 use fhe_http_core::apis::fhe::{decrypt, encrypt, proven_encrypt};
 use fhe_http_core::configs::typing::{
     SerialClientKey, SerialCompactPublicKey, SerialPublicZkParams,
 };
 use pyo3::prelude::*;
 
+/// Fhe class for encryption and decryption. This class requires
+/// client key for encryption and decryption. Public key is only
+/// need when using asymmetric encryption, i.e., proven encryption.
 #[pyclass]
 pub struct Fhe {
     client_key: SerialClientKey,
@@ -25,14 +30,16 @@ impl Fhe {
         }
     }
 
-    pub fn encrypt(&self, val: Vec<u8>, data_type: PyFheValue) -> Vec<u8> {
+    pub fn encrypt(&self, val: Vec<u8>, data_type: PyFheType) -> Vec<u8> {
         encrypt(&val, &self.client_key, &data_type.inner)
     }
 
+    /// Encrypt with public key and zk parameters.
+    /// Allowing server to verify the encryption.
     pub fn proven_encrypt(
         &self,
         val: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_params: SerialPublicZkParams,
     ) -> Vec<u8> {
         if let Some(pk) = &self.public_key {
@@ -42,7 +49,7 @@ impl Fhe {
         }
     }
 
-    pub fn decrypt(&self, val: Vec<u8>, data_type: PyFheValue) -> Vec<u8> {
+    pub fn decrypt(&self, val: Vec<u8>, data_type: PyFheType) -> Vec<u8> {
         decrypt(&val, &self.client_key, &data_type.inner)
     }
 }

@@ -26,46 +26,46 @@ pub type StringfiedJson = str;
 pub type CompuationResult<T> = Result<T, &'static str>;
 
 #[derive(Debug, Clone)]
-pub enum FheValue {
+pub enum FheType {
     Int64,
     Uint64,
 }
 
 #[derive(Debug, Clone)]
-pub enum ProvenFheValue {
+pub enum ProvenFheType {
     ProvenInt64,
     ProvenUint64,
 }
 
-impl FheValue {
+impl FheType {
     pub fn as_str(&self) -> &'static str {
         match self {
-            FheValue::Int64 => "Int64",
-            FheValue::Uint64 => "Uint64",
+            FheType::Int64 => "Int64",
+            FheType::Uint64 => "Uint64",
         }
     }
 
-    pub fn from_str(s: &str) -> FheValue {
+    pub fn from_str(s: &str) -> FheType {
         match s {
-            "Int64" => FheValue::Int64,
-            "Uint64" => FheValue::Uint64,
-            _ => panic!("Invalid FheValue"),
+            "Int64" => FheType::Int64,
+            "Uint64" => FheType::Uint64,
+            _ => panic!("Invalid FheType"),
         }
     }
 }
 
-impl ProvenFheValue {
+impl ProvenFheType {
     pub fn as_str(&self) -> &'static str {
         match self {
-            ProvenFheValue::ProvenInt64 => "ProvenInt64",
-            ProvenFheValue::ProvenUint64 => "ProvenUint64",
+            ProvenFheType::ProvenInt64 => "ProvenInt64",
+            ProvenFheType::ProvenUint64 => "ProvenUint64",
         }
     }
-    pub fn from_str(s: &str) -> ProvenFheValue {
+    pub fn from_str(s: &str) -> ProvenFheType {
         match s {
-            "ProvenInt64" => ProvenFheValue::ProvenInt64,
-            "ProvenUint64" => ProvenFheValue::ProvenUint64,
-            _ => panic!("Invalid FheValue"),
+            "ProvenInt64" => ProvenFheType::ProvenInt64,
+            "ProvenUint64" => ProvenFheType::ProvenUint64,
+            _ => panic!("Invalid FheType"),
         }
     }
 }

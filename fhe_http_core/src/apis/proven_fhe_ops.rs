@@ -1,5 +1,5 @@
 use crate::configs::typing::{
-    CompuationResult, ProvenFheValue, SerialCompactPublicKey, SerialPublicZkParams,
+    CompuationResult, ProvenFheType, SerialCompactPublicKey, SerialPublicZkParams,
 };
 use crate::fhe_traits::computable::{ProvenComputable, ProvenShiftable};
 use crate::fhe_traits::serializable::{
@@ -22,7 +22,7 @@ macro_rules! generate_binary_operation {
         pub fn $fn_name(
             a: &Vec<u8>,
             b: &Vec<u8>,
-            data_type: &ProvenFheValue,
+            data_type: &ProvenFheType,
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> CompuationResult<Vec<u8>> {
@@ -31,13 +31,13 @@ macro_rules! generate_binary_operation {
             let public_key = CompactPublicKey::try_deserialize(public_key)
                 .expect("Failed to deserialize public_key");
             match data_type {
-                ProvenFheValue::ProvenInt64 => {
+                ProvenFheType::ProvenInt64 => {
                     let a = ProvenCompactFheInt64::try_deserialize(a).unwrap();
                     let b = ProvenCompactFheInt64::try_deserialize(b).unwrap();
                     let result = a.$op_method(&b, &public_zk_param, &public_key); // Result is FheInt64
                     Ok(result.try_serialize().expect("Failed to serialize"))
                 }
-                ProvenFheValue::ProvenUint64 => {
+                ProvenFheType::ProvenUint64 => {
                     let a = ProvenCompactFheUint64::try_deserialize(a).unwrap();
                     let b = ProvenCompactFheUint64::try_deserialize(b).unwrap();
                     let result = a.$op_method(&b, &public_zk_param, &public_key); // Result is FheUint64
@@ -61,7 +61,7 @@ macro_rules! generate_unary_operation {
     ($fn_name:ident, $op_method:ident) => {
         pub fn $fn_name(
             a: &Vec<u8>,
-            data_type: &ProvenFheValue,
+            data_type: &ProvenFheType,
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> CompuationResult<Vec<u8>> {
@@ -70,12 +70,12 @@ macro_rules! generate_unary_operation {
             let public_key = CompactPublicKey::try_deserialize(public_key)
                 .expect("Failed to deserialize public_key");
             match data_type {
-                ProvenFheValue::ProvenInt64 => {
+                ProvenFheType::ProvenInt64 => {
                     let a = ProvenCompactFheInt64::try_deserialize(a).unwrap();
                     let result = a.$op_method(&public_zk_param, &public_key);
                     Ok(result.try_serialize().expect("Failed to serialize"))
                 }
-                ProvenFheValue::ProvenUint64 => {
+                ProvenFheType::ProvenUint64 => {
                     let a = ProvenCompactFheUint64::try_deserialize(a).unwrap();
                     let result = a.$op_method(&public_zk_param, &public_key);
                     Ok(result.try_serialize().expect("Failed to serialize"))
@@ -99,7 +99,7 @@ macro_rules! generate_binary_shift_operation {
         pub fn $fn_name(
             a: &Vec<u8>,
             b: &Vec<u8>,
-            data_type: &ProvenFheValue,
+            data_type: &ProvenFheType,
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> CompuationResult<Vec<u8>> {
@@ -108,7 +108,7 @@ macro_rules! generate_binary_shift_operation {
             let public_key = CompactPublicKey::try_deserialize(public_key)
                 .expect("Failed to deserialize public_key");
             match data_type {
-                ProvenFheValue::ProvenUint64 => {
+                ProvenFheType::ProvenUint64 => {
                     let a = ProvenCompactFheUint64::try_deserialize(a).unwrap();
                     let b = ProvenCompactFheUint64::try_deserialize(b).unwrap();
                     let result = a.$op_method(&b, &public_zk_param, &public_key);

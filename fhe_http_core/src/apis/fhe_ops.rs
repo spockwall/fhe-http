@@ -1,4 +1,4 @@
-use crate::configs::typing::{CompuationResult, FheValue};
+use crate::configs::typing::{CompuationResult, FheType};
 use crate::fhe_traits::computable::Computable;
 use crate::fhe_traits::computable::Shiftable;
 use crate::fhe_traits::serializable::FheValueSerializable;
@@ -18,16 +18,16 @@ macro_rules! generate_binary_operation {
         pub fn $fn_name(
             a: &Vec<u8>,
             b: &Vec<u8>,
-            data_type: &FheValue,
+            data_type: &FheType,
         ) -> CompuationResult<Vec<u8>> {
             match data_type {
-                FheValue::Int64 => {
+                FheType::Int64 => {
                     let a = FheInt64::try_deserialize(a).unwrap();
                     let b = FheInt64::try_deserialize(b).unwrap();
                     let result = a.$op_method(&b);
                     Ok(result.try_serialize().expect("Failed to serialize"))
                 }
-                FheValue::Uint64 => {
+                FheType::Uint64 => {
                     let a = FheUint64::try_deserialize(a).unwrap();
                     let b = FheUint64::try_deserialize(b).unwrap();
                     let result = a.$op_method(&b);
@@ -49,14 +49,14 @@ macro_rules! generate_binary_operation {
 /// ```
 macro_rules! generate_unary_operation {
     ($fn_name:ident, $op_method:ident) => {
-        pub fn $fn_name(a: &Vec<u8>, data_type: &FheValue) -> CompuationResult<Vec<u8>> {
+        pub fn $fn_name(a: &Vec<u8>, data_type: &FheType) -> CompuationResult<Vec<u8>> {
             match data_type {
-                FheValue::Int64 => {
+                FheType::Int64 => {
                     let a = FheInt64::try_deserialize(a).unwrap();
                     let result = a.$op_method();
                     Ok(result.try_serialize().expect("Failed to serialize"))
                 }
-                FheValue::Uint64 => {
+                FheType::Uint64 => {
                     let a = FheUint64::try_deserialize(a).unwrap();
                     let result = a.$op_method();
                     Ok(result.try_serialize().expect("Failed to serialize"))
@@ -80,10 +80,10 @@ macro_rules! generate_binary_shift_operation {
         pub fn $fn_name(
             a: &Vec<u8>,
             b: &Vec<u8>,
-            data_type: &FheValue,
+            data_type: &FheType,
         ) -> CompuationResult<Vec<u8>> {
             match data_type {
-                FheValue::Uint64 => {
+                FheType::Uint64 => {
                     let a: FheUint64 = FheValueSerializable::try_deserialize(a).unwrap();
                     let b: FheUint64 = FheValueSerializable::try_deserialize(b).unwrap();
                     let result = a.$op_method(&b);

@@ -1,4 +1,4 @@
-use crate::configs::typing::FheValue;
+use crate::configs::typing::FheType;
 use crate::utils::base64;
 use crate::utils::file_ctl::get_tfhe_version;
 use crate::utils::json;
@@ -35,14 +35,14 @@ pub fn create_fhe_header(method: &str, zk_experimental: Option<bool>) -> String 
 /// Currently, only the provided keys will be encrypted and left in the packet
 /// The rest of columns will be dropped, the problem will be fix in the future
 /// args:
-///    keys: &Vec<(String, FheValue)> - The keys to the values to encrypt
+///    keys: &Vec<(String, FheType)> - The keys to the values to encrypt
 ///    data: &str - The JSON object to encrypt which is stringified
 ///    client_key: Vec<u8> - The client key used for encryption
 /// returns:
 ///    String - The encrypted JSON object which is stringified
 ///           - The encrypted value in encoded in base64
 pub fn encrypt_fhe_body(
-    keys: &Vec<(String, FheValue)>,
+    keys: &Vec<(String, FheType)>,
     data: &str,
     client_key: &ClientKey,
 ) -> Map<String, Value> {
@@ -55,14 +55,14 @@ pub fn encrypt_fhe_body(
 /// Currently, only the provided keys will be decrypted and left in the packet
 /// The rest of columns will be dropped, the problem will be fix in the future
 /// args:
-///   keys: &Vec<(String, FheValue)> - The keys and types to the values to decrypt
+///   keys: &Vec<(String, FheType)> - The keys and types to the values to decrypt
 ///   data: &str - The JSON object to decrypt which is stringified
 ///   client_key: Vec<u8> - The client key used for decryption
 /// returns:
 ///   String - The decrypted JSON object which is stringified
 ///          - The decrypted value in encoded in base64
 pub fn decrypt_fhe_body(
-    keys: &Vec<(String, FheValue)>,
+    keys: &Vec<(String, FheType)>,
     data: &str,
     client_key: &ClientKey,
 ) -> Map<String, Value> {

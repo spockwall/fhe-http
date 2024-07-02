@@ -49,7 +49,7 @@ impl KeyGenerator {
         let res = self.load_keys();
         if res.is_err() {
             print!("fuck no key\n");
-            self.generate_new_keys();
+            let _res = self.generate_new_keys();
             self.save_keys()?;
         }
         Ok(())

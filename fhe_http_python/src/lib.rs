@@ -49,9 +49,9 @@ fn fhe_http_python(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     )?)?;
 
     // Using wrap_enum! to expose the enum
-    let fhe_value_enum = py.get_type_bound::<configs::typing::PyFheValue>();
-    let proven_fhe_value_enum = py.get_type_bound::<configs::typing::PyProvenFheValue>();
-    m.add("FheValue", fhe_value_enum)?;
-    m.add("ProvenFheValue", proven_fhe_value_enum)?;
+    let fhe_value_enum = py.get_type_bound::<configs::typing::PyFheType>();
+    let proven_fhe_value_enum = py.get_type_bound::<configs::typing::PyProvenFheType>();
+    m.add("FheType", fhe_value_enum)?;
+    m.add("ProvenFheType", proven_fhe_value_enum)?;
     Ok(())
 }

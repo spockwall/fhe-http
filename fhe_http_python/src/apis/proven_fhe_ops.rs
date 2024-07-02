@@ -1,4 +1,4 @@
-use crate::configs::typing::PyProvenFheValue;
+use crate::configs::typing::PyProvenFheType;
 use fhe_http_core::apis::proven_fhe_ops::*;
 use fhe_http_core::configs::typing::{SerialCompactPublicKey, SerialPublicZkParams};
 use pyo3::prelude::*;
@@ -8,7 +8,7 @@ macro_rules! impl_binary_py_fhe_ops {
         pub fn $func_name(
             a: Vec<u8>,
             b: Vec<u8>,
-            data_type: PyProvenFheValue,
+            data_type: PyProvenFheType,
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> PyResult<Vec<u8>> {
@@ -22,7 +22,7 @@ macro_rules! impl_unary_py_fhe_ops {
     ($func_name:ident, $method:ident) => {
         pub fn $func_name(
             a: Vec<u8>,
-            data_type: PyProvenFheValue,
+            data_type: PyProvenFheType,
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> PyResult<Vec<u8>> {
@@ -46,7 +46,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -58,7 +58,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -70,7 +70,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -82,7 +82,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -94,7 +94,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -106,7 +106,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -118,7 +118,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -130,7 +130,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -142,7 +142,7 @@ impl ProvenFheOps {
         &self,
         a: Vec<u8>,
         b: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -153,7 +153,7 @@ impl ProvenFheOps {
     pub fn not(
         &self,
         a: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {
@@ -164,7 +164,7 @@ impl ProvenFheOps {
     pub fn neg(
         &self,
         a: Vec<u8>,
-        data_type: PyProvenFheValue,
+        data_type: PyProvenFheType,
         public_zk_param: SerialPublicZkParams,
         public_key: SerialCompactPublicKey,
     ) -> PyResult<Vec<u8>> {

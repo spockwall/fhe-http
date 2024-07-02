@@ -1,7 +1,5 @@
-use tfhe::zk;
-
 use crate::configs::typing::{
-    FheValue, SerialClientKey, SerialCompactPublicKey, SerialPublicZkParams, SerialServerKey,
+    FheType, SerialClientKey, SerialCompactPublicKey, SerialPublicZkParams, SerialServerKey,
     StringfiedJson,
 };
 use crate::fhe_traits::serializable::KeySerializable;
@@ -12,18 +10,18 @@ pub fn create_fhe_header(method: &str, zk_experiment: Option<bool>) -> String {
 }
 
 pub fn encrypt_fhe_body(
-    keys: &Vec<(String, FheValue)>,
+    keys: &Vec<(String, FheType)>,
     data: &StringfiedJson,
     client_key: &SerialClientKey,
 ) -> String {
-    // turn keys.iter().1 into a &FheValue
+    // turn keys.iter().1 into a &FheType
     let client_key = KeySerializable::try_deserialize(client_key).unwrap();
     let encrypted_body = http::encrypt_fhe_body(&keys, data, &client_key);
     return serde_json::to_string(&encrypted_body).unwrap();
 }
 
 pub fn decrypt_fhe_body(
-    keys: &Vec<(String, FheValue)>,
+    keys: &Vec<(String, FheType)>,
     data: &StringfiedJson,
     client_key: &SerialClientKey,
 ) -> String {
