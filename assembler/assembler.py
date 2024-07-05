@@ -21,6 +21,7 @@ class Assembler:
     t_RPAREN = r"\)"
     t_EQUALS = r"="
     t_COLON = r":"
+    t_COMMA = r","
     t_ignore = " \t"
 
     def t_COMMENT(self, t):
@@ -70,10 +71,31 @@ class Assembler:
         return var_name
 
     def p_function(self, p):
-        "function : DEF ID LPAREN RPAREN COLON statements RETURN expression"
-        p[0] = p[8]
-        temp_var = self.variables.get(p[8], p[8])
+        "function : DEF ID LPAREN params RPAREN COLON statements RETURN expression"
+        p[0] = p[9]
+        temp_var = self.variables.get(p[9], p[9])
         self.assembly.append(f"OUT {temp_var}")
+
+    def p_params(self, p):
+        """params : params COMMA param
+        | param
+        | empty"""
+        if len(p) > 2:
+            p[0] = p[1] + [p[3]]
+        elif p[1] is not None:
+            p[0] = [p[1]]
+        else:
+            p[0] = []
+
+    def p_param(self, p):
+        "param : ID"
+        self.variables[p[1]] = self.new_temp()
+        p[0] = p[1]
+        self.assembly.append(f"VAR {p[1]} {self.variables[p[1]]}")
+
+    def p_empty(self, p):
+        "empty :"
+        pass
 
     def p_statements(self, p):
         """statements : statements statement
@@ -167,6 +189,9 @@ class Assembler:
                 return next(v for v in stack if v[1] == var)[0]
             if op == "MOV":
                 stack.append((int(args[0]), var))
+            if op == "VAR":
+                # Todo
+                print("VAR")
             elif len(args) == 2:
                 # binary operation
                 a = next(v for v in stack if v[1] == args[0])[0]
@@ -183,7 +208,7 @@ if __name__ == "__main__":
     assembler = Assembler()
 
     @assembler.code_wrapper
-    def operation():
+    def operation(a, b):
         a = (123 + -456) >> 2 * 3
         b = a >> 2
         c = 3 | 1234
@@ -192,5 +217,3 @@ if __name__ == "__main__":
 
     for instruction in operation.assembly:
         print(instruction)
-
-    assembler.compute_assembly(operation.assembly)

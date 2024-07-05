@@ -19,6 +19,7 @@ tokens = (
     "RETURN",
     "DEF",
     "COLON",
+    "COMMA",
 )
 
 precedence = (
