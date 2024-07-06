@@ -1,3 +1,4 @@
+pub mod assembly_parser;
 pub mod base64;
 pub mod file_ctl;
 pub mod http;
