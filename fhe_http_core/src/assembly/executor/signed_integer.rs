@@ -1,16 +1,14 @@
 use crate::configs::errors::AsmError;
 use crate::configs::instructions::{Instruction, InstructionLine};
 use crate::fhe_traits::computable::Computable;
-use crate::fhe_traits::encryptable::Encryptable;
 use std::collections::HashMap;
-use tfhe::{ClientKey, FheInt64};
+use tfhe::FheInt64;
 
 /// macro_rules that define asm execution functions for fhe signed integers
 ///
 /// Input:
 ///     - asm: &Vec<InstructionLine> - the assembly code to be executed
 ///     - args: &HashMap<String, FheInt> - the arguments of the asm code
-///     - client_key: &ClientKey - the client key to encrypt the values
 ///
 /// Output:
 ///     - Result<FheInt, AsmError> - the result of the asm execution
@@ -25,7 +23,6 @@ macro_rules! impl_execute_signed_int {
             pub fn [<execute_asm_ $t>](
                 asm: &Vec<InstructionLine>,
                 args: &HashMap<String, $fhe_ty>,
-                client_key: &ClientKey,
             ) -> Result<$fhe_ty, AsmError> {
                 let mut register_map: HashMap<&String, $fhe_ty> = HashMap::new();
 
@@ -37,15 +34,7 @@ macro_rules! impl_execute_signed_int {
                             let arg = args.get(&operands[0]).unwrap();
                             register_map.insert(register, arg.clone());
                         }
-                        Instruction::MOV => {
-                            let operand = operands[0].parse::<$t>().unwrap();
-                            let arg = operand.val_encrypt(client_key);
-                            if let Ok(arg) = arg {
-                                register_map.insert(register, arg);
-                            } else {
-                                return Err(AsmError::ExecutionError("Encryption error".to_string()));
-                            }
-                        }
+
                         Instruction::NEG => {
                             let arg = register_map.get(&operands[0]).unwrap();
                             let res = arg.neg();
