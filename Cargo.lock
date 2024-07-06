@@ -523,6 +523,7 @@ dependencies = [
  "bincode",
  "clap",
  "criterion",
+ "paste",
  "serde",
  "serde_json",
  "tfhe",
