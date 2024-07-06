@@ -5,6 +5,18 @@ pub struct InstructionLine {
     pub register: String,
 }
 
+impl InstructionLine {
+    pub fn to_string(&self) -> String {
+        let operands = self.operands.join(" ");
+        format!(
+            "{} {} {}",
+            self.instruction.as_str(),
+            operands,
+            self.register
+        )
+    }
+}
+
 // define instruction
 #[derive(Debug)]
 pub enum Instruction {
