@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 mod apis;
+mod assembly;
 mod configs;
 mod fhe_traits;
 mod utils;

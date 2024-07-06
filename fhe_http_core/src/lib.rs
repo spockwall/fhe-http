@@ -20,6 +20,11 @@ pub mod fhe_traits {
     pub mod serializable;
 }
 
+pub mod assembly {
+    pub mod executor;
+    pub mod parser;
+}
+
 pub mod apis {
     pub mod base64;
     pub mod fhe;
