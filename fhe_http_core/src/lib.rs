@@ -1,9 +1,11 @@
 pub mod configs {
+    pub mod instructions;
     pub mod typing;
     pub mod zk_params;
 }
 
 pub mod utils {
+    pub mod assembly_parser;
     pub mod base64;
     pub mod file_ctl;
     pub mod http;
