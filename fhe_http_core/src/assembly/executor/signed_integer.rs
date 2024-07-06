@@ -5,6 +5,20 @@ use crate::fhe_traits::encryptable::Encryptable;
 use std::collections::HashMap;
 use tfhe::{ClientKey, FheInt64};
 
+/// macro_rules that define asm execution functions for fhe signed integers
+///
+/// Input:
+///     - asm: &Vec<InstructionLine> - the assembly code to be executed
+///     - args: &HashMap<String, FheInt> - the arguments of the asm code
+///     - client_key: &ClientKey - the client key to encrypt the values
+///
+/// Output:
+///     - Result<FheInt, AsmError> - the result of the asm execution
+///
+/// Example:
+/// ```no_run
+/// impl_execute_signed_int!(i64, FheInt64);
+/// ```
 macro_rules! impl_execute_signed_int {
     ($t:ty, $fhe_ty:ty) => {
         paste::item! {

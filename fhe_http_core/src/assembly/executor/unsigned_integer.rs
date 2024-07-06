@@ -5,7 +5,21 @@ use crate::fhe_traits::encryptable::Encryptable;
 use std::collections::HashMap;
 use tfhe::{ClientKey, FheUint64};
 
-macro_rules! impl_execute_signed_int {
+/// macro_rules that define asm execution functions for fhe unsigned integers
+///
+/// Input:
+///     - asm: &Vec<InstructionLine> - the assembly code to be executed
+///     - args: &HashMap<String, FheUint> - the arguments of the asm code
+///     - client_key: &ClientKey - the client key to encrypt the values
+///
+/// Output:
+///     - Result<FheUint, AsmError> - the result of the asm execution
+///
+/// Example:
+/// ```no_run
+/// impl_execute_unsigned_int!(u64, FheUint64);
+/// ```
+macro_rules! impl_execute_unsigned_int {
     ($t:ty, $fhe_ty:ty) => {
         paste::item! {
             pub fn [<execute_asm_ $t>](
@@ -127,4 +141,4 @@ macro_rules! impl_execute_signed_int {
     };
 }
 
-impl_execute_signed_int!(u64, FheUint64);
+impl_execute_unsigned_int!(u64, FheUint64);
