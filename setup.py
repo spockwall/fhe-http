@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="fhe-http",
-    version="0.1.9",
+    version="0.1.20",
     author="spockwall",
     author_email="e1e1e1n9n9n9@gmail.com",
     description="This is an test package for Python Fhe Http ",
@@ -26,7 +26,7 @@ setup(
         )
     ],
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
