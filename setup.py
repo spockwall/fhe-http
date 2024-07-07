@@ -3,17 +3,20 @@ from setuptools import setup, find_packages
 
 setup(
     name="fhe-http",
-    version="0.1.3",
+    version="0.1.9",
     author="spockwall",
-    author_email="abcdefg35216874@gmail.com",
+    author_email="e1e1e1n9n9n9@gmail.com",
     description="This is an test package for Python Fhe Http ",
-    long_description=open("./fhe_http_python/README.md").read(),
+    long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/spockwall/fhe-http",  # Replace with your project's URL
     packages=find_packages(),
     install_requires=[
         "maturin>=1.5.0",
         "ply>=3.11",
+        "setuptools-rust>=1.9.0",
+        "setuptools>=68.2.2",
+        "wheel>=0.43.0",
     ],
     rust_extensions=[
         setuptools_rust.RustExtension(
