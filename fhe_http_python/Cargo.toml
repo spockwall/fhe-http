@@ -7,10 +7,9 @@ edition = "2021"
 [lib]
 path = "src/lib.rs"
 name = "fhe_http_python"
-#crate-type = ["cdylib", "lib"]
 
 [dependencies]
-pyo3 = { version = "0.21.2", features = ["extension-module"] }
+pyo3 = { version = "0.22.1", features = ["extension-module"] }
 fhe_http_core = { path = "../fhe_http_core" }
 project-root = "0.2.2"
 serde_json = "1.0.116"
