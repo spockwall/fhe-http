@@ -19,6 +19,7 @@ pub struct Fhe {
 #[pymethods]
 impl Fhe {
     #[new]
+    #[pyo3(signature = (client_key, public_key=None))]
     pub fn new(client_key: SerialClientKey, public_key: Option<SerialCompactPublicKey>) -> Self {
         let public_key = match public_key {
             Some(pk) => Some(pk.clone()),

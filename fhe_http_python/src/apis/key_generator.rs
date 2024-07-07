@@ -27,6 +27,7 @@ pub struct KeyGenerator {
 impl KeyGenerator {
     #[new]
     // check if the new keys generation is needed
+    #[pyo3(signature = (params=None))]
     pub fn new(params: Option<SerialPbsParams>) -> Self {
         let config: Config = match params {
             Some(p) => {
@@ -66,6 +67,7 @@ impl KeyGenerator {
         Ok(())
     }
 
+    #[pyo3(signature = (max_num_message, params=None))]
     pub fn generate_public_zk_params(
         &mut self,
         max_num_message: usize,

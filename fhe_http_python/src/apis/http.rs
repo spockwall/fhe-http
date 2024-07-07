@@ -12,6 +12,7 @@ use pyo3::types::PyDict;
 /// 2. fhe-version: "tfhe:<version>"
 /// 3. zk-experiment: bool
 #[pyfunction]
+#[pyo3(signature = (method, zk_experiment=None))]
 pub fn create_fhe_header(method: &str, zk_experiment: Option<bool>) -> String {
     http::create_fhe_header(method, zk_experiment)
 }
