@@ -49,7 +49,7 @@ class FheOps:
     def shr(self, a: SerialData, b: SerialData, data_type: str): ...
     def shl(self, a: SerialData, b: SerialData, data_type: str): ...
     def not_(self, a: SerialData, data_type: str): ...
-    def neg(self, a: SerialData, data_type: str): ...
+    # def neg(self, a: SerialData, data_type: str): ...
     def __getattr__(self, name):
         # Define a dictionary mapping method names to actual methods
         methods = {"and": self.and_, "or": self.or_, "not": self.not_}
@@ -176,5 +176,14 @@ def get_fhe_value_from_json(key: str, data: dict) -> SerialData:
     """
     get the FHE value from the JSON data.
     result is serialized data, and should be deserailized to use.
+    """
+    ...
+
+def execute_assembly(
+    assembly: str, args: dict[str, SerialData], data_type: FheType
+) -> SerialData:
+    """
+    Execute the assembly code compiled from python code. Args are
+    the arguments of the assembly code and should be serialized.
     """
     ...
