@@ -16,7 +16,7 @@ class Assembler:
     t_OR = r"\|"
     t_XOR = r"\^"
     t_NOT = r"~"
-    t_NEG = r"-"
+    # t_NEG = r"-"
     t_LPAREN = r"\("
     t_RPAREN = r"\)"
     t_EQUALS = r"="
@@ -104,7 +104,6 @@ class Assembler:
 
     def p_statement(self, p):
         "statement : ID EQUALS expression"
-        # self.assembly.append(f"# {p[1]} = {p[3]}")
         self.variables[p[1]] = p[3]  # Store the temp_var for the ID
 
     def p_expression_binop(self, p):
@@ -127,8 +126,7 @@ class Assembler:
         p[0] = temp_var
 
     def p_expression_uniop(self, p):
-        """expression : NEG expression
-        | NOT expression"""
+        """expression : NOT expression"""
         temp_var = self.new_temp()
         op = self.symbol_op_table_inv[p[1]]
         p[2] = self.variables.get(p[2], p[2])
@@ -150,7 +148,7 @@ class Assembler:
         p[0] = p[1]
 
     def p_error(self, p):
-        print(f"Syntax error at '{p.value}'")
+        raise SyntaxError(f"Syntax error at '{p.value}'")
 
     def parse(self, input_string):
         self.assembly = []
@@ -201,19 +199,3 @@ class Assembler:
                 # unary operation
                 a = next((v for v in stack if v[1] == args[0]))[0]
                 stack.append((self.symbol_op_func_table[op](a), var))
-
-
-if __name__ == "__main__":
-    # Example usage
-    assembler = Assembler()
-
-    @assembler.code_wrapper
-    def operation(a, b):
-        a = (123 + -456) >> 2 * 3
-        b = a >> 2
-        c = 3 | 1234
-        d = b + c
-        return d
-
-    for instruction in operation.assembly:
-        print(instruction)

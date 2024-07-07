@@ -10,7 +10,7 @@ tokens = (
     "OR",
     "XOR",
     "NOT",
-    "NEG",
+    # "NEG",
     "LPAREN",
     "RPAREN",
     "EQUALS",
@@ -29,7 +29,7 @@ precedence = (
     ("left", "SHR", "SHL"),
     ("left", "ADD", "SUB"),
     ("left", "MUL", "DIV", "REM"),
-    ("right", "NOT", "NEG"),
+    ("right", "NOT"),
 )
 
 symbol_op_table = {
@@ -44,7 +44,7 @@ symbol_op_table = {
     "OR": "|",
     "XOR": "^",
     "NOT": "~",
-    "NEG": "-",
+    # "NEG": "!",
 }
 
 symbol_op_func_table = {
@@ -59,5 +59,5 @@ symbol_op_func_table = {
     "OR": lambda a, b: a | b,
     "XOR": lambda a, b: a ^ b,
     "NOT": lambda a: ~a,
-    "NEG": lambda a: -a,
+    # "NEG": lambda a: -a,
 }
