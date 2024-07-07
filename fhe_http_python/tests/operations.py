@@ -1,6 +1,6 @@
 import unittest
-import fhe_http_python as py_fhe
-from fhe_http_python import create_fhe_value_type
+import fhe_http_python.fhe_http_python as py_fhe
+from fhe_http_python.fhe_http_python import create_fhe_value_type
 
 
 def generate_keys():
