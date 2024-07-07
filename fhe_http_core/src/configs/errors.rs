@@ -25,4 +25,10 @@ pub enum FheError {
 
     #[error("Decryption error: {0}")]
     DecryptionError(String),
+
+    #[error("Serialization error: {0}")]
+    SerializeError(String),
+
+    #[error("Deserialization error: {0}")]
+    DeserializeError(String),
 }
