@@ -2,7 +2,21 @@
 import json
 import requests
 from fhe import fhe as py_fhe
-from ..operations import generate_keys, decrypt_i64
+
+
+def generate_keys():
+    key_gen = py_fhe.KeyGenerator()
+    key_gen.init_keys()
+    client_key = key_gen.get_client_key()
+    server_key = key_gen.get_server_key()
+    return client_key, server_key
+
+
+def decrypt(encrypted_num, client_key, data_type: str = "Int64"):
+    serailizer = py_fhe.Serializer()
+    fhe_value = py_fhe.create_fhe_value_type(data_type)
+    fhe = py_fhe.Fhe(client_key)
+    return serailizer.to_i64(fhe.decrypt(encrypted_num, fhe_value))
 
 
 def send_post_request(url):
@@ -19,7 +33,7 @@ def send_post_request(url):
     response = requests.post(url, json=payload, headers=header)
     response = response.json()
     encrypted_c = py_fhe.decode_fhe_value(response["result"])
-    c = decrypt_i64(encrypted_c, client_key)
+    c = decrypt(encrypted_c, client_key)
     assert c == 123123246
 
 
