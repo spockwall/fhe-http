@@ -1,7 +1,7 @@
 import unittest
-import fhe_http_python.fhe_http_python as py_fhe
-from fhe_http_python.fhe_http_python import create_proven_fhe_value_type
-from fhe_http_python.fhe_http_python import get_public_zk_params
+import fhe.fhe as py_fhe
+from fhe.fhe import create_proven_fhe_value_type
+from fhe.fhe import get_public_zk_params
 
 
 def generate_keys():

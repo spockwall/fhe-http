@@ -1,7 +1,7 @@
 # client.py
 import json
 import requests
-import fhe_http_python as py_fhe
+from fhe import fhe as py_fhe
 from ..operations import generate_keys, decrypt_i64
 
 

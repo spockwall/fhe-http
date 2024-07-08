@@ -2,12 +2,14 @@
 
 ### Description
 - This setup script integrates py_fhe_http and assembler into a packages and upload the package to [PyPI](https://pypi.org/) and [TestPyPI](https://test.pypi.org/).
-- For the uploaded package on TestPyPI, please check: [fhe-http 0.1.9](https://test.pypi.org/project/fhe-http/)
-- For the uploaded package on PyPI, please check: [fhe-http 0.1.9](https://pypi.org/project/fhe-http/0.1.9/)
+- For the uploaded package on TestPyPI, please check: [fhe-http](https://test.pypi.org/project/fhe-http/)
+- For the uploaded package on PyPI, please check: [fhe-http](https://pypi.org/project/fhe-http/)
 
 ### How to build package and upload to PyPI
 ```shellscript=
-$ cd fhe-http
+$ cd fhe-http/fhe_http_python/fhe
+$ maturin develop
+$ cd ..
 $ python setup.py sdist bdist_wheel
 $ twine check dist/*
 

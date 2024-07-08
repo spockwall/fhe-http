@@ -1,4 +1,4 @@
-import fhe_http_python.fhe_http_python as py_fhe
+from fhe import fhe as py_fhe
 from assembler.assembler import Assembler
 
 

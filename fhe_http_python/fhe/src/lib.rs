@@ -20,7 +20,7 @@ pub mod configs {
 }
 
 #[pymodule]
-fn fhe_http_python(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn fhe(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<apis::fhe::Fhe>()?;
     m.add_class::<apis::fhe_ops::FheOps>()?;
     m.add_class::<apis::key_generator::KeyGenerator>()?;

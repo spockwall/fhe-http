@@ -1,6 +1,5 @@
 import unittest
-import fhe_http_python.fhe_http_python as py_fhe
-from fhe_http_python.fhe_http_python import create_fhe_value_type
+from fhe import fhe as py_fhe
 
 
 def generate_keys():
@@ -19,25 +18,25 @@ def set_server_key(server_key):
 
 def encrypt(num: int, client_key, data_type: str = "Int64"):
     serailizer = py_fhe.Serializer()
-    fhe_value = create_fhe_value_type(data_type)
+    fhe_value = py_fhe.create_fhe_value_type(data_type)
     fhe = py_fhe.Fhe(client_key)
     return fhe.encrypt(serailizer.from_i64(num), fhe_value)
 
 
 def decrypt(encrypted_num, client_key, data_type: str = "Int64"):
     serailizer = py_fhe.Serializer()
-    fhe_value = create_fhe_value_type(data_type)
+    fhe_value = py_fhe.create_fhe_value_type(data_type)
     fhe = py_fhe.Fhe(client_key)
     return serailizer.to_i64(fhe.decrypt(encrypted_num, fhe_value))
 
 
 def exec_binary_operation(encrypted_a, encrypted_b, method, type):
-    fhe_value = create_fhe_value_type(type)
+    fhe_value = py_fhe.create_fhe_value_type(type)
     return method(encrypted_a, encrypted_b, fhe_value)
 
 
 def exec_unary_operation(encrypted_a, method, type):
-    fhe_value = create_fhe_value_type(type)
+    fhe_value = py_fhe.create_fhe_value_type(type)
     return method(encrypted_a, fhe_value)
 
 
