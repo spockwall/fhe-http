@@ -18,9 +18,14 @@ pub fn create_fhe_header(method: &str, zk_experimental: Option<bool>) -> String 
     );
 
     // add zk-experiment header, using gzip to compress the body
+    // turn true or false to string
     header.insert(
         "zk-experiment".to_string(),
-        Value::Bool(zk_experimental.unwrap_or(false)),
+        Value::String(match zk_experimental {
+            Some(true) => "true".to_string(),
+            Some(false) => "false".to_string(),
+            None => "false".to_string(),
+        }),
     );
 
     // add content-encoding header
