@@ -1,14 +1,15 @@
 # FHE-HTTP-Python
 
 ## Introduce
-- Fully Homomorphic Encryption (FHE) is a technology that enables processing encrypted data without decrypting it. This allows clients to delegate computations, such as machine learning (ML) tasks to resource-equipped servers without revealing their own data. It can also be used for applications like Private Information Retrieval ([PIR](https://en.wikipedia.org/wiki/Private_information_retrieval)).
-- This package offers a Python interface for using [tfhe-rs](https://github.com/zama-ai/tfhe-rs). Additionally, a zk-experimental version is supported, enabling the server to verify encrypted values before computation begins. For more details about FHE, please refer to the  [tfhe-rs documentation](https://docs.zama.ai/tfhe-rs).
+- Fully Homomorphic Encryption (FHE) is a technology that enables processing encrypted data without decrypting it. This allows clients to delegate computations, such as machine learning (ML) tasks to resource-equipped servers without revealing their own data. It can also be used for applications like Private Information Retrieval ([PIR](https://en.wikipedia.org/wiki/Private_information_retrieval)). For more details about FHE, please refer to the  [tfhe-rs documentation](https://docs.zama.ai/tfhe-rs).
+- This project offers a Python interface for using [tfhe-rs](https://github.com/zama-ai/tfhe-rs). Additionally, a zk-experimental version is supported, enabling the server to verify encrypted values before computation begins, and assembly code execution allows clients to define the computation process/
+- Currently, gpu feature of tfhe-rs is not yet available in this project.
 
 ## Environment Required
-- rust^1.77.1 stable
+- rust^1.77.1 stable [installation](https://www.rust-lang.org/tools/install)
 - python^3.10
 
-## Download 
+## Download to use fhe-http
 ```shellscript=
 $ pip install fhe-http
 ```
