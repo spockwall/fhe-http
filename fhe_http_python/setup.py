@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="fhe-http",
-    version="0.1.20",
+    version="0.1.21",
     author="spockwall",
     author_email="e1e1e1n9n9n9@gmail.com",
     description="This is an test package for Python Fhe Http ",
@@ -20,8 +20,8 @@ setup(
     ],
     rust_extensions=[
         setuptools_rust.RustExtension(
-            "fhe_http_python.fhe_http_python",
-            "fhe_http_python/Cargo.toml",
+            "fhe.fhe",
+            "fhe/Cargo.toml",
             binding=setuptools_rust.Binding.PyO3,
         )
     ],
