@@ -5,3 +5,4 @@ setuptools-rust==1.9.0
 setuptools==70.2.0
 tomli==2.0.1
 twine==3.4.1
+wheel==0.43.0
