@@ -9,7 +9,6 @@ tfhe = { version = "*", features = [
     "boolean",
     "shortint",
     "integer",
-    "aarch64-unix",
     "zk-pok-experimental",
 ] }
 serde = { version = "1.0.104", features = ["derive"] }
