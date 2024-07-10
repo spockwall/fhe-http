@@ -1,5 +1,5 @@
-from fhe import fhe as py_fhe
-from assembler.assembler import Assembler
+import fhe_http as py_fhe
+from fhe_http.assembler.assembler import Assembler
 
 
 def generate_keys():

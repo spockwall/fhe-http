@@ -1,5 +1,5 @@
+import fhe_http as py_fhe
 import unittest
-from fhe import fhe as py_fhe
 
 
 def generate_keys():

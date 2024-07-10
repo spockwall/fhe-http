@@ -1,13 +1,13 @@
-import setuptools_rust
 from setuptools import setup, find_packages
+from setuptools_rust import RustExtension, Binding
 
 setup(
     name="fhe-http",
-    version="0.2.4",
+    version="0.2.41",
     author="spockwall",
     author_email="e1e1e1n9n9n9@gmail.com",
     description="This is an test package for Python Fhe Http ",
-    long_description=open("README.md").read(),
+    #long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/spockwall/fhe-http",  # Replace with your project's URL
     packages=find_packages(),
@@ -19,11 +19,11 @@ setup(
         "wheel>=0.43.0",
     ],
     rust_extensions=[
-        setuptools_rust.RustExtension(
-            "fhe.fhe",
-            "fhe/Cargo.toml",
-            binding=setuptools_rust.Binding.PyO3,
-        )
+        RustExtension(
+            "fhe_http.fhe",
+            "Cargo.toml",
+            binding=Binding.PyO3,
+        ),
     ],
     classifiers=[
         "Programming Language :: Python :: 3.10",

@@ -7,9 +7,7 @@
 
 ### How to build package and upload to PyPI
 ```shellscript=
-$ cd fhe-http/fhe_http_python/fhe
-$ maturin develop
-$ cd ..
+$ cd fhe-http/fhe_http_python
 $ python setup.py sdist bdist_wheel
 $ twine check dist/*
 

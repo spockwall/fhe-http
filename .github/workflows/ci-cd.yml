@@ -43,15 +43,19 @@ jobs:
             - name: Install Maturin
               run: pip install maturin
 
-            - name: Build and develop the Rust package
-              run: maturin develop
-              working-directory: fhe_http_python/fhe
-
             - name: Install dependencies
               run: pip install -r fhe_http_python/requirements.txt
 
             - name: Install the package
-              run: pip install .
+              run: python setup.py sdist bdist_wheel
+
+            - name: Upload package to PyPI
+              uses: pypa/gh-action-pypi-publish@master
+              with:
+                  user: __token__
+                  password: ${{ secrets.PYPI_API_TOKEN }}
+                  repository_url: https://upload.pypi.org/legacy/
+                  package_glob: dist/*.whl
 
     version:
         runs-on: ubuntu-latest

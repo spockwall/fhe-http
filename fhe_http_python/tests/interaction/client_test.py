@@ -1,7 +1,7 @@
 # client.py
 import json
 import requests
-from fhe import fhe as py_fhe
+import fhe_http as py_fhe
 
 
 def generate_keys():

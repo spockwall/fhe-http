@@ -3,7 +3,7 @@ import fastapi
 import uvicorn
 from fastapi import Body
 from pydantic import BaseModel
-from fhe import fhe as py_fhe
+import fhe_http as py_fhe
 
 
 app = fastapi.FastAPI()
