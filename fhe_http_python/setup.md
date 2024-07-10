@@ -1,4 +1,4 @@
-# py-fhe-http SetUp
+# Fhe-Http SetUp
 
 ### Description
 - This setup script integrates py_fhe_http and assembler into a packages and upload the package to [PyPI](https://pypi.org/) and [TestPyPI](https://test.pypi.org/).

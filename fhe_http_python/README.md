@@ -17,7 +17,8 @@
 $ pip install fhe-http
 
 // Build fhe-http package from source
-$ cd fhe-http/fhe_http_python/fhe
+// This will create a package in site-packages of pip
+$ cd fhe-http/fhe_http_python
 $ maturin develop
 ```
 ### Run Tests
@@ -38,7 +39,7 @@ This basic version of FHE computation enables clients to delegate computation ta
   - `Uint64`
 #### Example usage
 ```python=
-from fhe import fhe as py_fhe
+import fhe_http as py_fhe
 
 # initialize keys
 key_gen = py_fhe.KeyGenerator()
@@ -86,7 +87,7 @@ This zk-experimental feature allows servers to verify encrypted values sent by c
   - `ProvenUint64` 
 #### Example usage
 ```python=
-from fhe import fhe as py_fhe
+import fhe_http as py_fhe
 
 # initialize keys
 key_gen = py_fhe.KeyGenerator()
@@ -138,8 +139,8 @@ This assembly feature allows clients to define a function that includes multiple
   - `Uint64`
 #### Example usage
 ```python=
-from fhe import fhe as py_fhe
-from assembler.assembler import Assembler
+import fhe_http as py_fhe
+from fhe_http.assembler.assembler import Assembler
 
 def generate_keys():
     key_gen = py_fhe.KeyGenerator()
@@ -220,7 +221,7 @@ import fastapi
 import uvicorn
 from fastapi import Body
 from pydantic import BaseModel
-from fhe import fhe as py_fhe
+import fhe_http as py_fhe
 
 
 app = fastapi.FastAPI()
@@ -270,7 +271,7 @@ if __name__ == "__main__":
 # client.py
 import json
 import requests
-from fhe import fhe as py_fhe
+import fhe_http as py_fhe
 
 
 def generate_keys():
