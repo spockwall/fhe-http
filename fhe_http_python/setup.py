@@ -3,16 +3,15 @@ from setuptools_rust import RustExtension, Binding
 
 setup(
     name="fhe-http",
-    version="0.2.43",
+    version="0.2.44",
     author="spockwall",
     author_email="e1e1e1n9n9n9@gmail.com",
     description="This is an test package for Python Fhe Http ",
-    #long_description=open("README.md").read(),
+    # long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/spockwall/fhe-http",  # Replace with your project's URL
     packages=find_packages(),
     install_requires=[
-        "maturin>=1.5.0",
         "ply>=3.11",
         "setuptools-rust>=1.9.0",
         "setuptools>=68.2.2",
@@ -30,5 +29,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.10",  # Adjust this based on your project's requirements
+    # use_scm_version=True,  # Use setuptools_scm for versioning
 )

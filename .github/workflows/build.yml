@@ -1,0 +1,68 @@
+name: Build and Publish
+
+on:
+    push:
+        branches:
+            - main
+            - "v*.*.*"
+    pull_request:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-22.04, macos-latest, macos-12]
+                python-version: ["3.10"]
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Python
+              uses: actions/setup-python@v3
+              with:
+                  python-version: ${{ matrix.python-version }}
+
+            - name: Install Rust
+              uses: actions-rs/toolchain@v1
+              with:
+                  toolchain: stable
+                  override: true
+
+            - name: Install dependencies
+              run: pip install setuptools-rust wheel twine setuptools_scm
+
+            - name: Build wheels
+              run: python setup.py bdist_wheel
+              working-directory: ./fhe_http_python
+
+            - name: Upload wheels as artifact
+              uses: actions/upload-artifact@v2
+              with:
+                  name: wheels
+                  path: dist/*.whl
+
+    publish:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Download wheels from build
+              uses: actions/download-artifact@v2
+              with:
+                  name: wheels
+                  path: dist
+
+            - name: Install twine
+              run: pip install twine
+
+            - name: Publish package to PyPI
+              env:
+                  TWINE_USERNAME: __token__
+                  TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+              run: twine upload dist/*
