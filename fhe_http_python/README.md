@@ -5,10 +5,14 @@
 - This project offers a Python interface for using [tfhe-rs](https://github.com/zama-ai/tfhe-rs). Additionally, a zk-experimental version is supported, enabling the server to verify encrypted values before computation begins, and assembly code execution allows clients to define the computation process/
 - Currently, gpu acceleration of tfhe-rs is not yet available in this project.
 
-## Environment Required
-- rust^1.77.1 stable [installation](https://www.rust-lang.org/tools/install)
+## Required
+- rust^1.77.1 stable 
+  - [installation](https://www.rust-lang.org/tools/install)
 - python^3.10
-- Apple silicon chip (pkg installation on PyPI)
+- environment: 
+  - `ubuntu-22.04` 
+  - `macos arm64`
+  - `macos x86-64`
 
 ## How to use
 ### About Package

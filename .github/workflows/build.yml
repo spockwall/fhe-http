@@ -39,23 +39,41 @@ jobs:
               run: pip install setuptools-rust wheel twine setuptools_scm
 
             - name: Build wheels
-              run: python setup.py bdist_wheel
+              run: python setup.py sdist bdist_wheel
               working-directory: ./fhe_http_python
 
             - name: Upload wheels as artifact
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v4
               with:
-                  name: wheels
-                  path: dist/*.whl
+                  name: wheels-${{ matrix.os }}
+                  path: ./fhe_http_python/dist/*.whl
+                  if-no-files-found: error
 
     publish:
         needs: build
         runs-on: ubuntu-latest
         steps:
-            - name: Download wheels from build
-              uses: actions/download-artifact@v2
+            - name: Checkout repository
+              uses: actions/checkout@v2
               with:
-                  name: wheels
+                  fetch-depth: 0
+
+            #- name: Download wheels from build
+            #  uses: actions/download-artifact@v4
+            #  with:
+            #      name: wheels
+            #      path: ./fhe_http_python/dist/*.whl
+
+            - name: Download wheels from macos-latest
+              uses: actions/download-artifact@v4
+              with:
+                  name: wheels-macos-latest
+                  path: dist
+
+            - name: Download wheels from macos x86 build
+              uses: actions/download-artifact@v4
+              with:
+                  name: wheels-macos-12
                   path: dist
 
             - name: Install twine
