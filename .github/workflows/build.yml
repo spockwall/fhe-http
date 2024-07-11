@@ -62,7 +62,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: wheels
-                  path: ./fhe_http_pythondist/*
+                  path: ./fhe_http_python/dist/*
 
             - name: Install twine
               run: pip install twine
