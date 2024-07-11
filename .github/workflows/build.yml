@@ -58,11 +58,23 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Download wheels from build
-              uses: actions/download-artifact@v4
+            #- name: Download wheels from build
+            #  uses: actions/download-artifact@v4
+            #  with:
+            #      name: wheels
+            #      path: ./fhe_http_python/dist/*.whl
+
+            - name: Download wheels from macos-latest
+              uses: actions/download-artifact@v2
               with:
-                  name: wheels
-                  path: ./fhe_http_python/dist/*.whl
+                  name: macos-latest
+                  path: ./fhe_http_python/dist
+
+            - name: Download wheels from macos x86 build
+              uses: actions/download-artifact@v2
+              with:
+                  name: wheels-macos-12
+                  path: ./fhe_http_python/dist
 
             - name: Install twine
               run: pip install twine
