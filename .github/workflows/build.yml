@@ -68,13 +68,13 @@ jobs:
               uses: actions/download-artifact@v2
               with:
                   name: wheels-macos-latest
-                  path: ./fhe_http_python/dist/*.whl
+                  path: dist
 
             - name: Download wheels from macos x86 build
               uses: actions/download-artifact@v2
               with:
                   name: wheels-macos-12
-                  path: ./fhe_http_python/dist/*.whl
+                  path: dist
 
             - name: Install twine
               run: pip install twine
