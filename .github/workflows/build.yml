@@ -46,7 +46,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: wheels-${{ matrix.os }}
-                  path: ./fhe_http_python/dist/*.whl
+                  path: ./fhe_http_python/dist
                   if-no-files-found: error
 
     publish:
