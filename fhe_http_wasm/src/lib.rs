@@ -1,15 +1,6 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+pub mod configs {
+    pub mod typing;
 }
 
-use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-extern "C" {
-    pub fn alert(s: &str);
-}
-
-#[wasm_bindgen]
-pub fn greet(name: &str) {
-    alert(&format!("Hello, {}!", name));
-}
+pub use crate::configs::typing::create_fhe_type;
+pub use crate::configs::typing::create_proven_fhe_type;
