@@ -3,6 +3,7 @@ pub mod apis {
     pub mod fhe;
     pub mod key_generator;
     pub mod serializer;
+    pub mod server_key_setter;
 }
 pub mod configs {
     pub mod error;
