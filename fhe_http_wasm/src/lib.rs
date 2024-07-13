@@ -1,3 +1,6 @@
+pub mod apis {
+    pub mod fhe;
+}
 pub mod configs {
     pub mod typing;
 }
