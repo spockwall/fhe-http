@@ -22,6 +22,9 @@ fn main() {
                 tfhe_features.push("aarch64-unix");
             }
         }
+        "wasm32" => {
+            println!("cargo:rustc-cfg=wasm");
+        }
         _ => {
             panic!("Unsupported os architecture: {}, build failed!", target);
         }

@@ -1,0 +1,15 @@
+[package]
+name = "fhe_http_wasm"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+wasm-bindgen = "0.2.92"
+getrandom = { version = "0.2", features = ["js"] } # for wasm pack js feature
+fhe_http_core = { path = "../fhe_http_core" }
+
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["cdylib"]
