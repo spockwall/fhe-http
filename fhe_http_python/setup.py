@@ -3,7 +3,7 @@ from setuptools_rust import RustExtension, Binding
 
 setup(
     name="fhe-http",
-    version="0.2.46",
+    version="0.2.47",
     author="spockwall",
     author_email="e1e1e1n9n9n9@gmail.com",
     description="This is an test package for Python Fhe Http ",

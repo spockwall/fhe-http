@@ -58,11 +58,10 @@ jobs:
               with:
                   fetch-depth: 0
 
-            #- name: Download wheels from build
-            #  uses: actions/download-artifact@v4
-            #  with:
-            #      name: wheels
-            #      path: ./fhe_http_python/dist/*.whl
+            - name: Download wheels from ubuntu-22.04
+              uses: actions/download-artifact@v4
+              with:
+                  name: wheels-ubuntu-22.04
 
             - name: Download wheels from macos-latest
               uses: actions/download-artifact@v4
