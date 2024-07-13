@@ -44,9 +44,9 @@ fn fhe(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
         configs::zk_params::get_public_zk_params,
         m
     )?)?;
-    m.add_function(wrap_pyfunction!(configs::typing::create_fhe_value_type, m)?)?;
+    m.add_function(wrap_pyfunction!(configs::typing::create_fhe_type, m)?)?;
     m.add_function(wrap_pyfunction!(
-        configs::typing::create_proven_fhe_value_type,
+        configs::typing::create_proven_fhe_type,
         m
     )?)?;
 

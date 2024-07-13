@@ -40,11 +40,11 @@ impl PyProvenFheType {
 }
 
 #[pyfunction]
-pub fn create_fhe_value_type(s: &str) -> PyResult<PyFheType> {
+pub fn create_fhe_type(s: &str) -> PyResult<PyFheType> {
     PyFheType::from_str(s)
 }
 
 #[pyfunction]
-pub fn create_proven_fhe_value_type(s: &str) -> PyResult<PyProvenFheType> {
+pub fn create_proven_fhe_type(s: &str) -> PyResult<PyProvenFheType> {
     PyProvenFheType::from_str(s)
 }

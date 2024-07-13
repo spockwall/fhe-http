@@ -18,14 +18,14 @@ def set_server_key(server_key):
 
 def encrypt(num: int, client_key, data_type: str = "Uint64"):
     serailizer = py_fhe.Serializer()
-    fhe_value = py_fhe.create_fhe_value_type(data_type)
+    fhe_value = py_fhe.create_fhe_type(data_type)
     fhe = py_fhe.Fhe(client_key)
     return fhe.encrypt(serailizer.from_i64(num), fhe_value)
 
 
 def decrypt(encrypted_num, client_key, data_type: str = "Uint64"):
     serailizer = py_fhe.Serializer()
-    fhe_value = py_fhe.create_fhe_value_type(data_type)
+    fhe_value = py_fhe.create_fhe_type(data_type)
     fhe = py_fhe.Fhe(client_key)
     return serailizer.to_i64(fhe.decrypt(encrypted_num, fhe_value))
 
@@ -57,7 +57,7 @@ if __name__ == "__main__":
             "two": encrypt(2, client_key),
             "three": encrypt(3, client_key),
         },
-        py_fhe.create_fhe_value_type("Uint64"),
+        py_fhe.create_fhe_type("Uint64"),
     )
     decrypted = decrypt(encrypted, client_key)
     print(decrypted)
