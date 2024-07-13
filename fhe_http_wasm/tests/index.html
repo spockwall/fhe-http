@@ -6,9 +6,11 @@
     </head>
     <body>
         <script type="module">
-            import init, { greet } from "../pkg/fhe_http_wasm.js";
+            import init, { create_fhe_type, Fhe } from "../pkg/fhe_http_wasm.js";
             init().then(() => {
-                greet("WebAssembly");
+                let a = create_fhe_type("Int64");
+                console.log(a);
+                console.log(Fhe)
             });
         </script>
     </body>
