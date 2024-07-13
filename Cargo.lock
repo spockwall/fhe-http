@@ -542,7 +542,10 @@ version = "0.1.0"
 dependencies = [
  "fhe_http_core",
  "getrandom",
+ "js-sys",
+ "thiserror",
  "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
