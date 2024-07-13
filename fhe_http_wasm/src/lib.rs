@@ -1,4 +1,5 @@
 pub mod apis {
+    pub mod base64;
     pub mod fhe;
     pub mod key_generator;
 }
