@@ -1,0 +1,1156 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> function
+Rule 1     function -> DEF ID LPAREN params RPAREN COLON statements RETURN expression
+Rule 2     params -> params COMMA param
+Rule 3     params -> param
+Rule 4     params -> empty
+Rule 5     param -> ID
+Rule 6     empty -> <empty>
+Rule 7     statements -> statements statement
+Rule 8     statements -> statement
+Rule 9     statement -> ID EQUALS expression
+Rule 10    expression -> expression ADD expression
+Rule 11    expression -> expression SUB expression
+Rule 12    expression -> expression MUL expression
+Rule 13    expression -> expression DIV expression
+Rule 14    expression -> expression REM expression
+Rule 15    expression -> expression SHR expression
+Rule 16    expression -> expression SHL expression
+Rule 17    expression -> expression AND expression
+Rule 18    expression -> expression OR expression
+Rule 19    expression -> expression XOR expression
+Rule 20    expression -> NOT expression
+Rule 21    expression -> LPAREN expression RPAREN
+Rule 22    expression -> NUMBER
+Rule 23    expression -> ID
+
+Terminals, with rules where they appear
+
+ADD                  : 10
+AND                  : 17
+COLON                : 1
+COMMA                : 2
+DEF                  : 1
+DIV                  : 13
+EQUALS               : 9
+ID                   : 1 5 9 23
+LPAREN               : 1 21
+MUL                  : 12
+NOT                  : 20
+NUMBER               : 22
+OR                   : 18
+REM                  : 14
+RETURN               : 1
+RPAREN               : 1 21
+SHL                  : 16
+SHR                  : 15
+SUB                  : 11
+XOR                  : 19
+error                : 
+
+Nonterminals, with rules where they appear
+
+empty                : 4
+expression           : 1 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 21
+function             : 0
+param                : 2 3
+params               : 1 2
+statement            : 7 8
+statements           : 1 7
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . function
+    (1) function -> . DEF ID LPAREN params RPAREN COLON statements RETURN expression
+
+    DEF             shift and go to state 2
+
+    function                       shift and go to state 1
+
+state 1
+
+    (0) S' -> function .
+
+
+
+state 2
+
+    (1) function -> DEF . ID LPAREN params RPAREN COLON statements RETURN expression
+
+    ID              shift and go to state 3
+
+
+state 3
+
+    (1) function -> DEF ID . LPAREN params RPAREN COLON statements RETURN expression
+
+    LPAREN          shift and go to state 4
+
+
+state 4
+
+    (1) function -> DEF ID LPAREN . params RPAREN COLON statements RETURN expression
+    (2) params -> . params COMMA param
+    (3) params -> . param
+    (4) params -> . empty
+    (5) param -> . ID
+    (6) empty -> .
+
+    ID              shift and go to state 5
+    RPAREN          reduce using rule 6 (empty -> .)
+    COMMA           reduce using rule 6 (empty -> .)
+
+    params                         shift and go to state 6
+    param                          shift and go to state 7
+    empty                          shift and go to state 8
+
+state 5
+
+    (5) param -> ID .
+
+    RPAREN          reduce using rule 5 (param -> ID .)
+    COMMA           reduce using rule 5 (param -> ID .)
+
+
+state 6
+
+    (1) function -> DEF ID LPAREN params . RPAREN COLON statements RETURN expression
+    (2) params -> params . COMMA param
+
+    RPAREN          shift and go to state 9
+    COMMA           shift and go to state 10
+
+
+state 7
+
+    (3) params -> param .
+
+    RPAREN          reduce using rule 3 (params -> param .)
+    COMMA           reduce using rule 3 (params -> param .)
+
+
+state 8
+
+    (4) params -> empty .
+
+    RPAREN          reduce using rule 4 (params -> empty .)
+    COMMA           reduce using rule 4 (params -> empty .)
+
+
+state 9
+
+    (1) function -> DEF ID LPAREN params RPAREN . COLON statements RETURN expression
+
+    COLON           shift and go to state 11
+
+
+state 10
+
+    (2) params -> params COMMA . param
+    (5) param -> . ID
+
+    ID              shift and go to state 5
+
+    param                          shift and go to state 12
+
+state 11
+
+    (1) function -> DEF ID LPAREN params RPAREN COLON . statements RETURN expression
+    (7) statements -> . statements statement
+    (8) statements -> . statement
+    (9) statement -> . ID EQUALS expression
+
+    ID              shift and go to state 13
+
+    statements                     shift and go to state 14
+    statement                      shift and go to state 15
+
+state 12
+
+    (2) params -> params COMMA param .
+
+    RPAREN          reduce using rule 2 (params -> params COMMA param .)
+    COMMA           reduce using rule 2 (params -> params COMMA param .)
+
+
+state 13
+
+    (9) statement -> ID . EQUALS expression
+
+    EQUALS          shift and go to state 16
+
+
+state 14
+
+    (1) function -> DEF ID LPAREN params RPAREN COLON statements . RETURN expression
+    (7) statements -> statements . statement
+    (9) statement -> . ID EQUALS expression
+
+    RETURN          shift and go to state 17
+    ID              shift and go to state 13
+
+    statement                      shift and go to state 18
+
+state 15
+
+    (8) statements -> statement .
+
+    RETURN          reduce using rule 8 (statements -> statement .)
+    ID              reduce using rule 8 (statements -> statement .)
+
+
+state 16
+
+    (9) statement -> ID EQUALS . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 20
+
+state 17
+
+    (1) function -> DEF ID LPAREN params RPAREN COLON statements RETURN . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 24
+
+state 18
+
+    (7) statements -> statements statement .
+
+    RETURN          reduce using rule 7 (statements -> statements statement .)
+    ID              reduce using rule 7 (statements -> statements statement .)
+
+
+state 19
+
+    (23) expression -> ID .
+
+    ADD             reduce using rule 23 (expression -> ID .)
+    SUB             reduce using rule 23 (expression -> ID .)
+    MUL             reduce using rule 23 (expression -> ID .)
+    DIV             reduce using rule 23 (expression -> ID .)
+    REM             reduce using rule 23 (expression -> ID .)
+    SHR             reduce using rule 23 (expression -> ID .)
+    SHL             reduce using rule 23 (expression -> ID .)
+    AND             reduce using rule 23 (expression -> ID .)
+    OR              reduce using rule 23 (expression -> ID .)
+    XOR             reduce using rule 23 (expression -> ID .)
+    RETURN          reduce using rule 23 (expression -> ID .)
+    ID              reduce using rule 23 (expression -> ID .)
+    $end            reduce using rule 23 (expression -> ID .)
+    RPAREN          reduce using rule 23 (expression -> ID .)
+
+
+state 20
+
+    (9) statement -> ID EQUALS expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    RETURN          reduce using rule 9 (statement -> ID EQUALS expression .)
+    ID              reduce using rule 9 (statement -> ID EQUALS expression .)
+    ADD             shift and go to state 25
+    SUB             shift and go to state 26
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+    SHR             shift and go to state 30
+    SHL             shift and go to state 31
+    AND             shift and go to state 32
+    OR              shift and go to state 33
+    XOR             shift and go to state 34
+
+
+state 21
+
+    (20) expression -> NOT . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 35
+
+state 22
+
+    (21) expression -> LPAREN . expression RPAREN
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 36
+
+state 23
+
+    (22) expression -> NUMBER .
+
+    ADD             reduce using rule 22 (expression -> NUMBER .)
+    SUB             reduce using rule 22 (expression -> NUMBER .)
+    MUL             reduce using rule 22 (expression -> NUMBER .)
+    DIV             reduce using rule 22 (expression -> NUMBER .)
+    REM             reduce using rule 22 (expression -> NUMBER .)
+    SHR             reduce using rule 22 (expression -> NUMBER .)
+    SHL             reduce using rule 22 (expression -> NUMBER .)
+    AND             reduce using rule 22 (expression -> NUMBER .)
+    OR              reduce using rule 22 (expression -> NUMBER .)
+    XOR             reduce using rule 22 (expression -> NUMBER .)
+    RETURN          reduce using rule 22 (expression -> NUMBER .)
+    ID              reduce using rule 22 (expression -> NUMBER .)
+    $end            reduce using rule 22 (expression -> NUMBER .)
+    RPAREN          reduce using rule 22 (expression -> NUMBER .)
+
+
+state 24
+
+    (1) function -> DEF ID LPAREN params RPAREN COLON statements RETURN expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    $end            reduce using rule 1 (function -> DEF ID LPAREN params RPAREN COLON statements RETURN expression .)
+    ADD             shift and go to state 25
+    SUB             shift and go to state 26
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+    SHR             shift and go to state 30
+    SHL             shift and go to state 31
+    AND             shift and go to state 32
+    OR              shift and go to state 33
+    XOR             shift and go to state 34
+
+
+state 25
+
+    (10) expression -> expression ADD . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 37
+
+state 26
+
+    (11) expression -> expression SUB . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 38
+
+state 27
+
+    (12) expression -> expression MUL . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 39
+
+state 28
+
+    (13) expression -> expression DIV . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 40
+
+state 29
+
+    (14) expression -> expression REM . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 41
+
+state 30
+
+    (15) expression -> expression SHR . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 42
+
+state 31
+
+    (16) expression -> expression SHL . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 43
+
+state 32
+
+    (17) expression -> expression AND . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 44
+
+state 33
+
+    (18) expression -> expression OR . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 45
+
+state 34
+
+    (19) expression -> expression XOR . expression
+    (10) expression -> . expression ADD expression
+    (11) expression -> . expression SUB expression
+    (12) expression -> . expression MUL expression
+    (13) expression -> . expression DIV expression
+    (14) expression -> . expression REM expression
+    (15) expression -> . expression SHR expression
+    (16) expression -> . expression SHL expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression OR expression
+    (19) expression -> . expression XOR expression
+    (20) expression -> . NOT expression
+    (21) expression -> . LPAREN expression RPAREN
+    (22) expression -> . NUMBER
+    (23) expression -> . ID
+
+    NOT             shift and go to state 21
+    LPAREN          shift and go to state 22
+    NUMBER          shift and go to state 23
+    ID              shift and go to state 19
+
+    expression                     shift and go to state 46
+
+state 35
+
+    (20) expression -> NOT expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    ADD             reduce using rule 20 (expression -> NOT expression .)
+    SUB             reduce using rule 20 (expression -> NOT expression .)
+    MUL             reduce using rule 20 (expression -> NOT expression .)
+    DIV             reduce using rule 20 (expression -> NOT expression .)
+    REM             reduce using rule 20 (expression -> NOT expression .)
+    SHR             reduce using rule 20 (expression -> NOT expression .)
+    SHL             reduce using rule 20 (expression -> NOT expression .)
+    AND             reduce using rule 20 (expression -> NOT expression .)
+    OR              reduce using rule 20 (expression -> NOT expression .)
+    XOR             reduce using rule 20 (expression -> NOT expression .)
+    RETURN          reduce using rule 20 (expression -> NOT expression .)
+    ID              reduce using rule 20 (expression -> NOT expression .)
+    $end            reduce using rule 20 (expression -> NOT expression .)
+    RPAREN          reduce using rule 20 (expression -> NOT expression .)
+
+  ! ADD             [ shift and go to state 25 ]
+  ! SUB             [ shift and go to state 26 ]
+  ! MUL             [ shift and go to state 27 ]
+  ! DIV             [ shift and go to state 28 ]
+  ! REM             [ shift and go to state 29 ]
+  ! SHR             [ shift and go to state 30 ]
+  ! SHL             [ shift and go to state 31 ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 36
+
+    (21) expression -> LPAREN expression . RPAREN
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    RPAREN          shift and go to state 47
+    ADD             shift and go to state 25
+    SUB             shift and go to state 26
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+    SHR             shift and go to state 30
+    SHL             shift and go to state 31
+    AND             shift and go to state 32
+    OR              shift and go to state 33
+    XOR             shift and go to state 34
+
+
+state 37
+
+    (10) expression -> expression ADD expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    ADD             reduce using rule 10 (expression -> expression ADD expression .)
+    SUB             reduce using rule 10 (expression -> expression ADD expression .)
+    SHR             reduce using rule 10 (expression -> expression ADD expression .)
+    SHL             reduce using rule 10 (expression -> expression ADD expression .)
+    AND             reduce using rule 10 (expression -> expression ADD expression .)
+    OR              reduce using rule 10 (expression -> expression ADD expression .)
+    XOR             reduce using rule 10 (expression -> expression ADD expression .)
+    RETURN          reduce using rule 10 (expression -> expression ADD expression .)
+    ID              reduce using rule 10 (expression -> expression ADD expression .)
+    $end            reduce using rule 10 (expression -> expression ADD expression .)
+    RPAREN          reduce using rule 10 (expression -> expression ADD expression .)
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+
+  ! MUL             [ reduce using rule 10 (expression -> expression ADD expression .) ]
+  ! DIV             [ reduce using rule 10 (expression -> expression ADD expression .) ]
+  ! REM             [ reduce using rule 10 (expression -> expression ADD expression .) ]
+  ! ADD             [ shift and go to state 25 ]
+  ! SUB             [ shift and go to state 26 ]
+  ! SHR             [ shift and go to state 30 ]
+  ! SHL             [ shift and go to state 31 ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 38
+
+    (11) expression -> expression SUB expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    ADD             reduce using rule 11 (expression -> expression SUB expression .)
+    SUB             reduce using rule 11 (expression -> expression SUB expression .)
+    SHR             reduce using rule 11 (expression -> expression SUB expression .)
+    SHL             reduce using rule 11 (expression -> expression SUB expression .)
+    AND             reduce using rule 11 (expression -> expression SUB expression .)
+    OR              reduce using rule 11 (expression -> expression SUB expression .)
+    XOR             reduce using rule 11 (expression -> expression SUB expression .)
+    RETURN          reduce using rule 11 (expression -> expression SUB expression .)
+    ID              reduce using rule 11 (expression -> expression SUB expression .)
+    $end            reduce using rule 11 (expression -> expression SUB expression .)
+    RPAREN          reduce using rule 11 (expression -> expression SUB expression .)
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+
+  ! MUL             [ reduce using rule 11 (expression -> expression SUB expression .) ]
+  ! DIV             [ reduce using rule 11 (expression -> expression SUB expression .) ]
+  ! REM             [ reduce using rule 11 (expression -> expression SUB expression .) ]
+  ! ADD             [ shift and go to state 25 ]
+  ! SUB             [ shift and go to state 26 ]
+  ! SHR             [ shift and go to state 30 ]
+  ! SHL             [ shift and go to state 31 ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 39
+
+    (12) expression -> expression MUL expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    ADD             reduce using rule 12 (expression -> expression MUL expression .)
+    SUB             reduce using rule 12 (expression -> expression MUL expression .)
+    MUL             reduce using rule 12 (expression -> expression MUL expression .)
+    DIV             reduce using rule 12 (expression -> expression MUL expression .)
+    REM             reduce using rule 12 (expression -> expression MUL expression .)
+    SHR             reduce using rule 12 (expression -> expression MUL expression .)
+    SHL             reduce using rule 12 (expression -> expression MUL expression .)
+    AND             reduce using rule 12 (expression -> expression MUL expression .)
+    OR              reduce using rule 12 (expression -> expression MUL expression .)
+    XOR             reduce using rule 12 (expression -> expression MUL expression .)
+    RETURN          reduce using rule 12 (expression -> expression MUL expression .)
+    ID              reduce using rule 12 (expression -> expression MUL expression .)
+    $end            reduce using rule 12 (expression -> expression MUL expression .)
+    RPAREN          reduce using rule 12 (expression -> expression MUL expression .)
+
+  ! ADD             [ shift and go to state 25 ]
+  ! SUB             [ shift and go to state 26 ]
+  ! MUL             [ shift and go to state 27 ]
+  ! DIV             [ shift and go to state 28 ]
+  ! REM             [ shift and go to state 29 ]
+  ! SHR             [ shift and go to state 30 ]
+  ! SHL             [ shift and go to state 31 ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 40
+
+    (13) expression -> expression DIV expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    ADD             reduce using rule 13 (expression -> expression DIV expression .)
+    SUB             reduce using rule 13 (expression -> expression DIV expression .)
+    MUL             reduce using rule 13 (expression -> expression DIV expression .)
+    DIV             reduce using rule 13 (expression -> expression DIV expression .)
+    REM             reduce using rule 13 (expression -> expression DIV expression .)
+    SHR             reduce using rule 13 (expression -> expression DIV expression .)
+    SHL             reduce using rule 13 (expression -> expression DIV expression .)
+    AND             reduce using rule 13 (expression -> expression DIV expression .)
+    OR              reduce using rule 13 (expression -> expression DIV expression .)
+    XOR             reduce using rule 13 (expression -> expression DIV expression .)
+    RETURN          reduce using rule 13 (expression -> expression DIV expression .)
+    ID              reduce using rule 13 (expression -> expression DIV expression .)
+    $end            reduce using rule 13 (expression -> expression DIV expression .)
+    RPAREN          reduce using rule 13 (expression -> expression DIV expression .)
+
+  ! ADD             [ shift and go to state 25 ]
+  ! SUB             [ shift and go to state 26 ]
+  ! MUL             [ shift and go to state 27 ]
+  ! DIV             [ shift and go to state 28 ]
+  ! REM             [ shift and go to state 29 ]
+  ! SHR             [ shift and go to state 30 ]
+  ! SHL             [ shift and go to state 31 ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 41
+
+    (14) expression -> expression REM expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    ADD             reduce using rule 14 (expression -> expression REM expression .)
+    SUB             reduce using rule 14 (expression -> expression REM expression .)
+    MUL             reduce using rule 14 (expression -> expression REM expression .)
+    DIV             reduce using rule 14 (expression -> expression REM expression .)
+    REM             reduce using rule 14 (expression -> expression REM expression .)
+    SHR             reduce using rule 14 (expression -> expression REM expression .)
+    SHL             reduce using rule 14 (expression -> expression REM expression .)
+    AND             reduce using rule 14 (expression -> expression REM expression .)
+    OR              reduce using rule 14 (expression -> expression REM expression .)
+    XOR             reduce using rule 14 (expression -> expression REM expression .)
+    RETURN          reduce using rule 14 (expression -> expression REM expression .)
+    ID              reduce using rule 14 (expression -> expression REM expression .)
+    $end            reduce using rule 14 (expression -> expression REM expression .)
+    RPAREN          reduce using rule 14 (expression -> expression REM expression .)
+
+  ! ADD             [ shift and go to state 25 ]
+  ! SUB             [ shift and go to state 26 ]
+  ! MUL             [ shift and go to state 27 ]
+  ! DIV             [ shift and go to state 28 ]
+  ! REM             [ shift and go to state 29 ]
+  ! SHR             [ shift and go to state 30 ]
+  ! SHL             [ shift and go to state 31 ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 42
+
+    (15) expression -> expression SHR expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    SHR             reduce using rule 15 (expression -> expression SHR expression .)
+    SHL             reduce using rule 15 (expression -> expression SHR expression .)
+    AND             reduce using rule 15 (expression -> expression SHR expression .)
+    OR              reduce using rule 15 (expression -> expression SHR expression .)
+    XOR             reduce using rule 15 (expression -> expression SHR expression .)
+    RETURN          reduce using rule 15 (expression -> expression SHR expression .)
+    ID              reduce using rule 15 (expression -> expression SHR expression .)
+    $end            reduce using rule 15 (expression -> expression SHR expression .)
+    RPAREN          reduce using rule 15 (expression -> expression SHR expression .)
+    ADD             shift and go to state 25
+    SUB             shift and go to state 26
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+
+  ! ADD             [ reduce using rule 15 (expression -> expression SHR expression .) ]
+  ! SUB             [ reduce using rule 15 (expression -> expression SHR expression .) ]
+  ! MUL             [ reduce using rule 15 (expression -> expression SHR expression .) ]
+  ! DIV             [ reduce using rule 15 (expression -> expression SHR expression .) ]
+  ! REM             [ reduce using rule 15 (expression -> expression SHR expression .) ]
+  ! SHR             [ shift and go to state 30 ]
+  ! SHL             [ shift and go to state 31 ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 43
+
+    (16) expression -> expression SHL expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    SHR             reduce using rule 16 (expression -> expression SHL expression .)
+    SHL             reduce using rule 16 (expression -> expression SHL expression .)
+    AND             reduce using rule 16 (expression -> expression SHL expression .)
+    OR              reduce using rule 16 (expression -> expression SHL expression .)
+    XOR             reduce using rule 16 (expression -> expression SHL expression .)
+    RETURN          reduce using rule 16 (expression -> expression SHL expression .)
+    ID              reduce using rule 16 (expression -> expression SHL expression .)
+    $end            reduce using rule 16 (expression -> expression SHL expression .)
+    RPAREN          reduce using rule 16 (expression -> expression SHL expression .)
+    ADD             shift and go to state 25
+    SUB             shift and go to state 26
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+
+  ! ADD             [ reduce using rule 16 (expression -> expression SHL expression .) ]
+  ! SUB             [ reduce using rule 16 (expression -> expression SHL expression .) ]
+  ! MUL             [ reduce using rule 16 (expression -> expression SHL expression .) ]
+  ! DIV             [ reduce using rule 16 (expression -> expression SHL expression .) ]
+  ! REM             [ reduce using rule 16 (expression -> expression SHL expression .) ]
+  ! SHR             [ shift and go to state 30 ]
+  ! SHL             [ shift and go to state 31 ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 44
+
+    (17) expression -> expression AND expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    AND             reduce using rule 17 (expression -> expression AND expression .)
+    OR              reduce using rule 17 (expression -> expression AND expression .)
+    XOR             reduce using rule 17 (expression -> expression AND expression .)
+    RETURN          reduce using rule 17 (expression -> expression AND expression .)
+    ID              reduce using rule 17 (expression -> expression AND expression .)
+    $end            reduce using rule 17 (expression -> expression AND expression .)
+    RPAREN          reduce using rule 17 (expression -> expression AND expression .)
+    ADD             shift and go to state 25
+    SUB             shift and go to state 26
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+    SHR             shift and go to state 30
+    SHL             shift and go to state 31
+
+  ! ADD             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! SUB             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! MUL             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! DIV             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! REM             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! SHR             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! SHL             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! AND             [ shift and go to state 32 ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 45
+
+    (18) expression -> expression OR expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    OR              reduce using rule 18 (expression -> expression OR expression .)
+    RETURN          reduce using rule 18 (expression -> expression OR expression .)
+    ID              reduce using rule 18 (expression -> expression OR expression .)
+    $end            reduce using rule 18 (expression -> expression OR expression .)
+    RPAREN          reduce using rule 18 (expression -> expression OR expression .)
+    ADD             shift and go to state 25
+    SUB             shift and go to state 26
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+    SHR             shift and go to state 30
+    SHL             shift and go to state 31
+    AND             shift and go to state 32
+    XOR             shift and go to state 34
+
+  ! ADD             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! SUB             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! MUL             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! DIV             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! REM             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! SHR             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! SHL             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! AND             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! XOR             [ reduce using rule 18 (expression -> expression OR expression .) ]
+  ! OR              [ shift and go to state 33 ]
+
+
+state 46
+
+    (19) expression -> expression XOR expression .
+    (10) expression -> expression . ADD expression
+    (11) expression -> expression . SUB expression
+    (12) expression -> expression . MUL expression
+    (13) expression -> expression . DIV expression
+    (14) expression -> expression . REM expression
+    (15) expression -> expression . SHR expression
+    (16) expression -> expression . SHL expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . OR expression
+    (19) expression -> expression . XOR expression
+
+    OR              reduce using rule 19 (expression -> expression XOR expression .)
+    XOR             reduce using rule 19 (expression -> expression XOR expression .)
+    RETURN          reduce using rule 19 (expression -> expression XOR expression .)
+    ID              reduce using rule 19 (expression -> expression XOR expression .)
+    $end            reduce using rule 19 (expression -> expression XOR expression .)
+    RPAREN          reduce using rule 19 (expression -> expression XOR expression .)
+    ADD             shift and go to state 25
+    SUB             shift and go to state 26
+    MUL             shift and go to state 27
+    DIV             shift and go to state 28
+    REM             shift and go to state 29
+    SHR             shift and go to state 30
+    SHL             shift and go to state 31
+    AND             shift and go to state 32
+
+  ! ADD             [ reduce using rule 19 (expression -> expression XOR expression .) ]
+  ! SUB             [ reduce using rule 19 (expression -> expression XOR expression .) ]
+  ! MUL             [ reduce using rule 19 (expression -> expression XOR expression .) ]
+  ! DIV             [ reduce using rule 19 (expression -> expression XOR expression .) ]
+  ! REM             [ reduce using rule 19 (expression -> expression XOR expression .) ]
+  ! SHR             [ reduce using rule 19 (expression -> expression XOR expression .) ]
+  ! SHL             [ reduce using rule 19 (expression -> expression XOR expression .) ]
+  ! AND             [ reduce using rule 19 (expression -> expression XOR expression .) ]
+  ! OR              [ shift and go to state 33 ]
+  ! XOR             [ shift and go to state 34 ]
+
+
+state 47
+
+    (21) expression -> LPAREN expression RPAREN .
+
+    ADD             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    SUB             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    MUL             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    DIV             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    REM             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    SHR             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    SHL             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    AND             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    OR              reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    XOR             reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    RETURN          reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    ID              reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 21 (expression -> LPAREN expression RPAREN .)
+

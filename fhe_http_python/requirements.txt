@@ -1,0 +1,9 @@
+maturin==1.6.0
+ply==3.11
+semantic-version==2.10.0
+setuptools-rust==1.9.0
+setuptools_scm[toml]==8.0.0
+setuptools==68.2.2
+tomli==2.0.1
+twine==3.4.1
+wheel==0.43.0
