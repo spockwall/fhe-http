@@ -23,3 +23,12 @@ pub enum WasmError {
     #[error("local storage getting error: {0}")]
     LocalStorageError(String),
 }
+
+#[derive(Error, Debug)]
+pub enum OperationError {
+    #[error("Binary operation error: {0}")]
+    BinaryOpError(String),
+
+    #[error("Unary Operation error: {0}")]
+    UnaryOpError(String),
+}
