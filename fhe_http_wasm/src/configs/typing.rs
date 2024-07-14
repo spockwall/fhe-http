@@ -37,6 +37,18 @@ impl WasmProvenFheType {
     }
 }
 
+impl Into<FheType> for WasmFheType {
+    fn into(self) -> FheType {
+        self.inner
+    }
+}
+
+impl Into<ProvenFheType> for WasmProvenFheType {
+    fn into(self) -> ProvenFheType {
+        self.inner
+    }
+}
+
 impl Deref for WasmFheType {
     type Target = FheType;
 
