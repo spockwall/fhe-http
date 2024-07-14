@@ -35,4 +35,5 @@ pub mod apis {
 }
 
 pub extern crate serde;
+pub extern crate serde_json;
 pub extern crate tfhe;
