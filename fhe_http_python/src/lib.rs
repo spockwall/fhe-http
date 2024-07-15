@@ -20,6 +20,7 @@ pub mod configs {
 }
 
 #[pymodule]
+#[rustfmt::skip]
 fn fhe(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<apis::fhe::Fhe>()?;
     m.add_class::<apis::fhe_ops::FheOps>()?;
@@ -35,20 +36,11 @@ fn fhe(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(apis::http::decrypt_fhe_body, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::set_server_key_to_json, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::set_public_key_to_json, m)?)?;
-    m.add_function(wrap_pyfunction!(
-        apis::http::set_public_zk_params_to_json,
-        m
-    )?)?;
+    m.add_function(wrap_pyfunction!(apis::http::set_public_zk_params_to_json, m)?)?;
     m.add_function(wrap_pyfunction!(apis::http::get_fhe_value_from_json, m)?)?;
-    m.add_function(wrap_pyfunction!(
-        configs::zk_params::get_public_zk_params,
-        m
-    )?)?;
-    m.add_function(wrap_pyfunction!(configs::typing::create_fhe_value_type, m)?)?;
-    m.add_function(wrap_pyfunction!(
-        configs::typing::create_proven_fhe_value_type,
-        m
-    )?)?;
+    m.add_function(wrap_pyfunction!(configs::zk_params::get_public_zk_params, m)?)?;
+    m.add_function(wrap_pyfunction!(configs::typing::create_fhe_type, m)?)?;
+    m.add_function(wrap_pyfunction!(configs::typing::create_proven_fhe_type, m)?)?;
 
     // Using wrap_enum! to expose the enum
     let fhe_value_enum = py.get_type_bound::<configs::typing::PyFheType>();

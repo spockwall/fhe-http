@@ -1,6 +1,6 @@
 import unittest
 import fhe_http as py_fhe
-from fhe_http import create_proven_fhe_value_type
+from fhe_http import create_proven_fhe_type
 from fhe_http import get_public_zk_params
 
 
@@ -21,7 +21,7 @@ def set_server_key(server_key):
 
 def proven_encrypt(num: int, client_key, public_key, data_type, public_zk_params):
     serailizer = py_fhe.Serializer()
-    proven_fhe_value = create_proven_fhe_value_type(data_type)
+    proven_fhe_value = create_proven_fhe_type(data_type)
     fhe = py_fhe.Fhe(client_key, public_key)
     if data_type == "ProvenUint64":
         return fhe.proven_encrypt(
@@ -34,7 +34,7 @@ def proven_encrypt(num: int, client_key, public_key, data_type, public_zk_params
 
 def decrypt(encrypted_num, client_key, data_type: str = "ProvenInt64"):
     serailizer = py_fhe.Serializer()
-    proven_fhe_value = create_proven_fhe_value_type(data_type)
+    proven_fhe_value = create_proven_fhe_type(data_type)
     fhe = py_fhe.Fhe(client_key)
     if data_type == "ProvenUint64":
         return serailizer.to_u64(fhe.decrypt(encrypted_num, proven_fhe_value))
@@ -66,7 +66,7 @@ class TestFheOps(unittest.TestCase):
         ]
 
     def exec_binary_operation(self, encrypted_a, encrypted_b, method, type):
-        proven_fhe_value = create_proven_fhe_value_type(type)
+        proven_fhe_value = create_proven_fhe_type(type)
         return method(
             encrypted_a,
             encrypted_b,
@@ -76,7 +76,7 @@ class TestFheOps(unittest.TestCase):
         )
 
     def exec_unary_operation(self, encrypted_a, method, type):
-        proven_fhe_value = create_proven_fhe_value_type(type)
+        proven_fhe_value = create_proven_fhe_type(type)
         return method(
             encrypted_a, proven_fhe_value, self.public_zk_params, self.public_key
         )

@@ -14,7 +14,7 @@ def generate_keys():
 
 def decrypt(encrypted_num, client_key, data_type: str = "Int64"):
     serailizer = py_fhe.Serializer()
-    fhe_value = py_fhe.create_fhe_value_type(data_type)
+    fhe_value = py_fhe.create_fhe_type(data_type)
     fhe = py_fhe.Fhe(client_key)
     return serailizer.to_i64(fhe.decrypt(encrypted_num, fhe_value))
 
@@ -23,7 +23,7 @@ def send_post_request(url):
     header = json.loads(py_fhe.create_fhe_header("123"))
     client_key, server_key = generate_keys()
     data = {"a": 123123123, "b": 123}
-    data_type = py_fhe.create_fhe_value_type("Int64")
+    data_type = py_fhe.create_fhe_type("Int64")
     encrypt_json = py_fhe.encrypt_fhe_body(
         [("a", data_type), ("b", data_type)], data, client_key
     )
