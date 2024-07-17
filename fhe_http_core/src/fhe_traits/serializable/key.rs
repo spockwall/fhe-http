@@ -58,3 +58,4 @@ impl_key_serializable!(ServerKey, SerialServerKey);
 impl_key_serializable!(CompressedCompactPublicKey, SerialCompressedCompactPublicKey);
 impl_key_serializable!(CompressedServerKey, SerialCompressedServerKey);
 impl_key_serializable!(CompactPublicKey, SerialCompactPublicKey);
+impl_key_serializable!(tfhe::Config, Vec<u8>);
