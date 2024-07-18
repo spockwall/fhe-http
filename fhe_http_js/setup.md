@@ -1,7 +1,4 @@
-# fhe_http_js
-
-**fhe_http_js:** Js interface for fhe-http
-
+# Fhe-Http-JS Setup
 This project was bootstrapped by [create-neon](https://www.npmjs.com/package/create-neon).
 
 ## Building fhe_http_js
@@ -24,8 +21,8 @@ After building fhe_http_js, you can explore its exports at the Node console:
 $ npm i
 $ npm run build
 $ node
-> require('.').greeting()
-{ message: 'hello node' }
+> require('.')
+> // do something
 ```
 
 ## Available Scripts
