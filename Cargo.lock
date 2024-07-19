@@ -542,6 +542,7 @@ dependencies = [
  "fhe_http_core",
  "neon",
  "neon-macros",
+ "thiserror",
 ]
 
 [[package]]
