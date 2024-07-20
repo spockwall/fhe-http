@@ -18,9 +18,11 @@ pub fn create_fhe_header(method: String, zk_experiment: Option<bool>) -> String 
 /// Encrypt body of http request with FHE
 ///
 /// Input:
-///     keys: List[Tuple[str, PyFheType]]
-///         - list of keys in dict whose values to be enrypted with type: PyFheType
+///     keys: Array[String]
+///         - list of keys in dict whose values to be enrypted
 ///     data: Dict - json data to be encrypted
+///     type: String - type of data to be encrypted
+///     client_key: Vec<u8> - client key to encrypt data
 #[neon::export]
 pub fn encrypt_fhe_body<'cx>(
     cx: &mut FunctionContext<'cx>,
@@ -36,6 +38,14 @@ pub fn encrypt_fhe_body<'cx>(
     http::encrypt_fhe_body(&keys_ty, data_json_str.as_str(), &client_key)
 }
 
+/// Encrypt body of http request with FHE
+///
+/// Input:
+///     keys: Array[String]
+///         - list of keys in dict whose values to be decrypted
+///     data: Dict - json data to be decrypted
+///     type: String - type of data to be decrypted
+///     client_key: Vec<u8> - client key to decrypt data
 #[neon::export]
 pub fn decrypt_fhe_body<'cx>(
     cx: &mut FunctionContext<'cx>,
