@@ -55,6 +55,7 @@ declare module "./load.cjs" {
     function to_u64(value: Bytes): Number;
 
     function set_server_key(server_key: Bytes): void;
+    function get_public_zk_params(msg: Number, carry: Number): Bytes;
 }
 
 export class KeyGen {
@@ -192,4 +193,8 @@ export class Serializer {
 
 export function set_server_key(server_key: Bytes): void {
     return addon.set_server_key(server_key);
+}
+
+export function get_public_zk_params(msg: Number, carry: Number): Bytes {
+    return addon.get_public_zk_params(msg, carry);
 }
