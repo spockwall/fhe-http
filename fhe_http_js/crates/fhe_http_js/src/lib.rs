@@ -14,6 +14,7 @@ pub mod utils {
 pub mod configs {
     pub mod error;
     pub mod typing;
+    pub mod zk_params;
 }
 
 //#[neon::main]
