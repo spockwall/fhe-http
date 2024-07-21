@@ -12,14 +12,14 @@
 ## How to use
 ### Run Tests
 #### Execute tests in __tests__
-```
+```shellscript
 $ cd fhe-http/fhe_http_js
 $ npm install
 $ npm run build
 $ npm run test-js
 ```
 #### Test packaging at local
-```shellscript=
+```shellscript
 $ cd fhe-http/fhe_http_js
 $ npm install
 $ npm run build
@@ -45,7 +45,7 @@ This basic version of FHE computation enables clients to delegate computation ta
   - `Uint64`
 
 #### Example usage
-```javascript=
+```javascript
 const fhe_http = require("fhe_http_js");
 
 const keyGen = new fhe_http.KeyGen();
@@ -73,4 +73,124 @@ for (let i = 0; i < cases.length; i++) {
     console.log(res);
 }
 
+```
+
+## Interaction via Http
+### Decription
+This nodejs package also provide some function for http request. For example: setting the header to comfirm the fhe protocol, and some json related operation for both body and header (see below exmaple)
+
+### Example usage
+#### Execution
+```shellscript
+$ cd fhe-http/fhe_http_js
+$ npm run build
+$ cd __tests__/interaction/
+$ npm install
+
+// machine 1
+$ npm run start
+
+// machine 2
+$ node client.js
+```
+#### Client Side
+```javascript
+const fheHttp = require("fhe_http_js");
+const path = require("path");
+
+// send http request to server
+
+function generate_keys() {
+    let keyGen = new fheHttp.KeyGen();
+    let config = keyGen.createConfig();
+    let clientKey = keyGen.generateClientKey(config);
+    let serverKey = keyGen.generateServerKey(clientKey);
+    return { clientKey, serverKey };
+}
+
+function decrypt(encryptedNum, clientKey, dataType = "Int64") {
+    let serializer = new fheHttp.Serializer();
+    let fhe = new fheHttp.Fhe();
+    let res = fhe.decrypt(encryptedNum, clientKey, dataType);
+    return serializer.toI64(res);
+}
+
+function sendPostRequest(url) {
+    let header = JSON.parse(fheHttp.createFheHeader("123"));
+
+    let { clientKey, serverKey } = generate_keys();
+    let data = { a: 1223123, b: 123123 };
+    let payload_str = fheHttp.encryptFheBody(["a", "b"], "Int64", data, clientKey);
+    let payload = JSON.parse(payload_str);
+    payload_str = fheHttp.setServerKeyToJson(serverKey, payload);
+    delete header["content-encoding"];
+    (async () => {
+        try {
+            const res = await fetch("http://localhost:3000", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...header,
+                },
+                body: payload_str,
+            });
+            console.log("Status Code:", res.status);
+
+            const data = await res.json();
+            let base64 = new fheHttp.Base64();
+            const c = base64.decodeFheValue(data["result"]);
+            console.log("Decrypted Result:", decrypt(c, clientKey));
+        } catch (err) {
+            console.log(err.message); //can be console.error
+        }
+    })();
+}
+
+sendPostRequest();
+```
+
+#### Server Side
+```javascript
+const fheHttp = require("fhe_http_js");
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
+
+app.use(bodyParser.json({ limit: "5000mb" }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+//print("Received request")
+//    data_type = py_fhe.create_fhe_type("Int64")
+//    data_json = json.loads(data.model_dump_json())
+//    encrypted_a = py_fhe.decode_fhe_value(data_json["a"])
+//    encrypted_b = py_fhe.decode_fhe_value(data_json["b"])
+//    server_key = py_fhe.decode_fhe_value(data_json["server_key"])
+//    set_server_key(server_key)
+//    fhe_ops = py_fhe.FheOps()
+//    encrypted_c = fhe_ops.add(encrypted_a, encrypted_b, data_type)
+//    encoded_c = py_fhe.encode_fhe_value(encrypted_c)
+//    return {"result": encoded_c, "status": "success"}
+
+// route
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
+app.post("/", async (req, res) => {
+    let data = req.body;
+    let base64 = new fheHttp.Base64();
+    let fheOps = new fheHttp.FheOps();
+    let encrypted_a = base64.decodeFheValue(data["a"]);
+    let encrypted_b = base64.decodeFheValue(data["b"]);
+    let server_key = base64.decodeFheValue(data["server_key"]);
+    fheHttp.setServerKey(server_key);
+    let encrypted_c = fheOps.add(encrypted_a, encrypted_b, "Int64");
+    let encoded_c = base64.encodeFheValue(encrypted_c);
+    let result = { result: encoded_c, status: "success" };
+    res.json(result);
+});
+
+app.listen(3000, () => {
+    console.log("Server is running on port 3000");
+});
 ```
