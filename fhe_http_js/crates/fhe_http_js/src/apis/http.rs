@@ -1,5 +1,6 @@
 use crate::configs::typing::JsFheType;
-use crate::utils::conversion::{array_to_vec_string, object_to_json_str};
+use crate::configs::typing::StringfiedJson;
+use crate::utils::conversion::array_to_vec_string;
 use fhe_http_core::apis::http;
 use fhe_http_core::configs::typing::{
     FheType, SerialClientKey, SerialCompactPublicKey, SerialPublicZkParams, SerialServerKey,
@@ -28,14 +29,13 @@ pub fn encrypt_fhe_body<'cx>(
     cx: &mut FunctionContext<'cx>,
     keys: Handle<JsArray>, // Vec<String>
     data_type: JsFheType,
-    data: Handle<JsObject>,
+    data: StringfiedJson,
     client_key: SerialClientKey,
 ) -> String {
     let ty = FheType::from_str(&data_type);
     let keys = array_to_vec_string(cx, keys);
     let keys_ty = keys.iter().map(|k| (k.clone(), ty.clone())).collect();
-    let data_json_str = object_to_json_str(cx, data).unwrap();
-    http::encrypt_fhe_body(&keys_ty, data_json_str.as_str(), &client_key)
+    http::encrypt_fhe_body(&keys_ty, &data, &client_key)
 }
 
 /// Encrypt body of http request with FHE
@@ -51,44 +51,31 @@ pub fn decrypt_fhe_body<'cx>(
     cx: &mut FunctionContext<'cx>,
     keys: Handle<JsArray>,
     data_type: JsFheType,
-    data: Handle<JsObject>,
+    data: StringfiedJson,
     client_key: SerialClientKey,
 ) -> String {
     let ty = FheType::from_str(&data_type);
     let keys = array_to_vec_string(cx, keys);
     let keys_ty = keys.iter().map(|k| (k.clone(), ty.clone())).collect();
-    let data_json_str = object_to_json_str(cx, data).unwrap();
-    http::decrypt_fhe_body(&keys_ty, data_json_str.as_str(), &client_key)
+    http::decrypt_fhe_body(&keys_ty, &data, &client_key)
 }
 
 #[neon::export]
-pub fn set_server_key_to_json<'cx>(
-    cx: &mut FunctionContext<'cx>,
-    server_key: SerialServerKey,
-    data: Handle<JsObject>,
-) -> String {
-    let data_json_str = object_to_json_str(cx, data).unwrap();
-    http::set_server_key_to_json(&server_key, &data_json_str)
+pub fn set_server_key_to_json(server_key: SerialServerKey, data: StringfiedJson) -> String {
+    http::set_server_key_to_json(&server_key, &data)
 }
 
 #[neon::export]
-pub fn set_public_key_to_json<'cx>(
-    cx: &mut FunctionContext<'cx>,
-    public_key: SerialCompactPublicKey,
-    data: Handle<JsObject>,
-) -> String {
-    let data_json_str = object_to_json_str(cx, data).unwrap();
-    http::set_public_key_to_json(&public_key, &data_json_str)
+pub fn set_public_key_to_json(public_key: SerialCompactPublicKey, data: StringfiedJson) -> String {
+    http::set_public_key_to_json(&public_key, &data)
 }
 
 #[neon::export]
-pub fn set_public_zk_params_to_json<'cx>(
-    cx: &mut FunctionContext<'cx>,
+pub fn set_public_zk_params_to_json(
     public_zk_params: SerialPublicZkParams,
-    data: Handle<JsObject>,
+    data: StringfiedJson,
 ) -> String {
-    let data_json_str = object_to_json_str(cx, data).unwrap();
-    http::set_public_zk_params_to_json(&public_zk_params, &data_json_str)
+    http::set_public_zk_params_to_json(&public_zk_params, &data)
 }
 
 #[neon::export]
@@ -97,11 +84,6 @@ pub fn check_http_packet(packet: String) -> Result<(), String> {
 }
 
 #[neon::export]
-pub fn get_fhe_value_from_json<'cx>(
-    cx: &mut FunctionContext<'cx>,
-    key: String,
-    data: Handle<JsObject>,
-) -> Vec<u8> {
-    let data_json_str = object_to_json_str(cx, data).unwrap();
-    http::get_fhe_value_from_json(key.as_str(), &data_json_str)
+pub fn get_fhe_value_from_json(key: String, data: StringfiedJson) -> Vec<u8> {
+    http::get_fhe_value_from_json(key.as_str(), &data)
 }

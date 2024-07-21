@@ -54,6 +54,16 @@ declare module "./load.cjs" {
     function to_i64(value: Bytes): Number;
     function to_u64(value: Bytes): Number;
 
+    // http
+    function create_fhe_header(method: String, zk_experiment?: Boolean): String;
+    function encrypt_fhe_body(keys: Array<String>, data_type: String, data: String, client_key: Bytes): String;
+    function decrypt_fhe_body(keys: Array<String>, data_type: String, data: String, client_key: Bytes): String;
+    function set_server_key_to_json(server_key: Bytes, data: String): String;
+    function set_public_key_to_json(public_key: Bytes, data: String): String;
+    function set_public_zk_params_to_json(public_zk_params: Bytes, data: String): String;
+    function get_fhe_value_from_json(key: String, data: String): Bytes;
+
+    // other
     function set_server_key(server_key: Bytes): void;
     function get_public_zk_params(msg: Number, carry: Number): Bytes;
 }
@@ -191,10 +201,38 @@ export class Serializer {
     }
 }
 
-export function set_server_key(server_key: Bytes): void {
+export function setServerKey(server_key: Bytes): void {
     return addon.set_server_key(server_key);
 }
 
-export function get_public_zk_params(msg: Number, carry: Number): Bytes {
+export function getPublicZkParams(msg: Number, carry: Number): Bytes {
     return addon.get_public_zk_params(msg, carry);
+}
+
+export function createFheHeader(method: String, zk_experiment?: Boolean): String {
+    return addon.create_fhe_header(method, zk_experiment);
+}
+export function encryptFheBody(keys: Array<String>, data_type: String, data: JSON, client_key: Bytes): String {
+    let stringified_data = JSON.stringify(data);
+    return addon.encrypt_fhe_body(keys, data_type, stringified_data, client_key);
+}
+export function decryptFheBody(keys: Array<String>, data_type: String, data: JSON, client_key: Bytes): String {
+    let stringified_data = JSON.stringify(data);
+    return addon.decrypt_fhe_body(keys, data_type, stringified_data, client_key);
+}
+export function setServerKeyToJson(server_key: Bytes, data: JSON): String {
+    let stringified_data = JSON.stringify(data);
+    return addon.set_server_key_to_json(server_key, stringified_data);
+}
+export function setPublicKeyToJson(public_key: Bytes, data: JSON): String {
+    let stringified_data = JSON.stringify(data);
+    return addon.set_public_key_to_json(public_key, stringified_data);
+}
+export function setPublicZkParamsToJson(public_zk_params: Bytes, data: JSON): String {
+    let stringified_data = JSON.stringify(data);
+    return addon.set_public_zk_params_to_json(public_zk_params, stringified_data);
+}
+export function getFheValueFromJson(key: String, data: JSON): Bytes {
+    let stringified_data = JSON.stringify(data);
+    return addon.get_fhe_value_from_json(key, stringified_data);
 }
