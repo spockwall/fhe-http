@@ -140,36 +140,36 @@ export class FheOps {
 export class ProvenFheOps {
     constructor() {}
 
-    add(a: Bytes, b: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_add(a, b, type, public_zk_params, public_key);
+    add(a: Bytes, b: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_add(a, b, type, publicZkParams, publicKey);
     }
 
-    sub(a: Bytes, b: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_sub(a, b, type, public_zk_params, public_key);
+    sub(a: Bytes, b: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_sub(a, b, type, publicZkParams, publicKey);
     }
-    mul(a: Bytes, b: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_mul(a, b, type, public_zk_params, public_key);
+    mul(a: Bytes, b: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_mul(a, b, type, publicZkParams, publicKey);
     }
-    div(a: Bytes, b: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_div(a, b, type, public_zk_params, public_key);
+    div(a: Bytes, b: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_div(a, b, type, publicZkParams, publicKey);
     }
-    rem(a: Bytes, b: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_rem(a, b, type, public_zk_params, public_key);
+    rem(a: Bytes, b: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_rem(a, b, type, publicZkParams, publicKey);
     }
-    neg(a: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_neg(a, type, public_zk_params, public_key);
+    neg(a: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_neg(a, type, publicZkParams, publicKey);
     }
-    not(a: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_not(a, type, public_zk_params, public_key);
+    not(a: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_not(a, type, publicZkParams, publicKey);
     }
-    and(a: Bytes, b: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_and(a, b, type, public_zk_params, public_key);
+    and(a: Bytes, b: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_and(a, b, type, publicZkParams, publicKey);
     }
-    or(a: Bytes, b: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_or(a, b, type, public_zk_params, public_key);
+    or(a: Bytes, b: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_or(a, b, type, publicZkParams, publicKey);
     }
-    xor(a: Bytes, b: Bytes, type: String, public_zk_params: Bytes, public_key: Bytes): Bytes {
-        return addon.proven_xor(a, b, type, public_zk_params, public_key);
+    xor(a: Bytes, b: Bytes, type: String, publicZkParams: Bytes, publicKey: Bytes): Bytes {
+        return addon.proven_xor(a, b, type, publicZkParams, publicKey);
     }
 }
 
@@ -201,38 +201,38 @@ export class Serializer {
     }
 }
 
-export function setServerKey(server_key: Bytes): void {
-    return addon.set_server_key(server_key);
+export function setServerKey(serverKey: Bytes): void {
+    return addon.set_server_key(serverKey);
 }
 
 export function getPublicZkParams(msg: Number, carry: Number): Bytes {
     return addon.get_public_zk_params(msg, carry);
 }
 
-export function createFheHeader(method: String, zk_experiment?: Boolean): String {
-    return addon.create_fhe_header(method, zk_experiment);
+export function createFheHeader(method: String, zkExperiment?: Boolean): String {
+    return addon.create_fhe_header(method, zkExperiment);
 }
-export function encryptFheBody(keys: Array<String>, data_type: String, data: JSON, client_key: Bytes): String {
-    let stringified_data = JSON.stringify(data);
-    return addon.encrypt_fhe_body(keys, data_type, stringified_data, client_key);
+export function encryptFheBody(keys: Array<String>, dataType: String, data: JSON, clientKey: Bytes): String {
+    let stringifiedData = JSON.stringify(data);
+    return addon.encrypt_fhe_body(keys, dataType, stringifiedData, clientKey);
 }
-export function decryptFheBody(keys: Array<String>, data_type: String, data: JSON, client_key: Bytes): String {
-    let stringified_data = JSON.stringify(data);
-    return addon.decrypt_fhe_body(keys, data_type, stringified_data, client_key);
+export function decryptFheBody(keys: Array<String>, dataType: String, data: JSON, clientKey: Bytes): String {
+    let stringifiedData = JSON.stringify(data);
+    return addon.decrypt_fhe_body(keys, dataType, stringifiedData, clientKey);
 }
 export function setServerKeyToJson(server_key: Bytes, data: JSON): String {
-    let stringified_data = JSON.stringify(data);
-    return addon.set_server_key_to_json(server_key, stringified_data);
+    let stringifiedData = JSON.stringify(data);
+    return addon.set_server_key_to_json(server_key, stringifiedData);
 }
 export function setPublicKeyToJson(public_key: Bytes, data: JSON): String {
-    let stringified_data = JSON.stringify(data);
-    return addon.set_public_key_to_json(public_key, stringified_data);
+    let stringifiedData = JSON.stringify(data);
+    return addon.set_public_key_to_json(public_key, stringifiedData);
 }
-export function setPublicZkParamsToJson(public_zk_params: Bytes, data: JSON): String {
-    let stringified_data = JSON.stringify(data);
-    return addon.set_public_zk_params_to_json(public_zk_params, stringified_data);
+export function setPublicZkParamsToJson(publicZkParams: Bytes, data: JSON): String {
+    let stringifiedData = JSON.stringify(data);
+    return addon.set_public_zk_params_to_json(publicZkParams, stringifiedData);
 }
 export function getFheValueFromJson(key: String, data: JSON): Bytes {
-    let stringified_data = JSON.stringify(data);
-    return addon.get_fhe_value_from_json(key, stringified_data);
+    let stringifiedData = JSON.stringify(data);
+    return addon.get_fhe_value_from_json(key, stringifiedData);
 }

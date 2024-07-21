@@ -18,7 +18,7 @@ describe("Test Fhe Int64 Operation", () => {
         this.clientKey = this.keyGen.generateClientKey(this.config);
         this.serverKey = this.keyGen.generateServerKey(this.clientKey);
         this.publicKey = this.keyGen.generatePublicKey(this.clientKey);
-        fhe_http.set_server_key(this.serverKey);
+        fhe_http.setServerKey(this.serverKey);
     });
 
     test("Fhe i64 Addition", () => {
@@ -98,7 +98,7 @@ describe("Test Fhe Uint64 Operation", () => {
         this.clientKey = this.keyGen.generateClientKey(this.config);
         this.serverKey = this.keyGen.generateServerKey(this.clientKey);
         this.publicKey = this.keyGen.generatePublicKey(this.clientKey);
-        fhe_http.set_server_key(this.serverKey);
+        fhe_http.setServerKey(this.serverKey);
     });
 
     test("Fhe u64 Addition", () => {
