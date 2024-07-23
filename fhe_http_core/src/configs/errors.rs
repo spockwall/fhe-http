@@ -31,4 +31,7 @@ pub enum FheError {
 
     #[error("Deserialization error: {0}")]
     DeserializeError(String),
+
+    #[error("Invalid FheType error: {0}")]
+    InvalidFheType(String),
 }
