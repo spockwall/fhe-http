@@ -11,8 +11,12 @@ macro_rules! impl_binary_py_fhe_ops {
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> Vec<u8> {
-            let ty = ProvenFheType::from_str(data_type.as_str());
-            ($method)(&a, &b, &ty, &public_zk_param, &public_key).unwrap()
+            let proven_fhe_type = ProvenFheType::from_str(data_type.as_str());
+            if let Ok(ty) = proven_fhe_type {
+                ($method)(&a, &b, &ty, &public_zk_param, &public_key).unwrap()
+            } else {
+                panic!("Failed to parse data type: {}", data_type)
+            }
         }
     };
 }
@@ -25,8 +29,12 @@ macro_rules! impl_unary_py_fhe_ops {
             public_zk_param: &SerialPublicZkParams,
             public_key: &SerialCompactPublicKey,
         ) -> Vec<u8> {
-            let ty = ProvenFheType::from_str(data_type.as_str());
-            ($method)(&a, &ty, &public_zk_param, &public_key).unwrap()
+            let proven_fhe_type = ProvenFheType::from_str(data_type.as_str());
+            if let Ok(ty) = proven_fhe_type {
+                ($method)(&a, &ty, &public_zk_param, &public_key).unwrap()
+            } else {
+                panic!("Failed to parse data type: {}", data_type)
+            }
         }
     };
 }

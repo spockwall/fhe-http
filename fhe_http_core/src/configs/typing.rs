@@ -1,3 +1,4 @@
+use crate::configs::errors::FheError;
 // key_serializable.rs
 pub type SerialServerKey = Vec<u8>;
 pub type SerialClientKey = Vec<u8>;
@@ -46,15 +47,16 @@ impl FheType {
         }
     }
 
-    pub fn from_str(s: &str) -> FheType {
+    pub fn from_str(s: &str) -> Result<FheType, FheError> {
         match s {
-            "Int64" => FheType::Int64,
-            "Uint64" => FheType::Uint64,
-            _ => panic!("Invalid FheType"),
+            "Int64" => Ok(FheType::Int64),
+            "Uint64" => Ok(FheType::Uint64),
+            _ => Err(FheError::InvalidFheType(format!("Invalid FheType: {}", s))),
         }
     }
 }
 
+#[rustfmt::skip]
 impl ProvenFheType {
     pub fn as_str(&self) -> &'static str {
         match self {
@@ -62,11 +64,11 @@ impl ProvenFheType {
             ProvenFheType::ProvenUint64 => "ProvenUint64",
         }
     }
-    pub fn from_str(s: &str) -> ProvenFheType {
+    pub fn from_str(s: &str) -> Result<ProvenFheType, FheError> {
         match s {
-            "ProvenInt64" => ProvenFheType::ProvenInt64,
-            "ProvenUint64" => ProvenFheType::ProvenUint64,
-            _ => panic!("Invalid FheType"),
+            "ProvenInt64" => Ok(ProvenFheType::ProvenInt64),
+            "ProvenUint64" => Ok(ProvenFheType::ProvenUint64),
+            _ => Err(FheError::InvalidFheType(format!("Invalid ProvenFheType: {}", s))),
         }
     }
 }

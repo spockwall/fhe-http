@@ -28,11 +28,6 @@ pub fn create_fhe_header(method: &str, zk_experimental: Option<bool>) -> String 
         }),
     );
 
-    // add content-encoding header
-    header.insert(
-        "content-encoding".to_string(),
-        Value::String("gzip".to_string()),
-    );
     return serde_json::to_string(&header).unwrap();
 }
 

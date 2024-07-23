@@ -32,10 +32,14 @@ pub fn encrypt_fhe_body<'cx>(
     data: StringfiedJson,
     client_key: SerialClientKey,
 ) -> String {
-    let ty = FheType::from_str(&data_type);
+    let fhe_type = FheType::from_str(&data_type);
     let keys = array_to_vec_string(cx, keys);
-    let keys_ty = keys.iter().map(|k| (k.clone(), ty.clone())).collect();
-    http::encrypt_fhe_body(&keys_ty, &data, &client_key)
+    if let Ok(ty) = fhe_type {
+        let keys_ty = keys.iter().map(|k| (k.clone(), ty.clone())).collect();
+        http::encrypt_fhe_body(&keys_ty, &data, &client_key)
+    } else {
+        panic!("Failed to parse data type: {}", data_type)
+    }
 }
 
 /// Encrypt body of http request with FHE
@@ -54,10 +58,14 @@ pub fn decrypt_fhe_body<'cx>(
     data: StringfiedJson,
     client_key: SerialClientKey,
 ) -> String {
-    let ty = FheType::from_str(&data_type);
+    let fhe_type = FheType::from_str(&data_type);
     let keys = array_to_vec_string(cx, keys);
-    let keys_ty = keys.iter().map(|k| (k.clone(), ty.clone())).collect();
-    http::decrypt_fhe_body(&keys_ty, &data, &client_key)
+    if let Ok(ty) = fhe_type {
+        let keys_ty = keys.iter().map(|k| (k.clone(), ty.clone())).collect();
+        http::decrypt_fhe_body(&keys_ty, &data, &client_key)
+    } else {
+        panic!("Failed to parse data type: {}", data_type)
+    }
 }
 
 #[neon::export]
