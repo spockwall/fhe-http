@@ -4,6 +4,7 @@ pub type SerialClientKey = Vec<u8>;
 pub type SerialCompactPublicKey = Vec<u8>;
 pub type SerialCompressedServerKey = Vec<u8>;
 pub type SerialCompressedCompactPublicKey = Vec<u8>;
+pub type SerialConfig = Vec<u8>;
 
 // value
 pub type SerialInt64 = Vec<u8>;
