@@ -17,8 +17,12 @@ use fhe_http_core::configs::typing::FheType;
 macro_rules! impl_binary_fhe_ops {
     ($func_name:ident, $method:ident) => {
         pub fn $func_name(a: Vec<u8>, b: Vec<u8>, data_type: String) -> Vec<u8> {
-            let ty = FheType::from_str(&data_type);
-            ($method)(&a, &b, &ty).expect("Failed to perform binary operation")
+            let fhe_type = FheType::from_str(&data_type);
+            if let Ok(ty) = fhe_type {
+                ($method)(&a, &b, &ty).expect("Failed to perform binary operation")
+            } else {
+                panic!("Failed to parse data type: {}", data_type)
+            }
         }
     };
 }
@@ -35,8 +39,12 @@ macro_rules! impl_binary_fhe_ops {
 macro_rules! impl_unary_fhe_ops {
     ($func_name:ident, $method:ident) => {
         pub fn $func_name(a: Vec<u8>, data_type: String) -> Vec<u8> {
-            let ty = FheType::from_str(&data_type);
-            ($method)(&a, &ty).expect("Failed to perform unary operation")
+            let fhe_type = FheType::from_str(&data_type);
+            if let Ok(ty) = fhe_type {
+                ($method)(&a, &ty).expect("Failed to perform unary operation")
+            } else {
+                panic!("Failed to parse data type: {}", data_type)
+            }
         }
     };
 }
