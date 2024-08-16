@@ -26,7 +26,6 @@ function sendPostRequest(url) {
     let payload_str = fheHttp.encryptFheBody(["a", "b"], "Int64", data, clientKey);
     let payload = JSON.parse(payload_str);
     payload_str = fheHttp.setServerKeyToJson(serverKey, payload);
-    delete header["content-encoding"];
     (async () => {
         try {
             const res = await fetch("http://localhost:3000", {

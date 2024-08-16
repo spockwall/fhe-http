@@ -1,9 +1,10 @@
+use crate::configs::errors::FheError;
 use tfhe::prelude::FheTryEncrypt;
 use tfhe::zk::{CompactPkePublicParams, ZkComputeLoad};
 use tfhe::{
     ClientKey, CompactPublicKey, FheInt64, FheUint64, ProvenCompactFheInt64, ProvenCompactFheUint64,
 };
-type FheError = Box<dyn std::error::Error>;
+//type FheError = Box<dyn std::error::Error>;
 
 /// Define Encryptable trait for integer encryption.
 ///
@@ -68,9 +69,11 @@ macro_rules! impl_encryptable {
             type Output = $fhe_ty;
 
             fn val_encrypt(&self, client_key: &ClientKey) -> Result<Self::Output, FheError> {
-                match FheTryEncrypt::try_encrypt(*self, client_key) {
-                    Ok(encrypted) => Ok(encrypted),
-                    Err(e) => Err(e.into()),
+                let encrypted_res = FheTryEncrypt::try_encrypt(*self, client_key);
+                if let Ok(encrypted) = encrypted_res {
+                    Ok(encrypted)
+                } else {
+                    encrypted_res.map_err(|e| FheError::EncryptionError(e.to_string()))
                 }
             }
 
@@ -100,15 +103,16 @@ macro_rules! impl_proven_encryptable {
                 public_zk_params: &CompactPkePublicParams,
                 public_key: &CompactPublicKey,
             ) -> Result<Self::ProvenOutput, FheError> {
-                let a = <$proven_fhe_ty>::try_encrypt(
+                let encrypted_res = <$proven_fhe_ty>::try_encrypt(
                     *self,
                     public_zk_params,
                     &public_key,
                     ZkComputeLoad::Proof,
                 );
-                match a {
-                    Ok(encrypted) => Ok(encrypted),
-                    Err(e) => Err(e.into()),
+                if let Ok(encrypted) = encrypted_res {
+                    Ok(encrypted)
+                } else {
+                    encrypted_res.map_err(|e| FheError::EncryptionError(e.to_string()))
                 }
             }
 
