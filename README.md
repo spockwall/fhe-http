@@ -14,9 +14,7 @@ FHE computation enables clients to delegate computation tasks to servers. Client
 - ES6: [wasm-pack](https://github.com/rustwasm/wasm-pack)
 
 ## Example usage in Javascript (web and Node.js)
-
-## Details of Interaction via Http
-#### Client Side (web)
+#### Client Side (web env)
 ```javascript
 import init, { FheUint64, TfheConfigBuilder, TfheClientKey, TfheCompressedServerKey } from "fhe_http_web";
 import { uint8ArrayToBase64, base64ToUint8Array, createFheHeader } from "fhe_http_web/extend";
@@ -72,7 +70,7 @@ async function execute () {
     );
 }
 ```
-#### Server Side (Nodejs)
+#### Server Side (Node.js env)
 ```javascript
 const fheHttp = require("fhe_http_js");
 const express = require("express");
