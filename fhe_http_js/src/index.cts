@@ -236,3 +236,13 @@ export function getFheValueFromJson(key: String, data: JSON): Bytes {
     let stringifiedData = JSON.stringify(data);
     return addon.get_fhe_value_from_json(key, stringifiedData);
 }
+
+export function uint8ArrayToBase64(arr) {
+    return Buffer.from(arr).toString("base64");
+}
+
+export function base64ToUint8Array(base64String) {
+    const buffer = Buffer.from(base64String, "base64");
+    const uint8Array = new Uint8Array(buffer);
+    return uint8Array;
+}

@@ -26,7 +26,7 @@ $ cd fhe-http/fhe_http_python
 $ maturin develop
 ```
 ### Run Tests
-```python=
+```python
 // After package downloaded or built
 # cd fhe-http/fhe_http_python
 # python tests/*
@@ -42,7 +42,7 @@ This basic version of FHE computation enables clients to delegate computation ta
   - `Int64`
   - `Uint64`
 #### Example usage
-```python=
+```python
 import fhe_http as py_fhe
 
 # initialize keys
@@ -90,7 +90,7 @@ This zk-experimental feature allows servers to verify encrypted values sent by c
   - `ProvenInt64`
   - `ProvenUint64` 
 #### Example usage
-```python=
+```python
 import fhe_http as py_fhe
 
 # initialize keys
@@ -142,7 +142,7 @@ This assembly feature allows clients to define a function that includes multiple
   - `Int64`
   - `Uint64`
 #### Example usage
-```python=
+```python
 import fhe_http as py_fhe
 from fhe_http.assembler.assembler import Assembler
 
@@ -218,7 +218,7 @@ $ python3 server_test.py
 $ python3 client_test.py
 ```
 #### Client Side
-```python=
+```python
 # file name: client_test.py
 import json
 import fastapi
@@ -270,7 +270,7 @@ if __name__ == "__main__":
 ```
 
 #### Server Side
-```python=
+```python
 # file name: server_test.py
 # client.py
 import json
