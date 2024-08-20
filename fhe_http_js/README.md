@@ -28,7 +28,7 @@ $ npm install
 $ npm run build
 $ npm link
 
-// change to node.js env
+// change to Node.js application dir
 $ cd <nodejs project path>
 $ npm link fhe_http_js
 
